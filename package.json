@@ -1,0 +1,22 @@
+{
+  "name": "pixel-lobster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/app.tsx --bundle --loader:.png=file --outfile=public/app.js ",
+    "serve": "esbuild src/app.tsx --bundle --loader:.png=file --outdir=public --servedir=public "
+  },
+  "keywords": [],
+  "author": "Vincent Sit",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.47",
+    "@types/react-dom": "^18.2.18",
+    "esbuild": "^0.19.11"
+  }
+}
