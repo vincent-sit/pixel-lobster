@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
+import { ColorContext } from '../../contexts/color-context';
 
 const Wrapper = styled.div`
   background-color: #924C4C;
@@ -9,6 +10,7 @@ const Wrapper = styled.div`
 
 export function Canvas() {
     const [isDown, setIsDown] = useState(false);
+    const {color} = useContext(ColorContext);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -39,7 +41,7 @@ export function Canvas() {
         }
 
         const rect = canvasRef.current.getBoundingClientRect();
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = color;
         ctx.fillRect(e.clientX - rect.x, e.clientY - rect.y, 1, 1);
     }
 
