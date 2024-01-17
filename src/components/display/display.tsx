@@ -20,7 +20,7 @@ const CommandPanelWrapper = styled.div`
 
 export function Display() {
     return (
-        <Wrapper>
+        <Wrapper>            
             <CommandPanelWrapper>
                 <CommandPanel/>
             </CommandPanelWrapper>
