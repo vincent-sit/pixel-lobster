@@ -1,17 +1,9 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
-import { ToolBar } from './components/tool-bar/tool-bar';
-import { Display } from './components/display/display';
 import { ColorProvider } from './contexts/color-context';
 import { IsPointerDownProvider } from './contexts/is-pointer-down-context';
-
-const Layout = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 3fr;    
-  height: 100%;  
-`;
+import { AppBody } from './components/app-body/app-body';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -32,14 +24,11 @@ function App() {
     return (
         <>            
             <GlobalStyle/>
-            <Layout>
-                <IsPointerDownProvider>
-                    <ColorProvider>
-                        <ToolBar/>
-                        <Display/>    
-                    </ColorProvider>                            
-                </IsPointerDownProvider>
-            </Layout>            
+            <IsPointerDownProvider>
+                <ColorProvider>
+                    <AppBody></AppBody>
+                </ColorProvider>                            
+            </IsPointerDownProvider>
         </>
     );
 } 
