@@ -5,6 +5,7 @@ import { createGlobalStyle } from 'styled-components';
 import { ToolBar } from './components/tool-bar/tool-bar';
 import { Display } from './components/display/display';
 import { ColorProvider } from './contexts/color-context';
+import { IsPointerDownProvider } from './contexts/is-pointer-down-context';
 
 const Layout = styled.div`
   display: grid;
@@ -32,10 +33,12 @@ function App() {
         <>            
             <GlobalStyle/>
             <Layout>
-                <ColorProvider>
-                    <ToolBar/>
-                    <Display/>    
-                </ColorProvider>                            
+                <IsPointerDownProvider>
+                    <ColorProvider>
+                        <ToolBar/>
+                        <Display/>    
+                    </ColorProvider>                            
+                </IsPointerDownProvider>
             </Layout>            
         </>
     );
