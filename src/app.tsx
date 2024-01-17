@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 import { ToolBar } from './components/tool-bar/tool-bar';
 import { Display } from './components/display/display';
+import { ColorProvider } from './contexts/color-context';
 
 const Layout = styled.div`
   display: grid;
@@ -26,16 +27,16 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-function App() {
+function App() {    
     return (
-        <>
+        <>            
             <GlobalStyle/>
             <Layout>
-                {/* <CommandPanel/>
-                <ColorPicker/> */}
-                <ToolBar/>
-                <Display/>                
-            </Layout>
+                <ColorProvider>
+                    <ToolBar/>
+                    <Display/>    
+                </ColorProvider>                            
+            </Layout>            
         </>
     );
 } 

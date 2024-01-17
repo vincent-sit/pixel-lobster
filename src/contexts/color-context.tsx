@@ -22,9 +22,7 @@ export const ColorProvider = (props: { children : React.ReactNode } ) => {
 
     return (
         <ColorContext.Provider value={{ color, updateColor }} >
-            <div>
-                {props.children}
-            </div>
+            {props.children}
         </ColorContext.Provider>
     
     );
