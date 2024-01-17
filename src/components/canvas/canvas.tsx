@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { ColorContext } from '../../contexts/color-context';
+import { IsPointerDownContext } from '../../contexts/is-pointer-down-context';
 
 const Wrapper = styled.div`
   background-color: #924C4C;
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 export function Canvas() {
-    const [isDown, setIsDown] = useState(false);
+    const {isPointerDown} = useContext(IsPointerDownContext);
     const {color} = useContext(ColorContext);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -27,27 +28,19 @@ export function Canvas() {
         }
     }, []);
 
-    function handleDown() {
-        setIsDown(true);
-    }
-
-    function handleUp() {
-        setIsDown(false);
-    }
-
     function handleMove(e: React.PointerEvent<HTMLCanvasElement>) {
-        if (!isDown || !ctx || !canvasRef.current) {
+        if (!isPointerDown || !ctx || !canvasRef.current) {
             return;
         }
 
         const rect = canvasRef.current.getBoundingClientRect();
         ctx.fillStyle = color;
-        ctx.fillRect(e.clientX - rect.x, e.clientY - rect.y, 1, 1);
+        ctx.fillRect(e.clientX - rect.x, e.clientY - rect.y, 10, 10);
     }
 
     return (
         <Wrapper>
-            <canvas ref={canvasRef} width="300" height="300" onPointerDown={handleDown} onPointerUp={handleUp} onPointerMove={handleMove}></canvas>
+            <canvas ref={canvasRef} width="300" height="300" onPointerMove={handleMove}></canvas>
         </Wrapper>
     );
 }
