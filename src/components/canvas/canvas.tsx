@@ -40,7 +40,7 @@ export function Canvas() {
 
     return (
         <Wrapper>
-            <canvas ref={canvasRef} width="300" height="300" onPointerMove={handleMove}></canvas>
+            <canvas ref={canvasRef} width="300" height="300" onPointerUp={handleMove} onPointerMove={handleMove}></canvas>
         </Wrapper>
     );
 }
