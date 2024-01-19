@@ -3,10 +3,20 @@ import styled from 'styled-components';
 import { ColorContext } from '../../contexts/color-context';
 import { IsPointerDownContext } from '../../contexts/is-pointer-down-context';
 
+interface WrapperProps {
+    w: string;
+    h : string;
+    scaleFactor : string;
+}
+
+const dimensions : WrapperProps = {
+    w: '16',
+    h: '16',
+    scaleFactor: '10'
+};
+
 const Wrapper = styled.div`
   background-color: #924C4C;
-  width: 512px;
-  height: 512px;
 `;
 
 export function Canvas() {
@@ -15,6 +25,7 @@ export function Canvas() {
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+    // set up canvas on first load
     useEffect(() => {
         if (!canvasRef.current) {
             return;
@@ -28,7 +39,7 @@ export function Canvas() {
         }
     }, []);
 
-    function handleMove(e: React.PointerEvent<HTMLCanvasElement>) {
+    function handlePointerInteract(e: React.PointerEvent<HTMLCanvasElement>) {                 
         if (!isPointerDown || !ctx || !canvasRef.current) {
             return;
         }
@@ -40,7 +51,7 @@ export function Canvas() {
 
     return (
         <Wrapper>
-            <canvas ref={canvasRef} width="300" height="300" onPointerUp={handleMove} onPointerMove={handleMove}></canvas>
+            <canvas ref={canvasRef} width="100" height="100" onPointerUp={handlePointerInteract} onPointerMove={handlePointerInteract}></canvas>
         </Wrapper>
     );
 }

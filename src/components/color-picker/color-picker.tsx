@@ -124,7 +124,7 @@ export function ColorPicker() {
                 <div style={{width: 100, height: 30}} ref={colorSelectedRef}></div>
                 <ColorPickerBody>
                     {/* <canvas ref={colorCoordCircleRef}/> */}
-                    <canvas ref={colorCanvasRef} onPointerDown={handleCanvasInteract} onPointerMove={handleCanvasInteract} height="300" width="300"></canvas>
+                    <canvas ref={colorCanvasRef} onPointerUp={handleCanvasInteract} onPointerMove={handleCanvasInteract} height="300" width="300"></canvas>
                     <canvas ref={colorSliderRef} onClick={sliderClick} height="300" width="30"></canvas>
                 </ColorPickerBody>
             </div>
