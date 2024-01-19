@@ -16,20 +16,26 @@ const ColorPickerBody = styled.div`
     padding: 5px;
 `;
 
+interface Coord {
+    x : number,
+    y : number
+}
+
 export function ColorPicker() {
-    const {updateColor} = useContext(ColorContext);
+    const {color, updateColor} = useContext(ColorContext);
     const [coreColor, setCoreColor] = useState('red');
     const {isPointerDown} = useContext(IsPointerDownContext);
     const [canvasCtx, setCanvasCtx] = useState<CanvasRenderingContext2D | null>(null);
     const [sliderCtx, setSliderCtx] = useState<CanvasRenderingContext2D | null>(null);
     const colorCanvasRef = useRef<HTMLCanvasElement>(null);
     const colorSliderRef = useRef<HTMLCanvasElement>(null);
+    const colorSelectedRef = useRef<HTMLCanvasElement>(null);
+    const colorCoordCircleRef = useRef<HTMLCanvasElement>(null);
+    const [selectionCoord, setSelectionCoord] = useState<Coord>({x: 0, y: 0});
 
     // set color canvas
     useEffect(() => {
-        if (!colorCanvasRef.current || !colorSliderRef.current) {
-            return;
-        }
+        if (!colorCanvasRef.current) return;
 
         const currCanvasCtx = colorCanvasRef.current.getContext('2d');
         if (currCanvasCtx) {
@@ -51,40 +57,74 @@ export function ColorPicker() {
 
     // set color slider
     useEffect(() => {
-        if (!colorCanvasRef.current || !colorSliderRef.current) {
-            return;
-        }
+        if (!colorSliderRef.current) return;
 
         const currSliderCtx = colorSliderRef.current.getContext('2d');
         if (currSliderCtx) {
             setSliderCtx(currSliderCtx);
             
-            const gradientV = currSliderCtx.createLinearGradient(0, 0, 0, 300);
-            gradientV.addColorStop(0, 'rgba(255, 0, 0, 1)');
-            gradientV.addColorStop(0.17, 'rgba(255, 255, 0, 1)');
-            gradientV.addColorStop(0.34, 'rgba(0, 255, 0, 1)');
-            gradientV.addColorStop(0.51, 'rgba(0, 255, 255, 1)');
-            gradientV.addColorStop(0.68, 'rgba(0, 0, 255, 1)');
-            gradientV.addColorStop(0.85, 'rgba(255, 0, 255, 1)');
-            gradientV.addColorStop(1, 'rgba(255, 0, 0, 1)');
-            currSliderCtx.fillStyle = gradientV;
+            const gradient = currSliderCtx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(255, 0, 0, 1)');
+            gradient.addColorStop(0.17, 'rgba(255, 255, 0, 1)');
+            gradient.addColorStop(0.34, 'rgba(0, 255, 0, 1)');
+            gradient.addColorStop(0.51, 'rgba(0, 255, 255, 1)');
+            gradient.addColorStop(0.68, 'rgba(0, 0, 255, 1)');
+            gradient.addColorStop(0.85, 'rgba(255, 0, 255, 1)');
+            gradient.addColorStop(1, 'rgba(255, 0, 0, 1)');
+            currSliderCtx.fillStyle = gradient;
             currSliderCtx.fillRect(0, 0, currSliderCtx.canvas.width, currSliderCtx.canvas.height); 
         }
     }, []);
 
-    function sliderClick(e) {
+    useEffect(() => {
+        if (!colorSelectedRef.current) return;
+        colorSelectedRef.current.style.backgroundColor = color;
+    }, [color]);
+
+    // // set color selection coord and draw circle
+    // useEffect(() => {
+    //     if (!colorCanvasRef.current || !colorCoordCircleRef.current) return;
+        
+    //     const indicatorCtx = colorCoordCircleRef.current.getContext('2d');
+
+    //     if (indicatorCtx) {
+    //         indicatorCtx.beginPath();
+    //         indicatorCtx.arc(selectionCoord.x, selectionCoord.y, 5, 0, 2 * Math.PI);
+    //         indicatorCtx.stroke();
+    //     }
+
+    // }, [selectionCoord]);
+
+    function sliderClick(e: React.PointerEvent<HTMLCanvasElement>) {
         if (!colorSliderRef.current) return;    
         const rect = colorSliderRef.current.getBoundingClientRect();
-        const imageData = colorSliderRef.current.getContext('2d')!.getImageData(e.clientX - rect.x, e.clientY - rect.y, 1, 1).data;        
+        const imageData = colorSliderRef.current.getContext('2d')!.getImageData(e.clientX - rect.x, e.clientY - rect.y, 1, 1).data;
         const rgbaColor = 'rgba(' + imageData[0] + ',' + imageData[1] + ',' + imageData[2] + ',1)';
         setCoreColor(rgbaColor);        
+    }
+
+    function handleCanvasInteract(e: React.PointerEvent<HTMLCanvasElement>) {
+        if (!isPointerDown || !colorCanvasRef.current) return;
+
+        const rect = colorCanvasRef.current.getBoundingClientRect();
+
+        // set new coordinates to draw indicator
+        // const newCoord : Coord = {x : e.clientX - rect.x, y : e.clientY - rect.y};
+        // setSelectionCoord(newCoord);
+        
+        // set color chosen
+        const imageData = colorCanvasRef.current.getContext('2d', {willReadFrequently: true})!.getImageData(e.clientX - rect.x, e.clientY - rect.y, 1, 1).data;
+        const rgbaColor = 'rgba(' + imageData[0] + ',' + imageData[1] + ',' + imageData[2] + ',1)';
+        updateColor(rgbaColor);  
     }
 
     return (
         <Wrapper>
             <div>
+                <div style={{width: 100, height: 30}} ref={colorSelectedRef}></div>
                 <ColorPickerBody>
-                    <canvas ref={colorCanvasRef} height="300" width="300"></canvas>
+                    {/* <canvas ref={colorCoordCircleRef}/> */}
+                    <canvas ref={colorCanvasRef} onPointerDown={handleCanvasInteract} onPointerMove={handleCanvasInteract} height="300" width="300"></canvas>
                     <canvas ref={colorSliderRef} onClick={sliderClick} height="300" width="30"></canvas>
                 </ColorPickerBody>
             </div>
