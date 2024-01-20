@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
+import { usePointer } from '../../hooks/use-pointer';
+
 const Wrapper = styled.div`
   background-color: #924C4C;
   width: 512px;
@@ -8,9 +10,9 @@ const Wrapper = styled.div`
 `;
 
 export function Canvas() {
-    const [isDown, setIsDown] = useState(false);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const { isDown, x: pointerX, y: pointerY } = usePointer(canvasRef);
 
     useEffect(() => {
         if (!canvasRef.current) {
@@ -25,27 +27,18 @@ export function Canvas() {
         }
     }, []);
 
-    function handleDown() {
-        setIsDown(true);
-    }
-
-    function handleUp() {
-        setIsDown(false);
-    }
-
-    function handleMove(e: React.PointerEvent<HTMLCanvasElement>) {
+    function handleMove() {
         if (!isDown || !ctx || !canvasRef.current) {
             return;
         }
 
-        const rect = canvasRef.current.getBoundingClientRect();
         ctx.fillStyle = 'black';
-        ctx.fillRect(e.clientX - rect.x, e.clientY - rect.y, 1, 1);
+        ctx.fillRect(pointerX, pointerY, 1, 1);
     }
 
     return (
         <Wrapper>
-            <canvas ref={canvasRef} width="300" height="300" onPointerDown={handleDown} onPointerUp={handleUp} onPointerMove={handleMove}></canvas>
+            <canvas ref={canvasRef} width="300" height="300" onPointerMove={handleMove}></canvas>
         </Wrapper>
     );
 }
