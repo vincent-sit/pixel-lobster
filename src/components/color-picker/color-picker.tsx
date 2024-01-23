@@ -14,7 +14,7 @@ const ColorPickerBody = styled.div`
     width: 350px;
     border: solid 1px #ccc;
     opacity: 100;
-    padding: 5px;
+    padding: 5px;    
 `;
 
 interface Coord {
@@ -85,6 +85,20 @@ export function ColorPicker() {
         currSliderCtx.fillRect(0, 0, currSliderCtx.canvas.width, currSliderCtx.canvas.height); 
     }, []);
 
+    useEffect(() => {
+        if (!isColorDown || !colorCanvasRef.current) return;
+
+        const saturation = colorX / colorCanvasRef.current.width;
+        const value = colorY / colorCanvasRef.current.height;
+        console.log(colorX, colorY);
+        const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);                
+        updateColor(newColor);
+
+        // update selected color tile
+        if (!colorSelectedRef.current) return;
+        colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
+    }, [colorX, colorY]);
+
     // // set color selection coord and draw circle
     // useEffect(() => {
     //     if (!colorCanvasRef.current || !colorCoordCircleRef.current) return;
@@ -121,9 +135,10 @@ export function ColorPicker() {
         // setSelectionCoord(newCoord);
         
         // set color chosen
+
         const saturation = colorX / colorCanvasRef.current.width;
-        const value = colorY / colorCanvasRef.current.height;
-        const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);
+        const value = colorY / colorCanvasRef.current.height;        
+        const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);                
         updateColor(newColor);
 
         // update selected color tile
@@ -137,7 +152,8 @@ export function ColorPicker() {
                 <div style={{width: 100, height: 30}} ref={colorSelectedRef}></div>
                 <ColorPickerBody>
                     {/* <canvas ref={colorCoordCircleRef}/> */}
-                    <canvas ref={colorCanvasRef} onPointerUp={handleCanvasInteract} onPointerMove={handleCanvasInteract} height="300" width="300"></canvas>
+                    {/* <canvas ref={colorCanvasRef} onPointerUp={handleCanvasInteract} onPointerMove={handleCanvasInteract} height="300" width="300"></canvas> */}
+                    <canvas ref={colorCanvasRef} height="300" width="300"></canvas>
                     <canvas ref={colorSliderRef} onClick={sliderClick} height="300" width="30"></canvas>
                 </ColorPickerBody>
             </div>
