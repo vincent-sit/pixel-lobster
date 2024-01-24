@@ -5,6 +5,8 @@ export interface IColorProps {
     canvasHeight?: number | undefined,
     coordX : number,
     coordY : number, 
+    componentW: number,
+    componentL : number
 }
 
 export function ColorPickerMarker(props: IColorProps) {
@@ -17,12 +19,11 @@ export function ColorPickerMarker(props: IColorProps) {
         const currCoordCtx = colorCoordCircleRef.current.getContext('2d');
 
         if (!currCoordCtx) return;
-
         currCoordCtx.beginPath();
-        currCoordCtx.arc(x, y, 5, 0, 2 * Math.PI);
+        currCoordCtx.arc(x + 5, y, 5, 0, 2 * Math.PI);
         if (color) currCoordCtx.strokeStyle = color;
         currCoordCtx.stroke();
-        currCoordCtx.closePath();
+        currCoordCtx.closePath();        
     }
 
     useEffect(()=> {
@@ -51,7 +52,7 @@ export function ColorPickerMarker(props: IColorProps) {
         const indicatorCtx = colorCoordCircleRef.current.getContext('2d');
 
         if (indicatorCtx) {
-            indicatorCtx.clearRect(markerPrevCoord.x, markerPrevCoord.y, indicatorCtx.canvas.width, indicatorCtx.canvas.height);
+            indicatorCtx.clearRect(markerPrevCoord.x - 5, markerPrevCoord.y, indicatorCtx.canvas.width, indicatorCtx.canvas.height);
             if (props.coordY >= props.canvasHeight / 2) {
                 drawPositionMarker(props.coordX, props.coordY, 'white');
             } else {
@@ -62,6 +63,6 @@ export function ColorPickerMarker(props: IColorProps) {
     }, [props.coordX, props.coordY]);
 
     return (
-        <ColorPickerChild ref={colorCoordCircleRef} width='300px' height='300px'/>
+        <ColorPickerChild $left={props.componentL} $width={props.componentW} ref={colorCoordCircleRef} width={props.componentW} height='300px'/>
     );
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Color from 'colorjs.io';
 import { ColorContext } from '../../contexts/color-context';
@@ -20,23 +20,26 @@ const ColorPickerBody = styled.div`
 `;
 
 // note that canvas ratio is set as attribute through the attribute itself
-export const ColorPickerChild = styled.canvas`    
+export const ColorPickerChild = styled.canvas<{ $width: number, $left: number}>`
     position: absolute;
-    z-index: 9999;
-    width: 300px;
+    z-index: 9999; 
+    width: ${props => props.$width ? props.$width + 'px' : '0px'};
     height: 300px;
+    left: ${props => props.$left ? props.$left + 'px' : '0px'};
+
+    &:hover {
+        cursor: crosshair;
+    }
 `;
 
 const ColorCanvas = styled(ColorPickerChild)`
     z-index: 0;
-    top: 5px;
-    left: 5px;    
+    top: 5px;    
 `;
 
 const HueSelector = styled(ColorPickerChild)`
     z-index: 0;
     left: 305px;
-    width: 30px;
 `;
 
 export interface Coord {
@@ -46,13 +49,11 @@ export interface Coord {
 
 export function ColorPicker() {
     const { color, updateColor } = useContext(ColorContext);
-    const [canvasCtx, setCanvasCtx] = useState<CanvasRenderingContext2D | null>(null);
-    const [sliderCtx, setSliderCtx] = useState<CanvasRenderingContext2D | null>(null);
     const colorCanvasRef = useRef<HTMLCanvasElement>(null);
     const colorSliderRef = useRef<HTMLCanvasElement>(null);
     const colorSelectedRef = useRef<HTMLDivElement>(null);
     const { isDown: isColorDown, x: colorX, y: colorY } = usePointer(colorCanvasRef);
-    const { y: hueY } = usePointer(colorSliderRef);
+    const { isDown: isHueDown, y: hueY } = usePointer(colorSliderRef);
 
     function updateColorCanvas(hue: number) {
         if (!colorCanvasRef.current) return;
@@ -60,9 +61,7 @@ export function ColorPicker() {
         const currCanvasCtx = colorCanvasRef.current.getContext('2d');
         if (!currCanvasCtx) {
             return;
-        }
-
-        setCanvasCtx(currCanvasCtx);
+        }        
             
         const gradientH = currCanvasCtx.createLinearGradient(0, 0, currCanvasCtx.canvas.width, 0);
         gradientH.addColorStop(0, '#fff');
@@ -77,6 +76,15 @@ export function ColorPicker() {
         currCanvasCtx.fillRect(0, 0, currCanvasCtx.canvas.width, currCanvasCtx.canvas.height);
     }
 
+    function adjustColor(newHue? : number) {
+        if (!colorCanvasRef.current) return; 
+        const saturation = colorX / colorCanvasRef.current.width;
+        const value = colorY / colorCanvasRef.current.height;        
+        const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);
+        if (newHue) newColor.hsv.h = newHue;
+        return newColor;
+    }
+
     // set color canvas
     useEffect(() => {
         updateColorCanvas(color.hsv.h);
@@ -89,9 +97,7 @@ export function ColorPicker() {
         const currSliderCtx = colorSliderRef.current.getContext('2d');
         if (!currSliderCtx) {
             return;
-        }
-
-        setSliderCtx(currSliderCtx);
+        }        
             
         const gradient = currSliderCtx.createLinearGradient(0, 0, 0, 300);
         gradient.addColorStop(0, 'rgba(255, 0, 0, 1)');
@@ -109,9 +115,7 @@ export function ColorPicker() {
     useEffect(() => {
         if (!isColorDown || !colorCanvasRef.current) return;
 
-        const saturation = colorX / colorCanvasRef.current.width;
-        const value = colorY / colorCanvasRef.current.height;        
-        const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);                
+        const newColor = adjustColor()!;          
         updateColor(newColor);
 
         // update selected color tile
@@ -119,28 +123,29 @@ export function ColorPicker() {
         colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
     }, [colorX, colorY]);
 
-    function sliderClick() {
-        if (!colorSliderRef.current) return;
+    // calculate selected hue
+    useEffect(() => {
+        if (!isHueDown || !colorSliderRef.current || !colorCanvasRef.current) return;
 
-        // set color chosen
-        const newHue = (hueY / colorSliderRef.current.height) * 360;
-        const newColor = new Color(color);
-        newColor.hsv.h = newHue;
-        updateColor(newColor);
+        const newHue = (hueY / colorSliderRef.current.height) * 360;                            
+        
+        const newColor = adjustColor(newHue)!;        
+        updateColor(newColor);        
 
         // update selected color tile
         if (!colorSelectedRef.current) return;
         colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
-    }
+    }, [hueY]);
 
     return (
         <Wrapper>
             <div>
                 <div style={{width: 100, height: 30}} ref={colorSelectedRef}></div>
-                <ColorPickerBody>                                       
-                    <ColorPickerMarker canvasHeight={colorCanvasRef.current?.height} coordX={colorX} coordY={colorY}/>
-                    <ColorCanvas ref={colorCanvasRef} width='300px' height='300px'/>                    
-                    <HueSelector ref={colorSliderRef} onClick={sliderClick} height="300" width="30"/>
+                <ColorPickerBody>                                                       
+                    <ColorPickerMarker canvasHeight={colorCanvasRef.current?.height} coordX={colorX} coordY={colorY} componentW={300} componentL={0}/>
+                    <ColorCanvas $left={5} $width={300} ref={colorCanvasRef} width='300px' height='300px'/>
+                    <ColorPickerMarker canvasHeight={colorSliderRef.current?.height} coordX={10} coordY={hueY} componentW={30} componentL={305}/>
+                    <HueSelector $left={305} $width={30} ref={colorSliderRef} height="300" width="30"/>
                 </ColorPickerBody>
             </div>
         </Wrapper>
