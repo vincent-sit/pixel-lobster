@@ -15,6 +15,12 @@ const ColorPickerBody = styled.div`
     border: solid 1px #ccc;
     opacity: 100;
     padding: 5px;    
+    position: relative;
+`;
+
+const CoordinateMarker = styled.canvas`
+    position: absolute;
+
 `;
 
 interface Coord {
@@ -30,7 +36,7 @@ export function ColorPicker() {
     const colorSliderRef = useRef<HTMLCanvasElement>(null);
     const colorSelectedRef = useRef<HTMLDivElement>(null);
     const colorCoordCircleRef = useRef<HTMLCanvasElement>(null);
-    const [selectionCoord, setSelectionCoord] = useState<Coord>({x: 0, y: 0});
+    const [markerPrevCoord, setMarkerPrevCoord] = useState<Coord>({x: 0, y: 0});
     const { isDown: isColorDown, x: colorX, y: colorY } = usePointer(colorCanvasRef);
     const { y: hueY } = usePointer(colorSliderRef);
 
@@ -55,6 +61,19 @@ export function ColorPicker() {
         gradientV.addColorStop(1, '#000');
         currCanvasCtx.fillStyle = gradientV;
         currCanvasCtx.fillRect(0, 0, currCanvasCtx.canvas.width, currCanvasCtx.canvas.height);
+    }
+
+    function drawPositionMarker(x: number, y: number) {
+        if (!colorCoordCircleRef.current) return;
+
+        const currCoordCtx = colorCoordCircleRef.current.getContext('2d');
+
+        if (!currCoordCtx) return;
+
+        currCoordCtx.beginPath();
+        currCoordCtx.arc(x, y, 5, 0, 2 * Math.PI);
+        currCoordCtx.stroke();
+        currCoordCtx.closePath();
     }
 
     // set color canvas
@@ -86,11 +105,16 @@ export function ColorPicker() {
     }, []);
 
     useEffect(() => {
+        drawPositionMarker(colorX, colorY);
+        setMarkerPrevCoord({x: colorX, y:colorY});
+    }, []);
+
+    // calculate selected color
+    useEffect(() => {
         if (!isColorDown || !colorCanvasRef.current) return;
 
         const saturation = colorX / colorCanvasRef.current.width;
-        const value = colorY / colorCanvasRef.current.height;
-        console.log(colorX, colorY);
+        const value = colorY / colorCanvasRef.current.height;        
         const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);                
         updateColor(newColor);
 
@@ -100,18 +124,17 @@ export function ColorPicker() {
     }, [colorX, colorY]);
 
     // // set color selection coord and draw circle
-    // useEffect(() => {
-    //     if (!colorCanvasRef.current || !colorCoordCircleRef.current) return;
+    useEffect(() => {
+        if (!colorCanvasRef.current || !colorCoordCircleRef.current) return;
         
-    //     const indicatorCtx = colorCoordCircleRef.current.getContext('2d');
+        const indicatorCtx = colorCoordCircleRef.current.getContext('2d');
 
-    //     if (indicatorCtx) {
-    //         indicatorCtx.beginPath();
-    //         indicatorCtx.arc(selectionCoord.x, selectionCoord.y, 5, 0, 2 * Math.PI);
-    //         indicatorCtx.stroke();
-    //     }
+        if (indicatorCtx) {
+            indicatorCtx.clearRect(markerPrevCoord.x, markerPrevCoord.y, indicatorCtx.canvas.width, indicatorCtx.canvas.height);
+            drawPositionMarker(colorX, colorY);
+        }
 
-    // }, [selectionCoord]);
+    }, [colorX, colorY]);
 
     function sliderClick() {
         if (!colorSliderRef.current) return;
@@ -151,7 +174,7 @@ export function ColorPicker() {
             <div>
                 <div style={{width: 100, height: 30}} ref={colorSelectedRef}></div>
                 <ColorPickerBody>
-                    {/* <canvas ref={colorCoordCircleRef}/> */}
+                    <canvas ref={colorCoordCircleRef}/>
                     {/* <canvas ref={colorCanvasRef} onPointerUp={handleCanvasInteract} onPointerMove={handleCanvasInteract} height="300" width="300"></canvas> */}
                     <canvas ref={colorCanvasRef} height="300" width="300"></canvas>
                     <canvas ref={colorSliderRef} onClick={sliderClick} height="300" width="30"></canvas>
