@@ -38,9 +38,18 @@ export function Canvas() {
         ctx.fillRect(pointerX, pointerY, 10, 10);
     }
 
+    function handleUp() {
+        if (!isDown || !ctx || !canvasRef.current) {
+            return;
+        }
+
+        ctx.fillStyle = color.to('srgb').toString();
+        ctx.fillRect(pointerX, pointerY, 10, 10);
+    }
+
     return (
         <Wrapper>
-            <canvas ref={canvasRef} width="300" height="300" onPointerMove={handleMove}></canvas>
+            <canvas ref={canvasRef} width="300" height="300" onPointerMove={handleMove} onPointerUp={handleUp}></canvas>
         </Wrapper>
     );
 }

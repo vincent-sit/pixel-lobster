@@ -60,10 +60,15 @@ export function usePointer(ref?: RefObject<HTMLElement>) {
             });
         };
 
-        const handleUp = () => {
-            if (isWithinRef.current) {
-                isWithinRef.current = false;
-            }
+        const handleUp = (e: PointerEvent) => {
+            if (!isWithinRef.current) return;
+            isWithinRef.current = false;
+            const newCoord = calculateCoordWithinBounds(e);            
+            setState({
+                isDown: e.pressure > 0,
+                x: newCoord.x,
+                y: newCoord.y
+            });            
         };
 
         const handlePointer = (e: PointerEvent) => {            

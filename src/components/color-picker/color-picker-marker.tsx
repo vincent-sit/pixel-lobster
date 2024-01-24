@@ -20,7 +20,7 @@ export function ColorPickerMarker(props: IColorProps) {
 
         if (!currCoordCtx) return;
         currCoordCtx.beginPath();
-        currCoordCtx.arc(x + 5, y, 5, 0, 2 * Math.PI);
+        currCoordCtx.arc(x, y, 5, 0, 2 * Math.PI);
         if (color) currCoordCtx.strokeStyle = color;
         currCoordCtx.stroke();
         currCoordCtx.closePath();        
@@ -52,7 +52,7 @@ export function ColorPickerMarker(props: IColorProps) {
         const indicatorCtx = colorCoordCircleRef.current.getContext('2d');
 
         if (indicatorCtx) {
-            indicatorCtx.clearRect(markerPrevCoord.x - 5, markerPrevCoord.y, indicatorCtx.canvas.width, indicatorCtx.canvas.height);
+            indicatorCtx.clearRect(markerPrevCoord.x - 15, markerPrevCoord.y, indicatorCtx.canvas.width + 30, indicatorCtx.canvas.height + 15);
             if (props.coordY >= props.canvasHeight / 2) {
                 drawPositionMarker(props.coordX, props.coordY, 'white');
             } else {

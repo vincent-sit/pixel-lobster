@@ -142,9 +142,9 @@ export function ColorPicker() {
             <div>
                 <div style={{width: 100, height: 30}} ref={colorSelectedRef}></div>
                 <ColorPickerBody>                                                       
-                    <ColorPickerMarker canvasHeight={colorCanvasRef.current?.height} coordX={colorX} coordY={colorY} componentW={300} componentL={0}/>
+                    <ColorPickerMarker canvasHeight={colorCanvasRef.current?.height} coordX={colorX} coordY={colorY} componentW={300} componentL={5}/>
                     <ColorCanvas $left={5} $width={300} ref={colorCanvasRef} width='300px' height='300px'/>
-                    <ColorPickerMarker canvasHeight={colorSliderRef.current?.height} coordX={10} coordY={hueY} componentW={30} componentL={305}/>
+                    <ColorPickerMarker canvasHeight={colorSliderRef.current?.height} coordX={15} coordY={hueY} componentW={30} componentL={305}/>
                     <HueSelector $left={305} $width={30} ref={colorSliderRef} height="300" width="30"/>
                 </ColorPickerBody>
             </div>
