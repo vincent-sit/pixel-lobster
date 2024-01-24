@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Color from 'colorjs.io';
 import { ColorContext } from '../../contexts/color-context';
 import { usePointer } from '../../hooks/use-pointer';
+import { ColorPickerMarker } from './color-picker-marker';
 
 const Wrapper = styled.div`
     background-color: #D32A2A;    
@@ -14,16 +15,31 @@ const ColorPickerBody = styled.div`
     width: 350px;
     border: solid 1px #ccc;
     opacity: 100;
-    padding: 5px;    
+    padding: 5px;
     position: relative;
 `;
 
-const CoordinateMarker = styled.canvas`
+// note that canvas ratio is set as attribute through the attribute itself
+export const ColorPickerChild = styled.canvas`    
     position: absolute;
-
+    z-index: 9999;
+    width: 300px;
+    height: 300px;
 `;
 
-interface Coord {
+const ColorCanvas = styled(ColorPickerChild)`
+    z-index: 0;
+    top: 5px;
+    left: 5px;    
+`;
+
+const HueSelector = styled(ColorPickerChild)`
+    z-index: 0;
+    left: 305px;
+    width: 30px;
+`;
+
+export interface Coord {
     x : number,
     y : number
 }
@@ -35,8 +51,6 @@ export function ColorPicker() {
     const colorCanvasRef = useRef<HTMLCanvasElement>(null);
     const colorSliderRef = useRef<HTMLCanvasElement>(null);
     const colorSelectedRef = useRef<HTMLDivElement>(null);
-    const colorCoordCircleRef = useRef<HTMLCanvasElement>(null);
-    const [markerPrevCoord, setMarkerPrevCoord] = useState<Coord>({x: 0, y: 0});
     const { isDown: isColorDown, x: colorX, y: colorY } = usePointer(colorCanvasRef);
     const { y: hueY } = usePointer(colorSliderRef);
 
@@ -61,19 +75,6 @@ export function ColorPicker() {
         gradientV.addColorStop(1, '#000');
         currCanvasCtx.fillStyle = gradientV;
         currCanvasCtx.fillRect(0, 0, currCanvasCtx.canvas.width, currCanvasCtx.canvas.height);
-    }
-
-    function drawPositionMarker(x: number, y: number) {
-        if (!colorCoordCircleRef.current) return;
-
-        const currCoordCtx = colorCoordCircleRef.current.getContext('2d');
-
-        if (!currCoordCtx) return;
-
-        currCoordCtx.beginPath();
-        currCoordCtx.arc(x, y, 5, 0, 2 * Math.PI);
-        currCoordCtx.stroke();
-        currCoordCtx.closePath();
     }
 
     // set color canvas
@@ -104,11 +105,6 @@ export function ColorPicker() {
         currSliderCtx.fillRect(0, 0, currSliderCtx.canvas.width, currSliderCtx.canvas.height); 
     }, []);
 
-    useEffect(() => {
-        drawPositionMarker(colorX, colorY);
-        setMarkerPrevCoord({x: colorX, y:colorY});
-    }, []);
-
     // calculate selected color
     useEffect(() => {
         if (!isColorDown || !colorCanvasRef.current) return;
@@ -121,19 +117,6 @@ export function ColorPicker() {
         // update selected color tile
         if (!colorSelectedRef.current) return;
         colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
-    }, [colorX, colorY]);
-
-    // // set color selection coord and draw circle
-    useEffect(() => {
-        if (!colorCanvasRef.current || !colorCoordCircleRef.current) return;
-        
-        const indicatorCtx = colorCoordCircleRef.current.getContext('2d');
-
-        if (indicatorCtx) {
-            indicatorCtx.clearRect(markerPrevCoord.x, markerPrevCoord.y, indicatorCtx.canvas.width, indicatorCtx.canvas.height);
-            drawPositionMarker(colorX, colorY);
-        }
-
     }, [colorX, colorY]);
 
     function sliderClick() {
@@ -150,34 +133,14 @@ export function ColorPicker() {
         colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
     }
 
-    function handleCanvasInteract() {
-        if (!isColorDown || !colorCanvasRef.current) return;
-
-        // set new coordinates to draw indicator
-        // const newCoord : Coord = {x : e.clientX - rect.x, y : e.clientY - rect.y};
-        // setSelectionCoord(newCoord);
-        
-        // set color chosen
-
-        const saturation = colorX / colorCanvasRef.current.width;
-        const value = colorY / colorCanvasRef.current.height;        
-        const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);                
-        updateColor(newColor);
-
-        // update selected color tile
-        if (!colorSelectedRef.current) return;
-        colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
-    }
-
     return (
         <Wrapper>
             <div>
                 <div style={{width: 100, height: 30}} ref={colorSelectedRef}></div>
-                <ColorPickerBody>
-                    <canvas ref={colorCoordCircleRef}/>
-                    {/* <canvas ref={colorCanvasRef} onPointerUp={handleCanvasInteract} onPointerMove={handleCanvasInteract} height="300" width="300"></canvas> */}
-                    <canvas ref={colorCanvasRef} height="300" width="300"></canvas>
-                    <canvas ref={colorSliderRef} onClick={sliderClick} height="300" width="30"></canvas>
+                <ColorPickerBody>                                       
+                    <ColorPickerMarker canvasHeight={colorCanvasRef.current?.height} coordX={colorX} coordY={colorY}/>
+                    <ColorCanvas ref={colorCanvasRef} width='300px' height='300px'/>                    
+                    <HueSelector ref={colorSliderRef} onClick={sliderClick} height="300" width="30"/>
                 </ColorPickerBody>
             </div>
         </Wrapper>
