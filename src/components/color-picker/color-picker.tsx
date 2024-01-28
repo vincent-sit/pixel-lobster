@@ -3,49 +3,45 @@ import styled from 'styled-components';
 import Color from 'colorjs.io';
 import { ColorContext } from '../../contexts/color-context';
 import { usePointer } from '../../hooks/use-pointer';
-import { ColorPickerMarker } from './color-picker-marker';
+
+const CANVAS_SIZE_PX = 300;
+const HUE_SELECTOR_WIDTH_PX = 30;
 
 const Wrapper = styled.div`
     background-color: #D32A2A;    
 `;
 
 const ColorPickerBody = styled.div`
+    display: flex;
     background-color: white;
-    height: 350px;
-    width: 350px;
     border: solid 1px #ccc;
-    opacity: 100;
     padding: 5px;
-    position: relative;
+    box-sizing: border-box;
 `;
 
-// note that canvas ratio is set as attribute through the attribute itself
-export const ColorPickerChild = styled.canvas<{ $width: number, $left: number}>`
-    position: absolute;
-    z-index: 9999; 
-    width: ${props => props.$width ? props.$width + 'px' : '0px'};
-    height: 300px;
-    left: ${props => props.$left ? props.$left + 'px' : '0px'};
+const CanvasContainer = styled.div`
+    position: relative;
+    overflow: hidden;
+`;
+
+const Canvas = styled.canvas`
+    display: block;
+    position: relative;
 
     &:hover {
         cursor: crosshair;
     }
 `;
 
-const ColorCanvas = styled(ColorPickerChild)`
-    z-index: 0;
-    top: 5px;    
+const Marker = styled.span`
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 9999999px;
 `;
-
-const HueSelector = styled(ColorPickerChild)`
-    z-index: 0;
-    left: 305px;
-`;
-
-export interface Coord {
-    x : number,
-    y : number
-}
 
 export function ColorPicker() {
     const { color, updateColor } = useContext(ColorContext);
@@ -99,7 +95,7 @@ export function ColorPicker() {
             return;
         }        
             
-        const gradient = currSliderCtx.createLinearGradient(0, 0, 0, 300);
+        const gradient = currSliderCtx.createLinearGradient(0, 0, 0, CANVAS_SIZE_PX);
         gradient.addColorStop(0, 'rgba(255, 0, 0, 1)');
         gradient.addColorStop(0.17, 'rgba(255, 255, 0, 1)');
         gradient.addColorStop(0.34, 'rgba(0, 255, 0, 1)');
@@ -139,15 +135,17 @@ export function ColorPicker() {
 
     return (
         <Wrapper>
-            <div>
-                <div style={{width: 100, height: 30}} ref={colorSelectedRef}></div>
-                <ColorPickerBody>                                                       
-                    <ColorPickerMarker canvasHeight={colorCanvasRef.current?.height} coordX={colorX} coordY={colorY} componentW={300} componentL={0}/>
-                    <ColorCanvas $left={5} $width={300} ref={colorCanvasRef} width='300px' height='300px'/>
-                    <ColorPickerMarker canvasHeight={colorSliderRef.current?.height} coordX={10} coordY={hueY} componentW={30} componentL={305}/>
-                    <HueSelector $left={305} $width={30} ref={colorSliderRef} height="300" width="30"/>
-                </ColorPickerBody>
-            </div>
+            <div style={{width: 100, height: 30}} ref={colorSelectedRef}></div>
+            <ColorPickerBody>
+                <CanvasContainer>
+                    <Canvas ref={colorCanvasRef} width={`${CANVAS_SIZE_PX}px`} height={`${CANVAS_SIZE_PX}px`}/>
+                    <Marker style={{ transform: `translate(${colorX}px, ${colorY}px) translate(-50%, -50%)`, border: `1px solid ${colorY > CANVAS_SIZE_PX / 2 ? 'white' : 'black'}` }}/>
+                </CanvasContainer>
+                <CanvasContainer>
+                    <Canvas ref={colorSliderRef} height={`${CANVAS_SIZE_PX}px`} width={`${HUE_SELECTOR_WIDTH_PX}px`}/>
+                    <Marker style={{ left: HUE_SELECTOR_WIDTH_PX / 2, transform: `translateY(${hueY}px) translate(-50%, -50%)`, border: '1px solid black' }}/>
+                </CanvasContainer>
+            </ColorPickerBody>
         </Wrapper>
     );
 }
