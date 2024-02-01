@@ -1,5 +1,6 @@
 import { RefObject, useEffect, useState, useRef } from 'react';
 import { clamp } from '../utils/math';
+import { isWithinBounds } from '../utils/ui-check';
 
 type PointerState = {
     isDown: boolean;
@@ -24,17 +25,11 @@ export function usePointer(ref?: RefObject<HTMLElement>) {
         // If no ref passed, default to document.body
         const element = ref?.current ? ref.current : document.body;
 
-        const isWithinBounds = (e: PointerEvent) => {
-            const rect = element.getBoundingClientRect();
-            return (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom);
-        };
-
         const handleDown = (e: PointerEvent) => {
-            if (!isWithinBounds(e)) return;
+            const rect = element.getBoundingClientRect();
+            if (!isWithinBounds(e, rect)) return;
             
             isWithinRef.current = true;
-
-            const rect = element.getBoundingClientRect();
 
             setState({
                 isDown: e.pressure > 0,
