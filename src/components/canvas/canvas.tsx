@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
+import { ColorContext } from '../../contexts/color-context';
 
 import { usePointer } from '../../hooks/use-pointer';
 
@@ -13,6 +14,7 @@ export function Canvas() {
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const { isDown, x: pointerX, y: pointerY } = usePointer(canvasRef);
+    const { color } = useContext(ColorContext);
 
     useEffect(() => {
         if (!canvasRef.current) {
@@ -32,8 +34,8 @@ export function Canvas() {
             return;
         }
 
-        ctx.fillStyle = 'black';
-        ctx.fillRect(pointerX, pointerY, 1, 1);
+        ctx.fillStyle = color.to('srgb').toString();
+        ctx.fillRect(pointerX, pointerY, 10, 10);
     }
 
     return (
