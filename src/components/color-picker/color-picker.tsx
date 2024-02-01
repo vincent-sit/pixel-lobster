@@ -9,8 +9,8 @@ const Wrapper = styled.div`
 
 const ColorPickerBody = styled.div`
     background-color: white;
-    height: 350px;
-    width: 350px;
+    height: 325px;
+    width: 325px;
     border: solid 1px #ccc;
     opacity: 100;
     padding: 5px;
