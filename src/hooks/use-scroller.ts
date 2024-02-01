@@ -1,4 +1,5 @@
-import {RefObject, useState} from 'react';
+import {RefObject, useEffect, useRef, useState} from 'react';
+import { isWithinBounds } from '../utils/ui-check';
 
 type ScrollerState = {
     x : number;
@@ -15,7 +16,28 @@ export function useScroller(ref? : RefObject<HTMLElement>) {
         scrollSpeed: 2
     });
 
-    const isWtithinRef = useRef(false);
+    const isWithinRef = useRef(false);
+
+    const element = ref?.current ? ref.current : document.body;
+
+    // deltaY returns positve if scrolling down, otherwise negative if scrolling up
+    const wheelScroll = (e: WheelEvent) => {
+        const rect = element.getBoundingClientRect();
+        if (!isWithinBounds(e, rect)) return;
+
+        isWithinRef.current = true;
+
+        setState((prev) => ({
+            ...prev,
+            x: e.clientX - rect.x,
+            y: e.clientY - rect.y,
+            isScrolling: true
+        }));
+    };
+
+    useEffect(() => {
+        if (ref && !ref.current) return;
+    }, []);
     
     return () => {        
     }
