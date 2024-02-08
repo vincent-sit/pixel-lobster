@@ -18,7 +18,7 @@ const CommandPanelWrapper = styled.div`
     right: 0;
 `;
 
-export function Display() {
+export function Display() {    
     return (
         <Wrapper>
             <CommandPanelWrapper>
