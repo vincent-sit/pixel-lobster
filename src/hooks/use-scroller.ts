@@ -13,7 +13,7 @@ export function useScroller(ref? : RefObject<HTMLElement>) {
         x: 0,
         y: 0,        
         scrollSpeed: 2,
-        zoomFactor : 1
+        zoomFactor : 16
     });
 
     const isWithinRef = useRef(false);
