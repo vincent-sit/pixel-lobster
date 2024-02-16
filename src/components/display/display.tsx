@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Canvas } from '../canvas/canvas';
-import { CommandPanel } from '../command-panel/command-panel';
+import { DrawingArea } from '../drawing-area/drawing-area';
+import { CommandPanel } from '../command-panel/Command-Panel';
 
 const Wrapper = styled.div`
     background-color: #D9D9D9;  
@@ -16,6 +16,7 @@ const CommandPanelWrapper = styled.div`
     position: absolute;
     top: 0;
     right: 0;
+    z-index: 100;
 `;
 
 export function Display() {    
@@ -24,7 +25,7 @@ export function Display() {
             <CommandPanelWrapper>
                 <CommandPanel/>
             </CommandPanelWrapper>
-            <Canvas></Canvas>
+            <DrawingArea/>
         </Wrapper>
     );
 }
