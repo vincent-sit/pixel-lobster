@@ -12,8 +12,8 @@ export function useScroller(ref? : RefObject<HTMLElement>) {
     const [state, setState] = useState<ScrollerState>({
         x: 0,
         y: 0,        
-        scrollSpeed: 2,
-        zoomFactor : 16
+        scrollSpeed: 1.5,
+        zoomFactor : 3
     });
 
     const isWithinRef = useRef(false);
@@ -37,7 +37,9 @@ export function useScroller(ref? : RefObject<HTMLElement>) {
                 ...prev,
                 x: e.clientX - rect.x,
                 y: e.clientY - rect.y,
-                zoomFactor : prev.zoomFactor + scrollDistance > -1 ? prev.zoomFactor + scrollDistance : -1
+                // placing a hard limit on how small the zoom can be 
+                // (maybe it should be calculated as a percentage of the original canvas)
+                zoomFactor : prev.zoomFactor + scrollDistance > 0.1 ? prev.zoomFactor + scrollDistance : 0.1
             }));            
         };
         
