@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Color from 'colorjs.io';
 import { ColorContext } from '../../contexts/color-context';
 import { usePointer } from '../../hooks/use-pointer';
+import { ColorHistory } from './color-history';
 
 const CANVAS_SIZE_PX = 300;
 const HUE_SELECTOR_WIDTH_PX = 30;
@@ -148,6 +149,7 @@ export function ColorPicker() {
                     <Marker style={{ left: HUE_SELECTOR_WIDTH_PX / 2, transform: `translateY(${hueY}px) translate(-50%, -50%)`, border: '1px solid black' }}/>
                 </CanvasContainer>
             </ColorPickerBody>
+            <ColorHistory/>
         </Wrapper>
     );
 }
