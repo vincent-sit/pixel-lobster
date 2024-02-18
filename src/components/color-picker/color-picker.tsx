@@ -16,7 +16,7 @@ const ColorPickerBody = styled.div`
     display: flex;
     background-color: white;
     height: 325px;
-    width: 325px;
+    width: 360px;
     border: solid 1px #ccc;
     padding: 5px;
     box-sizing: border-box;
@@ -100,8 +100,9 @@ export function ColorPicker() {
             hueMarkerRef.current.style.transform = `translateY(${newHueY}px) translate(-50%, -50%)`;
             // color
             const newColorX = color.hsv.s / 100 * colorCanvasRef.current.width;
-            const newColorY = color.hsv.v / 100 * colorCanvasRef.current.height;
+            const newColorY = (1 - (color.hsv.v / 100)) * colorCanvasRef.current.height;
             colorMarkerRef.current.style.transform = `translate(${newColorX}px, ${newColorY}px) translate(-50%, -50%)`;
+            colorMarkerRef.current.style.border = `1px solid ${newColorY > CANVAS_SIZE_PX / 2 ? 'white' : 'black'}`;
         }
     }
 
