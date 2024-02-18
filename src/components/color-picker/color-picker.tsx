@@ -51,6 +51,8 @@ export function ColorPicker() {
     const colorCanvasRef = useRef<HTMLCanvasElement>(null);
     const colorSliderRef = useRef<HTMLCanvasElement>(null);
     const colorSelectedRef = useRef<HTMLDivElement>(null);
+    const hueMarkerRef = useRef<HTMLSpanElement>(null);
+    const colorMarkerRef = useRef<HTMLSpanElement>(null);
     const { isDown: isColorDown, x: colorX, y: colorY } = usePointer(colorCanvasRef);
     const { isDown: isHueDown, y: hueY } = usePointer(colorSliderRef);
 
@@ -78,18 +80,42 @@ export function ColorPicker() {
     function adjustColor(newHue? : number) {
         if (!colorCanvasRef.current) return; 
         const saturation = colorX / colorCanvasRef.current.width;
-        const value = colorY / colorCanvasRef.current.height;        
+        const value = colorY / colorCanvasRef.current.height;
         const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);
         if (newHue) newColor.hsv.h = newHue;
         return newColor;
     }
 
+    function moveMarkers() {
+        if (isColorDown) {
+            if (!colorMarkerRef.current) return;
+            colorMarkerRef.current.style.transform = `translate(${colorX}px, ${colorY}px) translate(-50%, -50%)`;
+        } else if (isHueDown) {
+            if (!hueMarkerRef.current) return;
+            hueMarkerRef.current.style.transform = `translateY(${hueY}px) translate(-50%, -50%)`;
+        } else {
+            if (!colorSliderRef.current || !colorCanvasRef.current || !colorMarkerRef.current || !hueMarkerRef.current) return;
+            // hue
+            const newHueY = color.hsv.h / 360 * colorSliderRef.current.height;
+            hueMarkerRef.current.style.transform = `translateY(${newHueY}px) translate(-50%, -50%)`;
+            // color
+            const newColorX = color.hsv.s / 100 * colorCanvasRef.current.width;
+            const newColorY = color.hsv.v / 100 * colorCanvasRef.current.height;
+            colorMarkerRef.current.style.transform = `translate(${newColorX}px, ${newColorY}px) translate(-50%, -50%)`;
+        }
+    }
+
     // set color canvas
     useEffect(() => {
         updateColorCanvas(color.hsv.h);
+        /** add function to tigger the movement of the markers
+         * if the color change is triggered by a manual selection from the
+         * color history
+         */
+        moveMarkers();
     }, [color]);
 
-    // set color slider
+    // #region initial load of color slider
     useEffect(() => {
         if (!colorSliderRef.current) return;
 
@@ -109,12 +135,13 @@ export function ColorPicker() {
         currSliderCtx.fillStyle = gradient;
         currSliderCtx.fillRect(0, 0, currSliderCtx.canvas.width, currSliderCtx.canvas.height); 
     }, []);
+    // #endregion
 
     // calculate selected color
     useEffect(() => {
         if (!isColorDown || !colorCanvasRef.current) return;
 
-        const newColor = adjustColor()!;          
+        const newColor = adjustColor()!;
         updateColor(newColor);
 
         // update selected color tile
@@ -126,10 +153,10 @@ export function ColorPicker() {
     useEffect(() => {
         if (!isHueDown || !colorSliderRef.current || !colorCanvasRef.current) return;
 
-        const newHue = (hueY / colorSliderRef.current.height) * 360;                            
+        const newHue = (hueY / colorSliderRef.current.height) * 360;
         
-        const newColor = adjustColor(newHue)!;        
-        updateColor(newColor);        
+        const newColor = adjustColor(newHue)!;
+        updateColor(newColor);
 
         // update selected color tile
         if (!colorSelectedRef.current) return;
@@ -142,11 +169,22 @@ export function ColorPicker() {
             <ColorPickerBody>
                 <CanvasContainer>
                     <Canvas ref={colorCanvasRef} width={`${CANVAS_SIZE_PX}px`} height={`${CANVAS_SIZE_PX}px`}/>
-                    <Marker style={{ transform: `translate(${colorX}px, ${colorY}px) translate(-50%, -50%)`, border: `1px solid ${colorY > CANVAS_SIZE_PX / 2 ? 'white' : 'black'}` }}/>
+                    <Marker  ref={colorMarkerRef}
+                        style={{ 
+                            transform: 'translate(-50%, -50%)',
+                            border: `1px solid ${colorY > CANVAS_SIZE_PX / 2 ? 'white' : 'black'}`
+                        }}
+                    />
                 </CanvasContainer>
                 <CanvasContainer>
                     <Canvas ref={colorSliderRef} height={`${CANVAS_SIZE_PX}px`} width={`${HUE_SELECTOR_WIDTH_PX}px`}/>
-                    <Marker style={{ left: HUE_SELECTOR_WIDTH_PX / 2, transform: `translateY(${hueY}px) translate(-50%, -50%)`, border: '1px solid black' }}/>
+                    <Marker ref={hueMarkerRef}
+                        style={{ 
+                            left: HUE_SELECTOR_WIDTH_PX / 2,
+                            transform: 'translate(-50%, -50%)',
+                            border: '1px solid black'
+                        }}
+                    />
                 </CanvasContainer>
             </ColorPickerBody>
             <ColorHistory/>
