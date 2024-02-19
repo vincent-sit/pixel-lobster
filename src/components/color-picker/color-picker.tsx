@@ -78,7 +78,7 @@ export function ColorPicker() {
     }
 
     function adjustColor(newHue? : number) {
-        if (!colorCanvasRef.current) return; 
+        if (!colorCanvasRef.current) return;
         const saturation = colorX / colorCanvasRef.current.width;
         const value = colorY / colorCanvasRef.current.height;
         const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);
@@ -109,11 +109,7 @@ export function ColorPicker() {
     // set color canvas
     useEffect(() => {
         updateColorCanvas(color.hsv.h);
-        /** add function to tigger the movement of the markers
-         * if the color change is triggered by a manual selection from the
-         * color history
-         */
-        moveMarkers();
+        moveMarkers();        
     }, [color]);
 
     // #region initial load of color slider
@@ -154,12 +150,11 @@ export function ColorPicker() {
     useEffect(() => {
         if (!isHueDown || !colorSliderRef.current || !colorCanvasRef.current) return;
 
-        const newHue = (hueY / colorSliderRef.current.height) * 360;
-        
+        const newHue = (hueY / colorSliderRef.current.height) * 360;        
         const newColor = adjustColor(newHue)!;
         updateColor(newColor);
 
-        // update selected color tile
+        // update selected color tile 
         if (!colorSelectedRef.current) return;
         colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
     }, [hueY]);

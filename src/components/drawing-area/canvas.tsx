@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { ColorContext } from '../../contexts/color-context';
 import { usePointer } from '../../hooks/use-pointer';
+import { ColorHistoryContext } from '../../contexts/color-history-context';
 
 const CanvasContainer = styled.div`
     position: absolute;
@@ -32,11 +33,6 @@ const Marker = styled.span`
     }
 `;
 
-interface MousePos {
-    x : number,
-    y : number
-}
-
 interface DisplayProps {
     zoomFactor : number
 }
@@ -48,6 +44,7 @@ export function Canvas(props: DisplayProps) {
     const displayRef = useRef<HTMLDivElement>(null);
     const { isDown, x: pointerX, y: pointerY } = usePointer(canvasRef);    
     const { color } = useContext(ColorContext);
+    const { colors: colorHistory, updateColors : setColorHistory } = useContext(ColorHistoryContext);
 
     useEffect(() => {
         if (!canvasRef.current) return;
@@ -81,8 +78,19 @@ export function Canvas(props: DisplayProps) {
     function handleMove() {
         if (!isDown || !ctx || !canvasRef.current) return;
         ctx.fillStyle = color.to('srgb').toString();        
-        ctx.fillRect(Math.floor(pointerX / (props.zoomFactor)), Math.floor(pointerY / (props.zoomFactor)), 1, 1);        
+        ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);        
     }
+
+    function handleUp() {
+        if (!isDown || !ctx || !canvasRef.current) return;
+        ctx.fillStyle = color.to('srgb').toString();        
+        ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);        
+        setColorHistory([
+            ...colorHistory,
+            color
+        ]);
+    }
+
 
     return (
         <CanvasContainer ref={displayRef}>
@@ -98,7 +106,7 @@ export function Canvas(props: DisplayProps) {
                 width="16" height="16"
                 style={{imageRendering: 'pixelated'}}
                 onPointerMove={handleMove}
-                onPointerUp={handleMove}
+                onPointerUp={handleUp}
                 onMouseMove={handleHover}
                 onMouseLeave={handleLeave}
             />
