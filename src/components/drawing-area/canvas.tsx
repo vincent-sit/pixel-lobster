@@ -4,6 +4,8 @@ import { ColorContext } from '../../contexts/color-context';
 import { usePointer } from '../../hooks/use-pointer';
 import { ColorHistoryContext } from '../../contexts/color-history-context';
 
+const COLOR_HISTORY_LIMIT = 20;
+
 const CanvasContainer = styled.div`
     position: absolute;
     top: 50%;
@@ -83,12 +85,19 @@ export function Canvas(props: DisplayProps) {
 
     function handleUp() {
         if (!isDown || !ctx || !canvasRef.current) return;
-        ctx.fillStyle = color.to('srgb').toString();        
+        const currentColorString = color.to('srgb').toString();
+        ctx.fillStyle = currentColorString;
         ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);        
-        setColorHistory([
-            ...colorHistory,
-            color
-        ]);
+        const colorSearchResult = colorHistory.find((element) => element.to('srgb').toString() === currentColorString);
+        if (colorHistory.length > COLOR_HISTORY_LIMIT) {
+            colorHistory.splice(0, 1);            
+        }
+        if (!colorSearchResult) {
+            setColorHistory([
+                ...colorHistory,
+                color
+            ]);
+        }
     }
 
 
