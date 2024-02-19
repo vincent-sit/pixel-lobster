@@ -27,14 +27,13 @@ export function ColorHistory() {
     }
 
     useEffect(() => {
-        const startingColors = [new Color('pink'), new Color('green')];
-        updateColors(startingColors);
+        updateColors([]);
     }, []);
 
     function Render() {
         const colorBlocks = colors.map((color, index) =>
             <ColorBlock key={`color-${index}`} 
-                style={{backgroundColor: color.toString()}}
+                style={{backgroundColor: color.to('srgb').toString()}}
                 onClick={(e) => onColorClick(e.target as HTMLDivElement)}
             />
         );
