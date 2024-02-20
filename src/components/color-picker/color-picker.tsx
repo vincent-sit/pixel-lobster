@@ -8,7 +8,7 @@ const CANVAS_SIZE_PX = 300;
 const HUE_SELECTOR_WIDTH_PX = 30;
 
 const Wrapper = styled.div`
-    background-color: #D32A2A;    
+    background-color: #D32A2A;
 `;
 
 const ColorPickerBody = styled.div`
@@ -59,8 +59,8 @@ export function ColorPicker() {
         const currCanvasCtx = colorCanvasRef.current.getContext('2d');
         if (!currCanvasCtx) {
             return;
-        }        
-            
+        }
+
         const gradientH = currCanvasCtx.createLinearGradient(0, 0, currCanvasCtx.canvas.width, 0);
         gradientH.addColorStop(0, '#fff');
         gradientH.addColorStop(1, new Color('hsv', [hue, 100, 100]).to('srgb').toString());
@@ -77,7 +77,7 @@ export function ColorPicker() {
     function adjustColor(newHue? : number) {
         if (!colorCanvasRef.current) return; 
         const saturation = colorX / colorCanvasRef.current.width;
-        const value = colorY / colorCanvasRef.current.height;        
+        const value = colorY / colorCanvasRef.current.height;
         const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);
         if (newHue) newColor.hsv.h = newHue;
         return newColor;
@@ -113,7 +113,7 @@ export function ColorPicker() {
     useEffect(() => {
         if (!isColorDown || !colorCanvasRef.current) return;
 
-        const newColor = adjustColor()!;          
+        const newColor = adjustColor()!;
         updateColor(newColor);
 
         // update selected color tile
@@ -125,10 +125,10 @@ export function ColorPicker() {
     useEffect(() => {
         if (!isHueDown || !colorSliderRef.current || !colorCanvasRef.current) return;
 
-        const newHue = (hueY / colorSliderRef.current.height) * 360;                            
+        const newHue = (hueY / colorSliderRef.current.height) * 360;
         
-        const newColor = adjustColor(newHue)!;        
-        updateColor(newColor);        
+        const newColor = adjustColor(newHue)!;
+        updateColor(newColor);
 
         // update selected color tile
         if (!colorSelectedRef.current) return;

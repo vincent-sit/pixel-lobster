@@ -32,11 +32,6 @@ const Marker = styled.span`
     }
 `;
 
-interface MousePos {
-    x : number,
-    y : number
-}
-
 interface DisplayProps {
     zoomFactor : number
 }
