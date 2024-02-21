@@ -6,6 +6,7 @@ import { ToolBar } from './components/tool-bar/tool-bar';
 import { Display } from './components/display/display';
 import { ColorProvider } from './contexts/color-context';
 import { ColorHistoryProvider } from './contexts/color-history-context';
+import { ToolProvider } from './contexts/tool-context';
 
 const Layout = styled.div`
   display: grid;
@@ -34,10 +35,12 @@ function App() {
             <GlobalStyle/>
             <ColorHistoryProvider>
                 <ColorProvider>
-                    <Layout>
-                        <ToolBar/>
-                        <Display/>
-                    </Layout>
+                    <ToolProvider>
+                        <Layout>
+                            <ToolBar/>
+                            <Display/>
+                        </Layout>
+                    </ToolProvider>
                 </ColorProvider>
             </ColorHistoryProvider>
         </>
