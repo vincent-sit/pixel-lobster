@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ColorPicker } from '../color-picker/color-picker';
+import { ToolButtonCollection } from './tool-button-collection';
 
 const Wrapper = styled.div`
   background-color: #39B271;
@@ -13,7 +14,7 @@ const Wrapper = styled.div`
 export function ToolBar() {
     return (
         <Wrapper>
-            <div></div>
+            <ToolButtonCollection/>
             <ColorPicker/>
         </Wrapper>
     );

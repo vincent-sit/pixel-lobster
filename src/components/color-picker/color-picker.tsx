@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Color from 'colorjs.io';
 import { ColorContext } from '../../contexts/color-context';
 import { usePointer } from '../../hooks/use-pointer';
+import { ColorHistory } from './color-history';
 
 const CANVAS_SIZE_PX = 300;
 const HUE_SELECTOR_WIDTH_PX = 30;
@@ -15,7 +16,7 @@ const ColorPickerBody = styled.div`
     display: flex;
     background-color: white;
     height: 325px;
-    width: 325px;
+    width: 360px;
     border: solid 1px #ccc;
     padding: 5px;
     box-sizing: border-box;
@@ -50,6 +51,8 @@ export function ColorPicker() {
     const colorCanvasRef = useRef<HTMLCanvasElement>(null);
     const colorSliderRef = useRef<HTMLCanvasElement>(null);
     const colorSelectedRef = useRef<HTMLDivElement>(null);
+    const hueMarkerRef = useRef<HTMLSpanElement>(null);
+    const colorMarkerRef = useRef<HTMLSpanElement>(null);
     const { isDown: isColorDown, x: colorX, y: colorY } = usePointer(colorCanvasRef);
     const { isDown: isHueDown, y: hueY } = usePointer(colorSliderRef);
 
@@ -75,7 +78,7 @@ export function ColorPicker() {
     }
 
     function adjustColor(newHue? : number) {
-        if (!colorCanvasRef.current) return; 
+        if (!colorCanvasRef.current) return;
         const saturation = colorX / colorCanvasRef.current.width;
         const value = colorY / colorCanvasRef.current.height;
         const newColor = new Color('hsv', [color.hsl.h, saturation * 100, (1 - value) * 100]);
@@ -83,20 +86,41 @@ export function ColorPicker() {
         return newColor;
     }
 
+    function moveMarkers() {
+        if (isColorDown) {
+            if (!colorMarkerRef.current) return;
+            colorMarkerRef.current.style.transform = `translate(${colorX}px, ${colorY}px) translate(-50%, -50%)`;
+        } else if (isHueDown) {
+            if (!hueMarkerRef.current) return;
+            hueMarkerRef.current.style.transform = `translateY(${hueY}px) translate(-50%, -50%)`;
+        } else {
+            if (!colorSliderRef.current || !colorCanvasRef.current || !colorMarkerRef.current || !hueMarkerRef.current) return;
+            // hue
+            const newHueY = color.hsv.h / 360 * colorSliderRef.current.height;
+            hueMarkerRef.current.style.transform = `translateY(${newHueY}px) translate(-50%, -50%)`;
+            // color
+            const newColorX = color.hsv.s / 100 * colorCanvasRef.current.width;
+            const newColorY = (1 - (color.hsv.v / 100)) * colorCanvasRef.current.height;
+            colorMarkerRef.current.style.transform = `translate(${newColorX}px, ${newColorY}px) translate(-50%, -50%)`;
+            colorMarkerRef.current.style.border = `1px solid ${newColorY > CANVAS_SIZE_PX / 2 ? 'white' : 'black'}`;
+        }
+    }
+
     // set color canvas
     useEffect(() => {
         updateColorCanvas(color.hsv.h);
+        moveMarkers();        
     }, [color]);
 
-    // set color slider
+    // #region initial load of color slider
     useEffect(() => {
         if (!colorSliderRef.current) return;
 
         const currSliderCtx = colorSliderRef.current.getContext('2d');
         if (!currSliderCtx) {
             return;
-        }        
-            
+        }
+
         const gradient = currSliderCtx.createLinearGradient(0, 0, 0, CANVAS_SIZE_PX);
         gradient.addColorStop(0, 'rgba(255, 0, 0, 1)');
         gradient.addColorStop(0.17, 'rgba(255, 255, 0, 1)');
@@ -108,6 +132,7 @@ export function ColorPicker() {
         currSliderCtx.fillStyle = gradient;
         currSliderCtx.fillRect(0, 0, currSliderCtx.canvas.width, currSliderCtx.canvas.height); 
     }, []);
+    // #endregion
 
     // calculate selected color
     useEffect(() => {
@@ -124,13 +149,11 @@ export function ColorPicker() {
     // calculate selected hue
     useEffect(() => {
         if (!isHueDown || !colorSliderRef.current || !colorCanvasRef.current) return;
-
         const newHue = (hueY / colorSliderRef.current.height) * 360;
-        
         const newColor = adjustColor(newHue)!;
         updateColor(newColor);
 
-        // update selected color tile
+        // update selected color tile 
         if (!colorSelectedRef.current) return;
         colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
     }, [hueY]);
@@ -141,13 +164,25 @@ export function ColorPicker() {
             <ColorPickerBody>
                 <CanvasContainer>
                     <Canvas ref={colorCanvasRef} width={`${CANVAS_SIZE_PX}px`} height={`${CANVAS_SIZE_PX}px`}/>
-                    <Marker style={{ transform: `translate(${colorX}px, ${colorY}px) translate(-50%, -50%)`, border: `1px solid ${colorY > CANVAS_SIZE_PX / 2 ? 'white' : 'black'}` }}/>
+                    <Marker  ref={colorMarkerRef}
+                        style={{ 
+                            transform: 'translate(-50%, -50%)',
+                            border: `1px solid ${colorY > CANVAS_SIZE_PX / 2 ? 'white' : 'black'}`
+                        }}
+                    />
                 </CanvasContainer>
                 <CanvasContainer>
                     <Canvas ref={colorSliderRef} height={`${CANVAS_SIZE_PX}px`} width={`${HUE_SELECTOR_WIDTH_PX}px`}/>
-                    <Marker style={{ left: HUE_SELECTOR_WIDTH_PX / 2, transform: `translateY(${hueY}px) translate(-50%, -50%)`, border: '1px solid black' }}/>
+                    <Marker ref={hueMarkerRef}
+                        style={{ 
+                            left: HUE_SELECTOR_WIDTH_PX / 2,
+                            transform: 'translate(-50%, -50%)',
+                            border: '1px solid black'
+                        }}
+                    />
                 </CanvasContainer>
             </ColorPickerBody>
+            <ColorHistory/>
         </Wrapper>
     );
 }

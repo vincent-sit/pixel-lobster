@@ -9,7 +9,7 @@ const Wrapper = styled.div`
     display: flex;
 
     button {
-        margin: 10px;        
+        margin: 10px;
     }
 `;
 
