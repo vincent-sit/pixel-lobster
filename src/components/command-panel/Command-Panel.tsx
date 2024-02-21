@@ -35,8 +35,8 @@ export function CommandPanel() {
 
     return (
         <Wrapper>
-            <CommandPanelButton text='Clear Canvas' id='clear-canvas-button' function={clearCanvas}/>
             <CommandPanelButton text='Export Canvas' id='export-canvas-button' function={exportCanvas}/>
+            <CommandPanelButton text='Clear Canvas' id='clear-canvas-button' function={clearCanvas}/>
         </Wrapper>
     );
 }
