@@ -44,7 +44,7 @@ export function Canvas(props: DisplayProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
     const displayRef = useRef<HTMLDivElement>(null);
-    const { isDown, x: pointerX, y: pointerY } = usePointer(canvasRef);    
+    const { isDown, x: pointerX, y: pointerY } = usePointer(canvasRef);
     const { color } = useContext(ColorContext);
     const { colors: colorHistory, updateColors : setColorHistory } = useContext(ColorHistoryContext);
 
@@ -60,8 +60,8 @@ export function Canvas(props: DisplayProps) {
     }, []);
 
     useEffect(() => {
-        if (!canvasRef.current || !displayRef.current || !markerRef.current) return;        
-        displayRef.current.style.transform = `scale(${props.zoomFactor})`;        
+        if (!canvasRef.current || !displayRef.current || !markerRef.current) return;
+        displayRef.current.style.transform = `scale(${props.zoomFactor})`;
     }, [props.zoomFactor]);
 
     function handleHover(e : React.MouseEvent<HTMLCanvasElement>) {
@@ -79,18 +79,18 @@ export function Canvas(props: DisplayProps) {
 
     function handleMove() {
         if (!isDown || !ctx || !canvasRef.current) return;
-        ctx.fillStyle = color.to('srgb').toString();        
-        ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);        
+        ctx.fillStyle = color.to('srgb').toString();
+        ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
     }
 
     function handleUp() {
         if (!isDown || !ctx || !canvasRef.current) return;
         const currentColorString = color.to('srgb').toString();
         ctx.fillStyle = currentColorString;
-        ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);        
+        ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
         const colorSearchResult = colorHistory.find((element) => element.to('srgb').toString() === currentColorString);
         if (colorHistory.length > COLOR_HISTORY_LIMIT) {
-            colorHistory.splice(0, 1);            
+            colorHistory.splice(0, 1);
         }
         if (!colorSearchResult) {
             setColorHistory([
@@ -100,11 +100,10 @@ export function Canvas(props: DisplayProps) {
         }
     }
 
-
     return (
         <CanvasContainer ref={displayRef}>
             <Marker 
-                ref={markerRef} 
+                ref={markerRef}
                 style={{ 
                     backgroundColor: `${color.to('srgb').toString()}`,
                     width: '1px',

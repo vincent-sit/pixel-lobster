@@ -119,8 +119,8 @@ export function ColorPicker() {
         const currSliderCtx = colorSliderRef.current.getContext('2d');
         if (!currSliderCtx) {
             return;
-        }        
-            
+        }
+
         const gradient = currSliderCtx.createLinearGradient(0, 0, 0, CANVAS_SIZE_PX);
         gradient.addColorStop(0, 'rgba(255, 0, 0, 1)');
         gradient.addColorStop(0.17, 'rgba(255, 255, 0, 1)');
