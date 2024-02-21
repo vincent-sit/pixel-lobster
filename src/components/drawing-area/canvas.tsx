@@ -89,7 +89,9 @@ export function Canvas(props: DisplayProps) {
                     height: '1px',
                     zIndex: 99}}
             />
-            <CenteredCanvas ref={canvasRef}
+            <CenteredCanvas 
+                ref={canvasRef}
+                id='drawing-canvas'
                 width="16" height="16"
                 style={{imageRendering: 'pixelated'}}
                 onPointerMove={handleMove}
