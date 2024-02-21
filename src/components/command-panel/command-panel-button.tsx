@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ButtonWrapper = styled.button`
+export const ButtonWrapper = styled.button`
     display: block;
     background: lightgrey;    
     width: 50px;
