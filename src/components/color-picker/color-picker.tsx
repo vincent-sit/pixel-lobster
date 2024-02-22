@@ -106,10 +106,16 @@ export function ColorPicker() {
         }
     }
 
+    function updateCurrentColorSelected() {
+        if (!colorSelectedRef.current) return;
+        colorSelectedRef.current.style.backgroundColor = color.to('srgb').toString();
+    }
+
     // set color canvas
     useEffect(() => {
         updateColorCanvas(color.hsv.h);
-        moveMarkers();        
+        moveMarkers();
+        updateCurrentColorSelected();
     }, [color]);
 
     // #region initial load of color slider
@@ -140,10 +146,6 @@ export function ColorPicker() {
 
         const newColor = adjustColor()!;
         updateColor(newColor);
-
-        // update selected color tile
-        if (!colorSelectedRef.current) return;
-        colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
     }, [colorX, colorY]);
 
     // calculate selected hue

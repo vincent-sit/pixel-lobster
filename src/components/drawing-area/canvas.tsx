@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { ColorContext } from '../../contexts/color-context';
 import { usePointer } from '../../hooks/use-pointer';
 import { ColorHistoryContext } from '../../contexts/color-history-context';
+import { TOOL, ToolContext } from '../../contexts/tool-context';
+import Color from 'colorjs.io';
 
 const COLOR_HISTORY_LIMIT = 20;
 
@@ -46,7 +48,8 @@ export function Canvas(props: DisplayProps) {
     const markerRef = useRef<HTMLSpanElement>(null);
     const displayRef = useRef<HTMLDivElement>(null);
     const { isDown, x: pointerX, y: pointerY } = usePointer(canvasRef);
-    const { color } = useContext(ColorContext);
+    const { color, updateColor } = useContext(ColorContext);
+    const { toolInUse } = useContext(ToolContext);
     const { colors: colorHistory, updateColors : setColorHistory } = useContext(ColorHistoryContext);
 
     useEffect(() => {
@@ -81,7 +84,7 @@ export function Canvas(props: DisplayProps) {
     }, [props.zoomFactor]);
 
     function handleHover(e : React.MouseEvent<HTMLCanvasElement>) {
-        if (!markerRef.current || !ctx || !canvasRef.current) return;
+        if (!markerRef.current || !ctx || !canvasRef.current || toolInUse !== TOOL.PAINTBRUSH) return;
         const rect = canvasRef.current.getBoundingClientRect();
         markerRef.current.style.visibility = 'visible';
         markerRef.current.style.top = `${Math.floor((e.clientY - rect.y) / props.zoomFactor)}px`;
@@ -95,24 +98,37 @@ export function Canvas(props: DisplayProps) {
 
     function handleMove() {
         if (!isDown || !ctx || !canvasRef.current) return;
-        ctx.fillStyle = color.to('srgb').toString();
-        ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
+        if (toolInUse === TOOL.PAINTBRUSH) {
+            ctx.fillStyle = color.to('srgb').toString();
+            ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
+        } else if (toolInUse === TOOL.ERASER) {            
+            ctx.clearRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
+        }
     }
 
     function handleUp() {
         if (!isDown || !ctx || !canvasRef.current) return;
-        const currentColorString = color.to('srgb').toString();
-        ctx.fillStyle = currentColorString;
-        ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
-        const colorSearchResult = colorHistory.find((element) => element.to('srgb').toString() === currentColorString);
-        if (colorHistory.length > COLOR_HISTORY_LIMIT) {
-            colorHistory.splice(0, 1);
-        }
-        if (!colorSearchResult) {
-            setColorHistory([
-                ...colorHistory,
-                color
-            ]);
+        if (toolInUse === TOOL.PAINTBRUSH) {
+            const currentColorString = color.to('srgb').toString();
+            ctx.fillStyle = currentColorString;
+            ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
+            const colorSearchResult = colorHistory.find((element) => element.to('srgb').toString() === currentColorString);
+            if (colorHistory.length > COLOR_HISTORY_LIMIT) {
+                colorHistory.splice(0, 1);
+            }
+            if (!colorSearchResult) {
+                setColorHistory([
+                    ...colorHistory,
+                    color
+                ]);
+            }
+        } else if (toolInUse === TOOL.ERASER) {            
+            ctx.clearRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
+        } else if (toolInUse === TOOL.COLORPICKER) {
+            const dataAtPixel = ctx.getImageData(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1).data;
+            const rgbaString = `rgba(${dataAtPixel[0]},${dataAtPixel[1]},${dataAtPixel[2]},${dataAtPixel[3]})`;
+            if (dataAtPixel[3] === 0) return;
+            updateColor(new Color(rgbaString));
         }
     }
 
