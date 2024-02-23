@@ -11,6 +11,7 @@ export const ButtonWrapper = styled.button`
 
     &:hover {
         cursor: pointer;
+        filter: brightness(125%);
     }
 
     &:active {
@@ -22,11 +23,14 @@ export const ButtonWrapper = styled.button`
 interface ButtonProps {
     text: string,
     id: string,
+    imageLink : string,
     function : () => void;
 }
 
 export function CommandPanelButton(props: ButtonProps) {
     return (
-        <ButtonWrapper id={props.id} onClick={props.function}>{props.text}</ButtonWrapper>
+        <ButtonWrapper id={props.id} onClick={props.function} title={props.text}>
+            <img src={String(props.imageLink)} alt={props.text}/>
+        </ButtonWrapper>
     );
 }
