@@ -19,7 +19,7 @@ export function ToolButtonCollection() {
                 tool={tool.tool}
                 imageLink={tool.imageLink}
                 altText={tool.altText}
-                isPressed={tool.isPressed}
+                pressed={tool.isPressed}
             />
         );
         return (

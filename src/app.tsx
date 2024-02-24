@@ -18,6 +18,16 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     height: 100%;
+    font-family: "VT323", monospace;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  input[type="text"]
+  {
+    font-family: "VT323", monospace;
+    font-weight: 400;
+    font-style: normal;
   }
 
   html {
@@ -27,6 +37,7 @@ const GlobalStyle = createGlobalStyle`
   #root {
     height: 100%;
   }
+  
 `;
 
 function App() {
