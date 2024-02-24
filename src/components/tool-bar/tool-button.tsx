@@ -8,11 +8,11 @@ export interface ToolButtonProps {
     tool : TOOL,
     imageLink : string,
     altText : string,
-    isPressed : boolean
+    pressed : boolean
 }
 
-const PressedStateButtonWrapper = styled(ButtonWrapper)<{ isPressed?: boolean; }>`
-    filter: ${props => props.isPressed ? 'brightness(80%)' : 'brightness(100%)'};
+const PressedStateButtonWrapper = styled(ButtonWrapper)<{ $isPressed?: boolean; }>`
+    filter: ${props => props.$isPressed ? 'brightness(80%)' : 'brightness(100%)'};
 `;
 
 export function ToolButton(props : ToolButtonProps) {
@@ -24,7 +24,7 @@ export function ToolButton(props : ToolButtonProps) {
     }
 
     return (
-        <PressedStateButtonWrapper onClick={onClick} isPressed={props.isPressed} title={props.altText}>
+        <PressedStateButtonWrapper onClick={onClick} $isPressed={props.pressed} title={props.altText}>
             <img src={String(props.imageLink)} alt={props.altText}/>
         </PressedStateButtonWrapper>
     );

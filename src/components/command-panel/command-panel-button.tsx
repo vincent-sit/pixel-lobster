@@ -8,6 +8,7 @@ export const ButtonWrapper = styled.button`
     height: 50px;
     padding: 0;
     border-width: 0;
+    border-radius: 0.6rem;
 
     &:hover {
         cursor: pointer;
