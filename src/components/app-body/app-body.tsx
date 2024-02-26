@@ -10,7 +10,7 @@ const Layout = styled.div`
 `;
 
 const BodyWrapper = styled.div`
-    height: 100%;
+    height: 100%;    
 `;
 
 export function AppBody() {

@@ -12,6 +12,7 @@ const Wrapper = styled.div`
 
     button {
         margin: 10px;
+
     }
 `;
 

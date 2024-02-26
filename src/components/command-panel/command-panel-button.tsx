@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 export const ButtonWrapper = styled.button`
+const ButtonWrapper = styled.button`
     display: block;
     background: lightgrey;    
     width: 50px;

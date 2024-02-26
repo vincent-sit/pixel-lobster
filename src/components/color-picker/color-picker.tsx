@@ -154,7 +154,7 @@ export function ColorPicker() {
         const newHue = (hueY / colorSliderRef.current.height) * 360;
         const newColor = adjustColor(newHue)!;
         updateColor(newColor);
-
+      
         // update selected color tile 
         if (!colorSelectedRef.current) return;
         colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
