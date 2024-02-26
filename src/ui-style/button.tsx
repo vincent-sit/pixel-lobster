@@ -20,8 +20,7 @@ export const ButtonWrapper = styled.button<{ buttonshape?: ButtonShape}>`
     font-family: "VT323", monospace;
     font-weight: 400;
     font-style: normal;
-
-    padding: 0;
+    padding: 0.5rem;
     border-width: 0;
 
     &:hover {

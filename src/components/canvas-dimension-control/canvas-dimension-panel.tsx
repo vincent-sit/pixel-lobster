@@ -29,8 +29,7 @@ export function CanvasSizePanel() {
         updateDimension({
             width: parseInt(widthInputRef.current.value, 10),
             height: parseInt(heightInputRef.current.value, 10)
-        });
-        console.log('update dimension');
+        });        
     }, [widthInputRef.current?.value, heightInputRef.current?.value]);
 
     return (

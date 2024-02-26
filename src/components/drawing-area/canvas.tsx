@@ -101,8 +101,7 @@ export function Canvas(props: DisplayProps) {
             const currentColorString = color.to('srgb').toString();
             ctx.fillStyle = currentColorString;
             ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
-            const colorSearchResult = colorHistory.find((element) => element.to('srgb').toString() === currentColorString);
-            console.log(currentColorString, colorSearchResult?.to('srgb').toString());
+            const colorSearchResult = colorHistory.find((element) => element.to('srgb').toString() === currentColorString);            
             if (colorHistory.length > COLOR_HISTORY_LIMIT) {
                 colorHistory.splice(0, 1);
             }

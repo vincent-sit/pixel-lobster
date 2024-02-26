@@ -53,7 +53,7 @@ export function ResizeDialog() {
                     style={{gridColumnStart:'1', gridColumnEnd:'3', gridRow:'3', justifySelf:'center'}}
                     buttonshape='rectangle'
                 >
-                    Confirm Confirm ConfirmConfirmConfirm Confirm
+                    Confirm
                 </ButtonWrapper>
                 <ButtonWrapper 
                     onClick={onClick} 
