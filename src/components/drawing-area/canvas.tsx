@@ -100,7 +100,6 @@ export function Canvas(props: DisplayProps) {
         }
     }
 
-
     return (
         <CanvasContainer ref={displayRef}>
             <Marker 
