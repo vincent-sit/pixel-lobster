@@ -1,0 +1,31 @@
+import React, { useContext } from 'react';
+import { ButtonWrapper } from '../command-panel/command-panel-button';
+import { TOOL } from '../../contexts/tool-context';
+import { ToolContext } from '../../contexts/tool-context';
+import { styled } from 'styled-components';
+
+export interface ToolButtonProps {
+    tool : TOOL,
+    imageLink : string,
+    altText : string,
+    pressed : boolean
+}
+
+const PressedStateButtonWrapper = styled(ButtonWrapper)<{ $isPressed?: boolean; }>`
+    filter: ${props => props.$isPressed ? 'brightness(80%)' : 'brightness(100%)'};
+`;
+
+export function ToolButton(props : ToolButtonProps) {
+    // TODO: add a hover notification of what tool it is
+    const {updateToolInUse} = useContext(ToolContext);
+
+    function onClick() {
+        updateToolInUse(props.tool);
+    }
+
+    return (
+        <PressedStateButtonWrapper onClick={onClick} $isPressed={props.pressed} title={props.altText}>
+            <img src={String(props.imageLink)} alt={props.altText}/>
+        </PressedStateButtonWrapper>
+    );
+}

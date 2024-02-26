@@ -106,10 +106,16 @@ export function ColorPicker() {
         }
     }
 
+    function updateCurrentColorSelected() {
+        if (!colorSelectedRef.current) return;
+        colorSelectedRef.current.style.backgroundColor = color.to('srgb').toString();
+    }
+
     // set color canvas
     useEffect(() => {
         updateColorCanvas(color.hsv.h);
-        moveMarkers();        
+        moveMarkers();
+        updateCurrentColorSelected();
     }, [color]);
 
     // #region initial load of color slider
@@ -119,8 +125,8 @@ export function ColorPicker() {
         const currSliderCtx = colorSliderRef.current.getContext('2d');
         if (!currSliderCtx) {
             return;
-        }        
-            
+        }
+
         const gradient = currSliderCtx.createLinearGradient(0, 0, 0, CANVAS_SIZE_PX);
         gradient.addColorStop(0, 'rgba(255, 0, 0, 1)');
         gradient.addColorStop(0.17, 'rgba(255, 255, 0, 1)');
@@ -140,20 +146,15 @@ export function ColorPicker() {
 
         const newColor = adjustColor()!;
         updateColor(newColor);
-
-        // update selected color tile
-        if (!colorSelectedRef.current) return;
-        colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();
     }, [colorX, colorY]);
 
     // calculate selected hue
     useEffect(() => {
         if (!isHueDown || !colorSliderRef.current || !colorCanvasRef.current) return;
-
         const newHue = (hueY / colorSliderRef.current.height) * 360;
         const newColor = adjustColor(newHue)!;
         updateColor(newColor);
-
+      
         // update selected color tile 
         if (!colorSelectedRef.current) return;
         colorSelectedRef.current.style.backgroundColor = newColor.to('srgb').toString();

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+export const ButtonWrapper = styled.button`
 const ButtonWrapper = styled.button`
     display: block;
     background: lightgrey;    
@@ -8,9 +9,11 @@ const ButtonWrapper = styled.button`
     height: 50px;
     padding: 0;
     border-width: 0;
+    border-radius: 0.6rem;
 
     &:hover {
         cursor: pointer;
+        filter: brightness(125%);
     }
 
     &:active {
@@ -22,11 +25,14 @@ const ButtonWrapper = styled.button`
 interface ButtonProps {
     text: string,
     id: string,
+    imageLink : string,
     function : () => void;
 }
 
 export function CommandPanelButton(props: ButtonProps) {
     return (
-        <ButtonWrapper id={props.id} onClick={props.function}>{props.text}</ButtonWrapper>
+        <ButtonWrapper id={props.id} onClick={props.function} title={props.text}>
+            <img src={String(props.imageLink)} alt={props.text}/>
+        </ButtonWrapper>
     );
 }

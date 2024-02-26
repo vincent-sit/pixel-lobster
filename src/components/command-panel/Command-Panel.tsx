@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CommandPanelButton } from './command-panel-button';
+import clearCanvasImage from '../../assets/clearCanvas.png';
+import exportImage from '../../assets/export.png';
 
 const Wrapper = styled.div`
     background-color: #C63F3F;
@@ -9,7 +11,8 @@ const Wrapper = styled.div`
     display: flex;
 
     button {
-        margin: 10px;        
+        margin: 10px;
+
     }
 `;
 
@@ -35,8 +38,8 @@ export function CommandPanel() {
 
     return (
         <Wrapper>
-            <CommandPanelButton text='Export Canvas' id='export-canvas-button' function={exportCanvas}/>
-            <CommandPanelButton text='Clear Canvas' id='clear-canvas-button' function={clearCanvas}/>
+            <CommandPanelButton text='Export Canvas' id='export-canvas-button' function={exportCanvas} imageLink={exportImage}/>
+            <CommandPanelButton text='Clear Canvas' id='clear-canvas-button' function={clearCanvas} imageLink={clearCanvasImage}/>
         </Wrapper>
     );
 }

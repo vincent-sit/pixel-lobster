@@ -1,8 +1,5 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-// import { ColorContext } from '../../contexts/color-context';
-// import { usePointer } from '../../hooks/use-pointer';
-// import { useScroller } from '../../hooks/use-scroller';
 import { Canvas } from './canvas';
 import { useScroller } from '../../hooks/use-scroller';
 
@@ -10,8 +7,7 @@ const Wrapper = styled.div`
     background-color: #5a546a;
     width: 100%;
     height: 100%;
-    display: flex;
-    //justify-content: center;
+    display: flex;    
     position: relative;
     overflow: hidden;
 `;
