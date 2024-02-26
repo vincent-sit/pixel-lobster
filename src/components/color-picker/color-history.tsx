@@ -4,13 +4,9 @@ import { styled } from 'styled-components';
 import Color from 'colorjs.io';
 import { ColorContext } from '../../contexts/color-context';
 
-const ColorBlocks = styled.div`    
-    margin: 0;
-    padding: 0;
+const ColorBlocks = styled.div`
     display: flex;
-    flex-flow: row-reverse wrap;
-    align-content: flex-start;
-    justify-content: flex-start;
+    flex-wrap: wrap;
 `;
 const ColorBlock = styled.div`
     width: 25px;
@@ -22,8 +18,8 @@ export function ColorHistory() {
     const {colors, updateColors} = useContext(ColorHistoryContext);
     const {updateColor} = useContext(ColorContext);
 
-    function onColorClick(e : HTMLDivElement) {
-        updateColor(new Color(e.style.backgroundColor));
+    function onColorClick(color: Color) {
+        updateColor(color);
     }
 
     useEffect(() => {
@@ -31,10 +27,10 @@ export function ColorHistory() {
     }, []);
 
     function Render() {
-        const colorBlocks = colors.map((color, index) =>
-            <ColorBlock key={`color-${index}`} 
+        const colorBlocks = [...colors].reverse().map((color, index) =>
+            <ColorBlock key={`color-${index}`}
                 style={{backgroundColor: color.to('srgb').toString()}}
-                onClick={(e) => onColorClick(e.target as HTMLDivElement)}
+                onClick={() => onColorClick(color)}
             />
         );
         return (

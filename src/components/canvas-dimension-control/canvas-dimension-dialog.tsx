@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import { StyledAlertDialog } from '../../ui-style/alert-dialog';
-import { BUTTONSHAPE, ButtonWrapper } from '../../ui-style/button';
+import { ButtonWrapper } from '../../ui-style/button';
 import { DialogContext } from '../../contexts/dialog-context';
 import styled from 'styled-components';
 import { CanvasSizeInput } from './canvas-dimension-input';
@@ -51,14 +51,14 @@ export function ResizeDialog() {
                 <ButtonWrapper 
                     onClick={onClick} 
                     style={{gridColumnStart:'1', gridColumnEnd:'3', gridRow:'3', justifySelf:'center'}}
-                    buttonshape={BUTTONSHAPE.RECTANGLE}
+                    buttonshape='rectangle'
                 >
-                    Confirm
+                    Confirm Confirm ConfirmConfirmConfirm Confirm
                 </ButtonWrapper>
                 <ButtonWrapper 
                     onClick={onClick} 
                     style={{gridColumnStart:'3', gridColumnEnd:'5', gridRow:'3', justifySelf:'center'}}
-                    buttonshape={BUTTONSHAPE.RECTANGLE}
+                    buttonshape='rectangle'
                 >
                     Cancel
                 </ButtonWrapper>

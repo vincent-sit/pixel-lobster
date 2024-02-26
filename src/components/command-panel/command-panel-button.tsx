@@ -3,14 +3,13 @@ import { ButtonWrapper } from '../../ui-style/button';
 
 interface ButtonProps {
     text: string,
-    id: string,
     imageLink : string,
-    function : () => void;
+    onClick : () => void;
 }
 
 export function CommandPanelButton(props: ButtonProps) {
     return (
-        <ButtonWrapper id={props.id} onClick={props.function} title={props.text}>
+        <ButtonWrapper onClick={props.onClick} title={props.text}>
             <img src={String(props.imageLink)} alt={props.text}/>
         </ButtonWrapper>
     );

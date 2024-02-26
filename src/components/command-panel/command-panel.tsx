@@ -8,15 +8,12 @@ import { DialogContext } from '../../contexts/dialog-context';
 
 const Wrapper = styled.div`
     background-color: #C63F3F;
-    height: 70px;
     width: 500px;
     display: flex;
     align-items: center;
-
-    button {
-        margin: 10px;
-
-    }
+    gap: 20px;
+    padding: 20px;
+    box-sizing: border-box;
 `;
 
 export function CommandPanel() {
@@ -47,9 +44,9 @@ export function CommandPanel() {
 
     return (
         <Wrapper>
-            <CommandPanelButton text='Export Canvas' id='export-canvas-button' function={exportCanvas} imageLink={exportImage}/>
-            <CommandPanelButton text='Clear Canvas' id='clear-canvas-button' function={clearCanvas} imageLink={clearCanvasImage}/>
-            <CommandPanelButton text='Resize Canvas' id='resize-canvas-button' function={resizeCanvas} imageLink={resizeImage}/>            
+            <CommandPanelButton text='Export Canvas' onClick={exportCanvas} imageLink={exportImage}/>
+            <CommandPanelButton text='Clear Canvas' onClick={clearCanvas} imageLink={clearCanvasImage}/>
+            <CommandPanelButton text='Resize Canvas' onClick={resizeCanvas} imageLink={resizeImage}/>
         </Wrapper>
     );
 }

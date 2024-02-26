@@ -6,32 +6,23 @@ import styled from 'styled-components';
 const ButtonCollectionWrapper = styled.div`
     display: flex;
     gap: 0.5rem;
-    
 `;
 
 export function ToolButtonCollection() {
     // const [activeButton, setActiveButton] = useState<HTMLButtonElement | null>(null);
 
-    function Render() {
-        const tools = ToolSetData.map((tool) =>
-            <ToolButton 
-                key={`tool-${tool.tool}`}
-                tool={tool.tool}
-                imageLink={tool.imageLink}
-                altText={tool.altText}
-                isPressed={tool.isPressed}
-            />
-        );
-        return (
-            <ButtonCollectionWrapper>
-                {tools}
-            </ButtonCollectionWrapper>
-        );
-    }
-
     return (
         <div>
-            {Render()}
+            <ButtonCollectionWrapper>
+                {ToolSetData.map((tool) =>
+                    (<ToolButton 
+                        key={`tool-${tool.tool}`}
+                        tool={tool.tool}
+                        imageLink={tool.imageLink}
+                        altText={tool.altText}
+                        isPressed={tool.isPressed}
+                    />))}
+            </ButtonCollectionWrapper>
         </div>
     );
 }
