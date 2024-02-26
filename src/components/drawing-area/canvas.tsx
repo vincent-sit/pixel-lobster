@@ -9,17 +9,13 @@ import { DimensionContext } from '../../contexts/dimension-context';
 
 const COLOR_HISTORY_LIMIT = 20;
 
-const CanvasContainer = styled.div`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    display: grid;
+const Container = styled.div`
+    transform-origin: center;
+    position: relative;
 `;
 
 const CenteredCanvas = styled.canvas`
-    margin-top: 0;
-    grid-column: 1;
-    grid-row: 1;
+    position: absolute;
 
     &:hover {
         cursor: crosshair;
@@ -29,8 +25,6 @@ const CenteredCanvas = styled.canvas`
 const Marker = styled.span`
     position: absolute;
     visibility: hidden;
-    grid-column: 1;
-    grid-row: 1;
     pointer-events: none;
 
     &:hover {
@@ -47,7 +41,6 @@ export function Canvas(props: DisplayProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const backgroundRef = useRef<HTMLCanvasElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
-    const displayRef = useRef<HTMLDivElement>(null);
     const { isDown, x: pointerX, y: pointerY } = usePointer(canvasRef);
     const { color, updateColor } = useContext(ColorContext);
     const { toolInUse } = useContext(ToolContext);
@@ -69,7 +62,6 @@ export function Canvas(props: DisplayProps) {
             const colorTwo = 'rgba(199, 199, 199, 1)';
             let isMainColor = true;
             for (let i = 0; i < dimension.height; i++) {
-                // if even, flip j
                 if (dimension.height % 2 == 0) isMainColor = !isMainColor;
                 for (let j = 0; j < dimension.width; j++) {
                     backgroundCtx.fillStyle = isMainColor ? colorOne : colorTwo;
@@ -79,11 +71,6 @@ export function Canvas(props: DisplayProps) {
             }
         }
     }, [dimension]);
-
-    useEffect(() => {
-        if (!canvasRef.current || !displayRef.current || !markerRef.current || !backgroundRef.current) return;
-        displayRef.current.style.transform = `scale(${props.zoomFactor})`;
-    }, [props.zoomFactor]);
 
     function handleHover(e : React.MouseEvent<HTMLCanvasElement>) {
         if (!markerRef.current || !ctx || !canvasRef.current || toolInUse !== TOOL.PAINTBRUSH) return;
@@ -115,6 +102,7 @@ export function Canvas(props: DisplayProps) {
             ctx.fillStyle = currentColorString;
             ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
             const colorSearchResult = colorHistory.find((element) => element.to('srgb').toString() === currentColorString);
+            console.log(currentColorString, colorSearchResult?.to('srgb').toString());
             if (colorHistory.length > COLOR_HISTORY_LIMIT) {
                 colorHistory.splice(0, 1);
             }
@@ -135,31 +123,30 @@ export function Canvas(props: DisplayProps) {
     }
 
     return (
-        <CanvasContainer ref={displayRef}>
-            <Marker 
-                ref={markerRef}
-                style={{ 
-                    backgroundColor: `${color.to('srgb').toString()}`,
-                    width: '1px',
-                    height: '1px',
-                    zIndex: 99}}
+        <Container style={{ transform: `scale(${props.zoomFactor})`, width: dimension.width, height: dimension.height }}>
+            <CenteredCanvas
+                id='canvas-background'
+                width={dimension.width} height={dimension.height}
+                ref={backgroundRef}
+                style={{imageRendering: 'pixelated'}}
             />
             <CenteredCanvas 
                 ref={canvasRef}
                 id='drawing-canvas'
                 width={dimension.width} height={dimension.height}
-                style={{imageRendering: 'pixelated', zIndex:3}}
+                style={{imageRendering: 'pixelated'}}
                 onPointerMove={handleMove}
                 onPointerUp={handleUp}
                 onMouseMove={handleHover}
                 onMouseLeave={handleLeave}
             />
-            <CenteredCanvas
-                id='canvas-background'
-                width={dimension.width} height={dimension.height}
-                ref={backgroundRef}
-                style={{imageRendering: 'pixelated', zIndex:2}}
+            <Marker 
+                ref={markerRef}
+                style={{ 
+                    backgroundColor: `${color.to('srgb').toString()}`,
+                    width: '1px',
+                    height: '1px'}}
             />
-        </CanvasContainer>
+        </Container>
     );
 }

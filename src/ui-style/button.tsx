@@ -1,26 +1,22 @@
 import styled from 'styled-components';
 
-export enum BUTTONSHAPE {
-    SQUARE,
-    RECTANGLE
-}
+type ButtonShape = 'square' | 'rectangle';
 
-const AdjustWidth = (buttonShape?: BUTTONSHAPE) => {
+const AdjustWidth = (buttonShape?: ButtonShape) => {
     switch (buttonShape) {
-        case BUTTONSHAPE.SQUARE:
+        case 'square':
             return '50px';
-        case BUTTONSHAPE.RECTANGLE:
+        case 'rectangle':
             return '85px';
         default:
             return '50px';
     }
 };
 
-export const ButtonWrapper = styled.button<{ buttonshape?: BUTTONSHAPE}>`
-    display: block;
+export const ButtonWrapper = styled.button<{ buttonshape?: ButtonShape}>`
     background: lightgrey;    
-    height: 50px;
-    width: ${({ buttonshape }) => AdjustWidth(buttonshape)};
+    min-height: 50px;
+    min-width: ${({ buttonshape }) => AdjustWidth(buttonshape)};
     font-family: "VT323", monospace;
     font-weight: 400;
     font-style: normal;

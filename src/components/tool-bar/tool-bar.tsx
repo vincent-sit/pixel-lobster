@@ -5,10 +5,10 @@ import { ToolButtonCollection } from './tool-button-collection';
 
 const Wrapper = styled.div`
   background-color: #39B271;
-  display: grid;
-  grid-template-rows: 2fr 2fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 2rem;
-  z-index: 999;
 `;
 
 export function ToolBar() {
