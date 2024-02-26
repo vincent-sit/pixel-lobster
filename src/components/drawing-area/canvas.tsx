@@ -42,26 +42,41 @@ interface DisplayProps {
 export function Canvas(props: DisplayProps) {
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const backgroundRef = useRef<HTMLCanvasElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
     const displayRef = useRef<HTMLDivElement>(null);
-    const { isDown, x: pointerX, y: pointerY } = usePointer(canvasRef);    
+    const { isDown, x: pointerX, y: pointerY } = usePointer(canvasRef);
     const { color } = useContext(ColorContext);
-    const { colors: colorHistory, updateColors : setColorHistory } = useContext(ColorHistoryContext);
 
     useEffect(() => {
-        if (!canvasRef.current) return;
+        if (!canvasRef.current || !backgroundRef.current) return;
 
         const currCtx = canvasRef.current.getContext('2d');
+        const backgroundCtx = backgroundRef.current.getContext('2d');
         if (currCtx) {
             setCtx(currCtx);
-            currCtx.fillStyle = 'blue';
+            currCtx.fillStyle = 'rgba(0,0,0,0)';
             currCtx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        }
+        if (backgroundCtx) {
+            const colorOne = 'rgba(138, 138, 138, 1)';
+            const colorTwo = 'rgba(199, 199, 199, 1)';
+            let isMainColor = true;
+            for (let i = 0; i < 16; i++) {
+                // if even, flip j
+                isMainColor = !isMainColor;
+                for (let j = 0; j < 16; j++) {
+                    backgroundCtx.fillStyle = isMainColor ? colorOne : colorTwo;
+                    backgroundCtx.fillRect(i, j, 1, 1);
+                    isMainColor = !isMainColor;
+                }
+            }
         }
     }, []);
 
     useEffect(() => {
-        if (!canvasRef.current || !displayRef.current || !markerRef.current) return;        
-        displayRef.current.style.transform = `scale(${props.zoomFactor})`;        
+        if (!canvasRef.current || !displayRef.current || !markerRef.current || !backgroundRef.current) return;
+        displayRef.current.style.transform = `scale(${props.zoomFactor})`;
     }, [props.zoomFactor]);
 
     function handleHover(e : React.MouseEvent<HTMLCanvasElement>) {
@@ -110,13 +125,21 @@ export function Canvas(props: DisplayProps) {
                     height: '1px',
                     zIndex: 99}}
             />
-            <CenteredCanvas ref={canvasRef}
+            <CenteredCanvas 
+                ref={canvasRef}
+                id='drawing-canvas'
                 width="16" height="16"
-                style={{imageRendering: 'pixelated'}}
+                style={{imageRendering: 'pixelated', zIndex:3}}
                 onPointerMove={handleMove}
-                onPointerUp={handleUp}
+                onPointerUp={handleMove}
                 onMouseMove={handleHover}
                 onMouseLeave={handleLeave}
+            />
+            <CenteredCanvas
+                id='canvas-background'
+                width="16" height="16"
+                ref={backgroundRef}
+                style={{imageRendering: 'pixelated', zIndex:2}}
             />
         </CanvasContainer>
     );

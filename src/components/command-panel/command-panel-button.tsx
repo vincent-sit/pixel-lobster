@@ -21,11 +21,12 @@ const ButtonWrapper = styled.button`
 
 interface ButtonProps {
     text: string,
-    id: string
+    id: string,
+    function : () => void;
 }
 
 export function CommandPanelButton(props: ButtonProps) {
     return (
-        <ButtonWrapper id={props.id}>{props.text}</ButtonWrapper>
+        <ButtonWrapper id={props.id} onClick={props.function}>{props.text}</ButtonWrapper>
     );
 }

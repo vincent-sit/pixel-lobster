@@ -9,7 +9,7 @@ const CANVAS_SIZE_PX = 300;
 const HUE_SELECTOR_WIDTH_PX = 30;
 
 const Wrapper = styled.div`
-    background-color: #D32A2A;    
+    background-color: #D32A2A;
 `;
 
 const ColorPickerBody = styled.div`
@@ -62,8 +62,8 @@ export function ColorPicker() {
         const currCanvasCtx = colorCanvasRef.current.getContext('2d');
         if (!currCanvasCtx) {
             return;
-        }        
-            
+        }
+
         const gradientH = currCanvasCtx.createLinearGradient(0, 0, currCanvasCtx.canvas.width, 0);
         gradientH.addColorStop(0, '#fff');
         gradientH.addColorStop(1, new Color('hsv', [hue, 100, 100]).to('srgb').toString());
@@ -150,7 +150,7 @@ export function ColorPicker() {
     useEffect(() => {
         if (!isHueDown || !colorSliderRef.current || !colorCanvasRef.current) return;
 
-        const newHue = (hueY / colorSliderRef.current.height) * 360;        
+        const newHue = (hueY / colorSliderRef.current.height) * 360;
         const newColor = adjustColor(newHue)!;
         updateColor(newColor);
 
