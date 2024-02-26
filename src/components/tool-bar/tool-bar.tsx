@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-rows: 2fr 2fr;
   padding: 2rem;
-  z-index: 9999;
+  z-index: 999;
 `;
 
 export function ToolBar() {

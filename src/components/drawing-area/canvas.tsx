@@ -5,6 +5,7 @@ import { usePointer } from '../../hooks/use-pointer';
 import { ColorHistoryContext } from '../../contexts/color-history-context';
 import { TOOL, ToolContext } from '../../contexts/tool-context';
 import Color from 'colorjs.io';
+import { DimensionContext } from '../../contexts/dimension-context';
 
 const COLOR_HISTORY_LIMIT = 20;
 
@@ -51,6 +52,7 @@ export function Canvas(props: DisplayProps) {
     const { color, updateColor } = useContext(ColorContext);
     const { toolInUse } = useContext(ToolContext);
     const { colors: colorHistory, updateColors : setColorHistory } = useContext(ColorHistoryContext);
+    const { dimension } = useContext(DimensionContext);
 
     useEffect(() => {
         if (!canvasRef.current || !backgroundRef.current) return;
@@ -66,17 +68,17 @@ export function Canvas(props: DisplayProps) {
             const colorOne = 'rgba(138, 138, 138, 1)';
             const colorTwo = 'rgba(199, 199, 199, 1)';
             let isMainColor = true;
-            for (let i = 0; i < 16; i++) {
+            for (let i = 0; i < dimension.height; i++) {
                 // if even, flip j
-                isMainColor = !isMainColor;
-                for (let j = 0; j < 16; j++) {
+                if (dimension.height % 2 == 0) isMainColor = !isMainColor;
+                for (let j = 0; j < dimension.width; j++) {
                     backgroundCtx.fillStyle = isMainColor ? colorOne : colorTwo;
                     backgroundCtx.fillRect(i, j, 1, 1);
                     isMainColor = !isMainColor;
                 }
             }
         }
-    }, []);
+    }, [dimension]);
 
     useEffect(() => {
         if (!canvasRef.current || !displayRef.current || !markerRef.current || !backgroundRef.current) return;
@@ -145,7 +147,7 @@ export function Canvas(props: DisplayProps) {
             <CenteredCanvas 
                 ref={canvasRef}
                 id='drawing-canvas'
-                width="16" height="16"
+                width={dimension.width} height={dimension.height}
                 style={{imageRendering: 'pixelated', zIndex:3}}
                 onPointerMove={handleMove}
                 onPointerUp={handleUp}
@@ -154,7 +156,7 @@ export function Canvas(props: DisplayProps) {
             />
             <CenteredCanvas
                 id='canvas-background'
-                width="16" height="16"
+                width={dimension.width} height={dimension.height}
                 ref={backgroundRef}
                 style={{imageRendering: 'pixelated', zIndex:2}}
             />
