@@ -1,6 +1,7 @@
-import { RefObject, useEffect, useState, useRef } from 'react';
+import { RefObject, useEffect, useState, useRef, useContext } from 'react';
 import { clamp } from '../utils/math';
 import { isWithinBounds } from '../utils/ui-check';
+import { DialogContext } from '../contexts/dialog-context';
 
 type PointerState = {
     isDown: boolean;
@@ -15,6 +16,8 @@ export function usePointer(ref?: RefObject<HTMLElement>) {
         y: 0,
     });
 
+    const { isDialogActive } = useContext(DialogContext);
+
     const isWithinRef = useRef(false);
 
     useEffect(() => {
@@ -27,7 +30,7 @@ export function usePointer(ref?: RefObject<HTMLElement>) {
 
         const handleDown = (e: PointerEvent) => {
             const rect = element.getBoundingClientRect();
-            if (!isWithinBounds(e, rect)) return;
+            if (!isWithinBounds(e, rect) || isDialogActive) return;
             
             isWithinRef.current = true;
 
@@ -39,6 +42,7 @@ export function usePointer(ref?: RefObject<HTMLElement>) {
         };
 
         const handleUp = () => {
+            if (isDialogActive) return;
             isWithinRef.current = false;
             setState((prev) => ({
                 ...prev,
@@ -47,7 +51,7 @@ export function usePointer(ref?: RefObject<HTMLElement>) {
         };
 
         const handleMove = (e: PointerEvent) => {
-            if (!isWithinRef.current) return;
+            if (!isWithinRef.current || isDialogActive) return;
             const rect = element.getBoundingClientRect();
             setState({
                 isDown: e.pressure > 0,

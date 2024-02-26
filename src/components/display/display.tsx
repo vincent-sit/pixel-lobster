@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { DrawingArea } from '../drawing-area/drawing-area';
-import { CommandPanel } from '../command-panel/Command-Panel';
+import { CommandPanel } from '../command-panel/command-panel';
 
 const Wrapper = styled.div`
     background-color: #D9D9D9;  

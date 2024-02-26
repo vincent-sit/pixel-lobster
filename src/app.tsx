@@ -1,18 +1,12 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
-import { ToolBar } from './components/tool-bar/tool-bar';
-import { Display } from './components/display/display';
 import { ColorProvider } from './contexts/color-context';
 import { ColorHistoryProvider } from './contexts/color-history-context';
 import { ToolProvider } from './contexts/tool-context';
-
-const Layout = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 3fr;    
-  height: 100%;  
-`;
+import { DimensionProvider } from './contexts/dimension-context';
+import { DialogProvider } from './contexts/dialog-context';
+import { AppBody } from './components/app-body/app-body';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -21,6 +15,8 @@ const GlobalStyle = createGlobalStyle`
     font-family: "VT323", monospace;
     font-weight: 400;
     font-style: normal;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   input[type="text"]
@@ -44,16 +40,17 @@ function App() {
     return (
         <>
             <GlobalStyle/>
-            <ColorHistoryProvider>
-                <ColorProvider>
-                    <ToolProvider>
-                        <Layout>
-                            <ToolBar/>
-                            <Display/>
-                        </Layout>
-                    </ToolProvider>
-                </ColorProvider>
-            </ColorHistoryProvider>
+            <DialogProvider>
+                <ColorHistoryProvider>
+                    <ColorProvider>
+                        <ToolProvider>
+                            <DimensionProvider>
+                                <AppBody/>
+                            </DimensionProvider>
+                        </ToolProvider>
+                    </ColorProvider>
+                </ColorHistoryProvider>
+            </DialogProvider>
         </>
     );
 } 

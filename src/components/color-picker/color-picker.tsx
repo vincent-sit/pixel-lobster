@@ -4,6 +4,7 @@ import Color from 'colorjs.io';
 import { ColorContext } from '../../contexts/color-context';
 import { usePointer } from '../../hooks/use-pointer';
 import { ColorHistory } from './color-history';
+import { DialogContext } from '../../contexts/dialog-context';
 
 const CANVAS_SIZE_PX = 300;
 const HUE_SELECTOR_WIDTH_PX = 30;
@@ -55,6 +56,7 @@ export function ColorPicker() {
     const colorMarkerRef = useRef<HTMLSpanElement>(null);
     const { isDown: isColorDown, x: colorX, y: colorY } = usePointer(colorCanvasRef);
     const { isDown: isHueDown, y: hueY } = usePointer(colorSliderRef);
+    const { isDialogActive } = useContext(DialogContext);
 
     function updateColorCanvas(hue: number) {
         if (!colorCanvasRef.current) return;
@@ -113,6 +115,7 @@ export function ColorPicker() {
 
     // set color canvas
     useEffect(() => {
+        if (isDialogActive) return;
         updateColorCanvas(color.hsv.h);
         moveMarkers();
         updateCurrentColorSelected();
@@ -141,16 +144,16 @@ export function ColorPicker() {
     // #endregion
 
     // calculate selected color
-    useEffect(() => {
-        if (!isColorDown || !colorCanvasRef.current) return;
+    useEffect(() => {        
+        if (!isColorDown || !colorCanvasRef.current || isDialogActive) return;
 
         const newColor = adjustColor()!;
         updateColor(newColor);
     }, [colorX, colorY]);
 
     // calculate selected hue
-    useEffect(() => {
-        if (!isHueDown || !colorSliderRef.current || !colorCanvasRef.current) return;
+    useEffect(() => {        
+        if (!isHueDown || !colorSliderRef.current || !colorCanvasRef.current || isDialogActive) return;
         const newHue = (hueY / colorSliderRef.current.height) * 360;
         const newColor = adjustColor(newHue)!;
         updateColor(newColor);
