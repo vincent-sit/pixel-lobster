@@ -7,11 +7,15 @@ import { ColorContext } from '../../contexts/color-context';
 const ColorBlocks = styled.div`
     display: flex;
     flex-wrap: wrap;
+    height: 50px;
+    width: 250px;
+    gap: 0;
 `;
 const ColorBlock = styled.div`
     width: 25px;
     height: 25px;
     border: 0.1rem solid black;
+    box-sizing: border-box;
 `;
 
 export function ColorHistory() {
@@ -26,23 +30,14 @@ export function ColorHistory() {
         updateColors([]);
     }, []);
 
-    function Render() {
-        const colorBlocks = [...colors].reverse().map((color, index) =>
-            <ColorBlock key={`color-${index}`}
-                style={{backgroundColor: color.to('srgb').toString()}}
-                onClick={() => onColorClick(color)}
-            />
-        );
-        return (
-            <ColorBlocks>
-                {colorBlocks}
-            </ColorBlocks>
-        );
-    }
-
     return (
-        <div>
-            {Render()}
-        </div>
+        <ColorBlocks>
+            {[...colors].reverse().map((color, index) =>
+                <ColorBlock key={`color-${index}`}
+                    style={{backgroundColor: color.to('srgb').toString()}}
+                    onClick={() => onColorClick(color)}
+                />)
+            }
+        </ColorBlocks>
     );
 }

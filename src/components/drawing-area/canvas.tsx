@@ -7,7 +7,7 @@ import { TOOL, ToolContext } from '../../contexts/tool-context';
 import Color from 'colorjs.io';
 import { DimensionContext } from '../../contexts/dimension-context';
 
-const COLOR_HISTORY_LIMIT = 20;
+// const COLOR_HISTORY_LIMIT = 20;
 
 const Container = styled.div`
     transform-origin: center;
@@ -101,10 +101,7 @@ export function Canvas(props: DisplayProps) {
             const currentColorString = color.to('srgb').toString();
             ctx.fillStyle = currentColorString;
             ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);
-            const colorSearchResult = colorHistory.find((element) => element.to('srgb').toString() === currentColorString);            
-            if (colorHistory.length > COLOR_HISTORY_LIMIT) {
-                colorHistory.splice(0, 1);
-            }
+            const colorSearchResult = colorHistory.find((element) => element.to('srgb').toString() === currentColorString);
             if (!colorSearchResult) {
                 setColorHistory([
                     ...colorHistory,
