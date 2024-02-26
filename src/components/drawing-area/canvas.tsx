@@ -2,6 +2,9 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { ColorContext } from '../../contexts/color-context';
 import { usePointer } from '../../hooks/use-pointer';
+import { ColorHistoryContext } from '../../contexts/color-history-context';
+
+const COLOR_HISTORY_LIMIT = 20;
 
 const CanvasContainer = styled.div`
     position: absolute;
@@ -32,11 +35,6 @@ const Marker = styled.span`
     }
 `;
 
-interface MousePos {
-    x : number,
-    y : number
-}
-
 interface DisplayProps {
     zoomFactor : number
 }
@@ -48,6 +46,7 @@ export function Canvas(props: DisplayProps) {
     const displayRef = useRef<HTMLDivElement>(null);
     const { isDown, x: pointerX, y: pointerY } = usePointer(canvasRef);    
     const { color } = useContext(ColorContext);
+    const { colors: colorHistory, updateColors : setColorHistory } = useContext(ColorHistoryContext);
 
     useEffect(() => {
         if (!canvasRef.current) return;
@@ -81,7 +80,24 @@ export function Canvas(props: DisplayProps) {
     function handleMove() {
         if (!isDown || !ctx || !canvasRef.current) return;
         ctx.fillStyle = color.to('srgb').toString();        
-        ctx.fillRect(Math.floor(pointerX / (props.zoomFactor)), Math.floor(pointerY / (props.zoomFactor)), 1, 1);        
+        ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);        
+    }
+
+    function handleUp() {
+        if (!isDown || !ctx || !canvasRef.current) return;
+        const currentColorString = color.to('srgb').toString();
+        ctx.fillStyle = currentColorString;
+        ctx.fillRect(Math.floor(pointerX / props.zoomFactor), Math.floor(pointerY / props.zoomFactor), 1, 1);        
+        const colorSearchResult = colorHistory.find((element) => element.to('srgb').toString() === currentColorString);
+        if (colorHistory.length > COLOR_HISTORY_LIMIT) {
+            colorHistory.splice(0, 1);            
+        }
+        if (!colorSearchResult) {
+            setColorHistory([
+                ...colorHistory,
+                color
+            ]);
+        }
     }
 
     return (
@@ -98,7 +114,7 @@ export function Canvas(props: DisplayProps) {
                 width="16" height="16"
                 style={{imageRendering: 'pixelated'}}
                 onPointerMove={handleMove}
-                onPointerUp={handleMove}
+                onPointerUp={handleUp}
                 onMouseMove={handleHover}
                 onMouseLeave={handleLeave}
             />
