@@ -4,7 +4,7 @@ import styled from 'styled-components';
 interface CanvasInputProps {
     id: string,
     innerText: string,
-    value: number    
+    value: string
 }
 
 const SizeInputDiv = styled.div`
@@ -15,11 +15,16 @@ const SizeInputDiv = styled.div`
 `;
 
 export const CanvasSizeInput = forwardRef(function CanvasSizeInput(props: CanvasInputProps, ref: React.ForwardedRef<HTMLInputElement>) {
-    const [innerValue, setInnerValue] = useState(0);
+    const [innerValue, setInnerValue] = useState('');
 
     useEffect(() => {
         setInnerValue(props.value);
     }, []);
+
+    function handleChange(e : React.ChangeEvent<HTMLInputElement>) {
+        const numericValue = e.target.value.replace(/[^0-9]/g, '');
+        setInnerValue(numericValue);
+    }
 
     return (
         <SizeInputDiv>
@@ -28,14 +33,13 @@ export const CanvasSizeInput = forwardRef(function CanvasSizeInput(props: Canvas
                 id={props.id}
                 name={props.innerText}
                 ref={ref}
-
                 type="text"
                 value={innerValue}
                 style={{
-                    width: '25px', 
+                    width: '25px',
                     textAlign: 'center'
                 }}
-                onChange={(e) => setInnerValue(parseInt(e.target.value, 10))}
+                onChange={handleChange}
             />
         </SizeInputDiv>
     );

@@ -44,9 +44,9 @@ export function ResizeDialog() {
                     Resize the Canvas
                 </Title>
                 <SizeInputWrapper style={{gridColumnStart:'2', gridColumnEnd: '4', gridRow:'2', alignSelf:'start'}}>
-                    <CanvasSizeInput id='width' innerText='W' value={dimension.width} ref={widthInputRef}/>
+                    <CanvasSizeInput id='width' innerText='W' value={dimension.width.toString()} ref={widthInputRef}/>
                     <span>x</span>
-                    <CanvasSizeInput id='height' innerText='H' value={dimension.height} ref={heightInputRef}/>
+                    <CanvasSizeInput id='height' innerText='H' value={dimension.height.toString()} ref={heightInputRef}/>
                 </SizeInputWrapper>
                 <ButtonWrapper 
                     onClick={onClick} 
