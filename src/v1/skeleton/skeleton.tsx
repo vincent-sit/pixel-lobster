@@ -18,6 +18,9 @@ const SidePanel = styled.div`
 
 const Display = styled.div`
     background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100%;
 `;
 
@@ -28,7 +31,13 @@ const CommandPanel = styled.div`
     right: 0;
 `;
 
-export function Skeleton() {
+type SkeletonProps = {
+    Canvas: React.ComponentType,
+};
+
+export function Skeleton({
+    Canvas,
+}: SkeletonProps) {
     return (
         <Layout>
             <SidePanel>
@@ -36,7 +45,7 @@ export function Skeleton() {
             </SidePanel>
 
             <Display>
-                <p>Hello World</p>
+                <Canvas/>
             </Display>
 
             <CommandPanel>
