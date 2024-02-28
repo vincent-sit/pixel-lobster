@@ -29,12 +29,21 @@ const SizeInputWrapper = styled.div`
 
 export function ResizeDialog() {
     const { setIsDialogActive } = useContext(DialogContext);
-    const {dimension} = useContext(DimensionContext);
+    const {dimension, updateDimension} = useContext(DimensionContext);
     const widthInputRef = useRef<HTMLInputElement>(null);
     const heightInputRef = useRef<HTMLInputElement>(null);
 
     function onClick() {
         setIsDialogActive(false);
+    }
+
+    function submit() {
+        setIsDialogActive(false);
+        if (!widthInputRef.current || !heightInputRef.current) return;
+        updateDimension({
+            width: parseInt(widthInputRef.current.value, 10),
+            height: parseInt(heightInputRef.current.value, 10)
+        });
     }
 
     return (
@@ -49,7 +58,7 @@ export function ResizeDialog() {
                     <CanvasSizeInput id='height' innerText='H' value={dimension.height.toString()} ref={heightInputRef}/>
                 </SizeInputWrapper>
                 <ButtonWrapper 
-                    onClick={onClick} 
+                    onClick={submit}
                     style={{gridColumnStart:'1', gridColumnEnd:'3', gridRow:'3', justifySelf:'center'}}
                     buttonshape='rectangle'
                 >

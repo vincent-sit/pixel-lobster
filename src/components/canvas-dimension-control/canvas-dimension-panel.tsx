@@ -35,9 +35,9 @@ export function CanvasSizePanel() {
     return (
         <CanvasSizeWrapper>
             <span>Canvas size: </span>
-            <CanvasSizeInput id='width' innerText='W' value={dimension.width} ref={widthInputRef}/>
+            <CanvasSizeInput id='width' innerText='W' value={dimension.width.toString()} ref={widthInputRef}/>
             <span>x</span>
-            <CanvasSizeInput id='height' innerText='H' value={dimension.height} ref={heightInputRef}/>
+            <CanvasSizeInput id='height' innerText='H' value={dimension.height.toString()} ref={heightInputRef}/>
         </CanvasSizeWrapper>
     );
 }

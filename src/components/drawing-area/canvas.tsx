@@ -54,18 +54,21 @@ export function Canvas(props: DisplayProps) {
         const backgroundCtx = backgroundRef.current.getContext('2d');
         if (currCtx) {
             setCtx(currCtx);
-            currCtx.fillStyle = 'rgba(0,0,0,0)';
-            currCtx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            const imgData = currCtx.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+            canvasRef.current.width = dimension.width;
+            canvasRef.current.height = dimension.height;
+            currCtx.putImageData(imgData, 0, 0);
         }
         if (backgroundCtx) {
+            backgroundCtx.clearRect(0, 0, dimension.width, dimension.height);
             const colorOne = 'rgba(138, 138, 138, 1)';
             const colorTwo = 'rgba(199, 199, 199, 1)';
             let isMainColor = true;
-            for (let i = 0; i < dimension.height; i++) {
+            for (let x = 0; x < dimension.width; x++) {
                 if (dimension.height % 2 == 0) isMainColor = !isMainColor;
-                for (let j = 0; j < dimension.width; j++) {
+                for (let y = 0; y < dimension.height; y++) {
                     backgroundCtx.fillStyle = isMainColor ? colorOne : colorTwo;
-                    backgroundCtx.fillRect(i, j, 1, 1);
+                    backgroundCtx.fillRect(x, y, 1, 1);
                     isMainColor = !isMainColor;
                 }
             }
@@ -129,7 +132,6 @@ export function Canvas(props: DisplayProps) {
             <CenteredCanvas 
                 ref={canvasRef}
                 id='drawing-canvas'
-                width={dimension.width} height={dimension.height}
                 style={{imageRendering: 'pixelated'}}
                 onPointerMove={handleMove}
                 onPointerUp={handleUp}
