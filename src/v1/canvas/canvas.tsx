@@ -9,10 +9,19 @@ const Container = styled.div`
     position: absolute;
     left: 50%;
     top: 50%;
+    z-index: 1;
+`;
+
+const InnerCanvas = styled.div`
+    position: relative;
 `;
 
 export interface CanvasProps extends LayerProps {
-    canvas: HTMLCanvasElement
+    canvas: HTMLCanvasElement,
+    marker : HTMLSpanElement,
+    // eslint-disable-next-line no-unused-vars
+    onMouseMove : (e : PointerEvent) => void,
+    onMouseLeave : () => void,
 }
 
 export interface LayerProps {
@@ -24,21 +33,35 @@ export function Canvas({
     canvas,
     width,
     height,
+    marker,
+    onMouseMove,
+    onMouseLeave
 }: CanvasProps) {
-    const containerRef = useRef<HTMLDivElement>(null);
+    const innerCanvasRef = useRef<HTMLDivElement>(null);
     const snapshot = useSnapshot(DisplayState);
+    marker.style.backgroundColor = 'white';
 
     useEffect(() => {
-        containerRef.current?.append(canvas);
+        innerCanvasRef.current?.addEventListener('pointermove', onMouseMove);
+        innerCanvasRef.current?.addEventListener('pointerleave', onMouseLeave);
+        innerCanvasRef.current?.append(canvas);
+        innerCanvasRef.current?.append(marker);
 
         return () => {
-            containerRef.current?.removeChild(canvas);
+            innerCanvasRef.current?.removeEventListener('pointermove', onMouseMove);
+            innerCanvasRef.current?.removeEventListener('pointerleave', onMouseLeave);
+            innerCanvasRef.current?.removeChild(canvas);
+            innerCanvasRef.current?.removeChild(marker);
         };
     }, [canvas]);
 
     return (
-        <Container ref={containerRef} style={{transform: `scale(${snapshot.store.zoomFactor})`, width: width, height : height}}>
-            <BackgroundLayer width={width} height={height}/>
+        <Container
+            style={{transform: `scale(${snapshot.store.zoomFactor})`, width: width, height : height}}
+        >
+            <InnerCanvas ref={innerCanvasRef} style={{width: width, height: height}}>
+                <BackgroundLayer width={width} height={height}/>
+            </InnerCanvas>
         </Container>
     );
 }
