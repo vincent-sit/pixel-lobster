@@ -13,15 +13,15 @@ const SidePanel = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
 `;
 
-const Display = styled.div`
+const DisplayWrapper = styled.div`
     background-color: blue;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
+    overflow: hidden;
 `;
 
 const CommandPanel = styled.div`
@@ -32,21 +32,21 @@ const CommandPanel = styled.div`
 `;
 
 type SkeletonProps = {
-    Canvas: React.ComponentType,
+    Display : React.ComponentType
 };
 
 export function Skeleton({
-    Canvas,
+    Display
 }: SkeletonProps) {
     return (
         <Layout>
             <SidePanel>
                 <p>Hello World</p>
             </SidePanel>
-
-            <Display>
-                <Canvas/>
-            </Display>
+            
+            <DisplayWrapper>
+                <Display/>
+            </DisplayWrapper>
 
             <CommandPanel>
                 <p>Hello World</p>
