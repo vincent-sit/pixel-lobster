@@ -6,7 +6,7 @@ export function BackgroundLayer({width, height} : LayerProps) {
     const patternId = useId();
 
     return (
-        <Background>
+        <Background style={{width: width, height: height}}>
             <svg width={width} height={height} xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <pattern id={patternId} x="0" y="0" width="2" height="2" patternUnits="userSpaceOnUse">
