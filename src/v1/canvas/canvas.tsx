@@ -44,12 +44,14 @@ export function Canvas({
     useEffect(() => {
         innerCanvasRef.current?.addEventListener('pointermove', onMouseMove);
         innerCanvasRef.current?.addEventListener('pointerleave', onMouseLeave);
+        innerCanvasRef.current?.addEventListener('pointerdown', onMouseMove);
         innerCanvasRef.current?.append(canvas);
         innerCanvasRef.current?.append(marker);
 
         return () => {
             innerCanvasRef.current?.removeEventListener('pointermove', onMouseMove);
             innerCanvasRef.current?.removeEventListener('pointerleave', onMouseLeave);
+            innerCanvasRef.current?.removeEventListener('pointerdown', onMouseMove);
             innerCanvasRef.current?.removeChild(canvas);
             innerCanvasRef.current?.removeChild(marker);
         };
