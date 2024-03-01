@@ -4,7 +4,6 @@ import { Canvas as InternalCanvas } from './canvas';
 import { CanvasPresenter } from './presenter';
 import { DisplayState } from '../display/model';
 import Color from 'colorjs.io';
-import { ResizePresenter } from '../resize/presenter';
 import { ResizeState } from '../resize/model';
 
 export function installCanvas() {
@@ -23,14 +22,13 @@ export function installCanvas() {
     marker.style.left = '0';
     
     const presenter = new CanvasPresenter(canvas, marker);
-    const resizePresenter = new ResizePresenter(canvas);
 
     const Canvas = () => {
         const snapshot = useSnapshot(ResizeState);
 
         useEffect(() => {
             // eslint-disable-next-line valtio/state-snapshot-rule
-            resizePresenter.canvasResize(snapshot.store.width, snapshot.store.height);
+            presenter.canvasResize(snapshot.store.width, snapshot.store.height);
         }, [snapshot.store]);
 
         return <InternalCanvas 
