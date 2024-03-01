@@ -9,13 +9,13 @@ export function installDisplay(Canvas : React.ComponentType) {
     display.style.width = '100%';
     display.style.height = '100%';
     display.style.position = 'absolute';
-    const presenter = new DisplayPresenter(display);
+    const Presenter = new DisplayPresenter(display);
 
     const Display = () => {
         const snapshot = useSnapshot(DisplayState);
         
         function onScroll(e : WheelEvent) {
-            const newZoomFactor = presenter.updateZoomFactor(e, snapshot.store.scrollSpeed, snapshot.store.zoomFactor);
+            const newZoomFactor = Presenter.updateZoomFactor(e, snapshot.store.scrollSpeed, snapshot.store.zoomFactor);
             if (!newZoomFactor) return;
             snapshot.updateZoomFactor(newZoomFactor);
         }
@@ -29,6 +29,7 @@ export function installDisplay(Canvas : React.ComponentType) {
     };
 
     return {
-        Display
+        Display,
+        Presenter
     };
 }

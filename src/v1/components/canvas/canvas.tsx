@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { BackgroundLayer } from './background-layer';
 import { useSnapshot } from 'valtio';
 import { DisplayState } from '../display/model';
-import { ResizeState } from '../resize/model';
 
 const Container = styled.div`
     transform-origin: center;
@@ -40,12 +39,7 @@ export function Canvas({
 }: CanvasProps) {
     const innerCanvasRef = useRef<HTMLDivElement>(null);
     const snapshot = useSnapshot(DisplayState);
-    const resizeSnapshot = useSnapshot(ResizeState);
     marker.style.backgroundColor = 'white';
-
-    useEffect(() => {
-        
-    }, [resizeSnapshot.store]);
 
     useEffect(() => {
         innerCanvasRef.current?.addEventListener('pointermove', onMouseMove);
@@ -64,9 +58,7 @@ export function Canvas({
     }, [canvas]);
 
     return (
-        <Container
-            style={{transform: `scale(${snapshot.store.zoomFactor})`, width: width, height : height}}
-        >
+        <Container style={{transform: `scale(${snapshot.store.zoomFactor})`, width: width, height: height}}>
             <InnerCanvas ref={innerCanvasRef} style={{width: width, height: height}}>
                 <BackgroundLayer width={width} height={height}/>
             </InnerCanvas>

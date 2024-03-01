@@ -6,10 +6,10 @@ import { installResizeDialog } from './components/resize/reisze-dialog/install';
 import { installCommandPanel } from './components/command-panel/panel/install';
 
 export function installApp() {
-    const { Canvas, presenter } = installCanvas();
+    const { Canvas, Presenter : CanvasPresenter } = installCanvas();
     const { Display } = installDisplay(Canvas);
     const ResizeDialog = installResizeDialog();
-    const { CommandPanelComponent } = installCommandPanel(presenter);
+    const { CommandPanelComponent } = installCommandPanel(CanvasPresenter);
 
     const App = () => (
         <Skeleton 

@@ -21,14 +21,14 @@ export function installCanvas() {
     marker.style.top = '0';
     marker.style.left = '0';
     
-    const presenter = new CanvasPresenter(canvas, marker);
+    const Presenter = new CanvasPresenter(canvas, marker);
 
     const Canvas = () => {
         const snapshot = useSnapshot(ResizeState);
 
         useEffect(() => {
             // eslint-disable-next-line valtio/state-snapshot-rule
-            presenter.canvasResize(snapshot.store.width, snapshot.store.height);
+            Presenter.canvasResize(snapshot.store.width, snapshot.store.height);
         }, [snapshot.store]);
 
         return <InternalCanvas 
@@ -36,13 +36,13 @@ export function installCanvas() {
             marker={marker}
             width={snapshot.store.width}
             height={snapshot.store.height}
-            onMouseMove={(e) => presenter.onMouseMove(e, new Color('white'), DisplayState.store.zoomFactor)}
-            onMouseLeave={() => presenter.onMouseLeave()}
+            onMouseMove={(e) => Presenter.onMouseMove(e, new Color('white'), DisplayState.store.zoomFactor)}
+            onMouseLeave={() => Presenter.onMouseLeave()}
         />;
     };
 
     return {
         Canvas,
-        presenter
+        Presenter
     };
 }
