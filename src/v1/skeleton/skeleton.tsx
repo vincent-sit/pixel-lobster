@@ -32,18 +32,18 @@ const CommandPanel = styled.div`
 `;
 
 type SkeletonProps = {
-    Display : React.ComponentType
+    Display : React.ComponentType,
+    ResizeDialog : React.ComponentType
 };
 
 export function Skeleton({
-    Display
+    Display, ResizeDialog
 }: SkeletonProps) {
     return (
         <Layout>
             <SidePanel>
                 <p>Hello World</p>
             </SidePanel>
-            
             <DisplayWrapper>
                 <Display/>
             </DisplayWrapper>
@@ -51,6 +51,7 @@ export function Skeleton({
             <CommandPanel>
                 <p>Hello World</p>
             </CommandPanel>
+            <ResizeDialog/>
         </Layout>
     );
 }

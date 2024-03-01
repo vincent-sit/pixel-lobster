@@ -1,17 +1,17 @@
-import React from 'react';
-import { proxy, useSnapshot } from 'valtio';
+import React , { useEffect }from 'react';
+import { useSnapshot } from 'valtio';
 import { Canvas as InternalCanvas } from './canvas';
-import { CanvasStore } from './store';
 import { CanvasPresenter } from './presenter';
 import { DisplayState } from '../display/model';
 import Color from 'colorjs.io';
+import { ResizePresenter } from '../resize/presenter';
+import { ResizeState } from '../resize/model';
 
 export function installCanvas() {
-    const store = proxy(new CanvasStore());
 
     const canvas = document.createElement('canvas');
-    canvas.width = store.width;
-    canvas.height = store.height;
+    canvas.width = ResizeState.store.width;
+    canvas.height = ResizeState.store.height;
     canvas.style.imageRendering = 'pixelated';
     
     const marker = document.createElement('span');
@@ -24,22 +24,26 @@ export function installCanvas() {
     marker.style.left = '0';
     
     const presenter = new CanvasPresenter(canvas, marker);
+    const resizePresenter = new ResizePresenter(canvas);
 
     const Canvas = () => {
-        const snapshot = useSnapshot(store);
+        const snapshot = useSnapshot(ResizeState);
+
+        useEffect(() => {
+            resizePresenter.canvasResize(ResizeState.store.width, ResizeState.store.height);
+        }, [ResizeState.store]);
 
         return <InternalCanvas 
             canvas={canvas}
             marker={marker}
-            width={snapshot.width}
-            height={snapshot.height}
+            width={snapshot.store.width}
+            height={snapshot.store.height}
             onMouseMove={(e) => presenter.onMouseMove(e, new Color('white'), DisplayState.store.zoomFactor)}
             onMouseLeave={() => presenter.onMouseLeave()}
         />;
     };
 
     return {
-        Canvas,
-        store,
+        Canvas
     };
 }
