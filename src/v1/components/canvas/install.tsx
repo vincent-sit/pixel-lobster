@@ -8,7 +8,6 @@ import { ResizePresenter } from '../resize/presenter';
 import { ResizeState } from '../resize/model';
 
 export function installCanvas() {
-
     const canvas = document.createElement('canvas');
     canvas.width = ResizeState.store.width;
     canvas.height = ResizeState.store.height;
@@ -30,8 +29,9 @@ export function installCanvas() {
         const snapshot = useSnapshot(ResizeState);
 
         useEffect(() => {
-            resizePresenter.canvasResize(ResizeState.store.width, ResizeState.store.height);
-        }, [ResizeState.store]);
+            // eslint-disable-next-line valtio/state-snapshot-rule
+            resizePresenter.canvasResize(snapshot.store.width, snapshot.store.height);
+        }, [snapshot.store]);
 
         return <InternalCanvas 
             canvas={canvas}
