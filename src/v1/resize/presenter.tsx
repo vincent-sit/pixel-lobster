@@ -3,7 +3,7 @@ export class ResizePresenter {
         this.canvas = canvas;
     }
 
-    resize(width: number, height: number) {
+    canvasResize(width: number, height: number) {
         const ctx = this.canvas.getContext('2d');
         if (!ctx) {
             return;

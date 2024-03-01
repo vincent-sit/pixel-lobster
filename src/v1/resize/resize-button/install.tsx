@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button as InternalResizeButton } from '../../ui-style/button/ui';
-import { ResizePresenter } from './presenter';
+import { ResizeState } from '../model';
 
-export function installResize(canvas: HTMLCanvasElement) {
-    const presenter = new ResizePresenter(canvas);
+export function installButton() {
 
     const ResizeButton = () => (
-        <InternalResizeButton onClick={() => (width: number, height: number) => presenter.resize(width, height)}/>
+        <InternalResizeButton onClick={() => ResizeState.toggleDialog('on')}/>
     );
 
     return ResizeButton;
