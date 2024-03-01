@@ -2,8 +2,7 @@ import React from 'react';
 import { useSnapshot } from 'valtio';
 import { DisplayState } from './model';
 import { DisplayPresenter } from './presenter';
-import { Display as InternalDisplay } from './display'; 
-// import { installCanvas } from '../canvas/install';
+import { Display as InternalDisplay } from './display';
 
 export function installDisplay(Canvas : React.ComponentType) {
     const display = document.createElement('div');

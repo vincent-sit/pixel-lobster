@@ -1,5 +1,5 @@
 import React, { useId } from 'react';
-import { Background } from '../ui-style/canvas/ui';
+import { Background } from '../../ui-style/canvas/ui';
 import { LayerProps } from './canvas';
 
 export function BackgroundLayer({width, height} : LayerProps) {

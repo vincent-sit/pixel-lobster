@@ -1,5 +1,5 @@
 import React from 'react';
-import { SizeInputDiv } from '../../ui-style/alert-dialog/alert-dialog';
+import { SizeInputDiv } from '../../../ui-style/alert-dialog/alert-dialog';
 
 export interface ResizeInputProps {
     id : string,

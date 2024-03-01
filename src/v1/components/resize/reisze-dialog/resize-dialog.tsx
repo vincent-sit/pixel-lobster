@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyledAlertDialog, ResizeContent, Title, SizeInputWrapper } from '../../../ui-style/alert-dialog';
+import { StyledAlertDialog, ResizeContent, Title, SizeInputWrapper } from '../../../ui-style/alert-dialog/alert-dialog';
 import { ResizeInput } from '../resize-input/resize-input';
 import { useSnapshot } from 'valtio';
 import { ResizeState } from '../model';
-import { Button } from '../../ui-style/button/ui';
+import { Button } from '../../../ui-style/button/ui';
 import { InputState } from '../resize-input/input-model';
 
 export function ResizeDialog() {
