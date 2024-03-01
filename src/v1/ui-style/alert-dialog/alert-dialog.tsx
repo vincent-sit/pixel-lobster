@@ -43,3 +43,10 @@ export const SizeInputWrapper = styled.div`
     align-items: center;
     font-size: 18px;
 `;
+
+export const SizeInputDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+`;
