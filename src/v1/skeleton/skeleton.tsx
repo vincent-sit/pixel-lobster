@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { StyledBackdrop } from '../ui-style/alert-dialog/backdrop';
+import { ResizeState } from '../resize/model';
 
 const Layout = styled.div`
     display: grid;
@@ -51,7 +53,8 @@ export function Skeleton({
             <CommandPanel>
                 <p>Hello World</p>
             </CommandPanel>
-            <ResizeDialog/>
+            { ResizeState.store.isDialogActive && <StyledBackdrop/>}
+            { ResizeState.store.isDialogActive && <ResizeDialog/>}
         </Layout>
     );
 }
