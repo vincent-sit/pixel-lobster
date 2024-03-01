@@ -21,12 +21,10 @@ export function ResizeDialog() {
                     <ResizeInput id='height' innerText='H' innerValue={inputSnap.store.height} onChange={InputState.setHeight}/>
                 </SizeInputWrapper>
                 <Button 
-                    onClick={() => 
-                        ResizeState.updateSize(
-                            parseInt(InputState.store.width, 10), 
-                            parseInt(InputState.store.height, 10)
-                        )
-                    }
+                    onClick={() => {
+                        ResizeState.updateSize(parseInt(InputState.store.width, 10), parseInt(InputState.store.height, 10));
+                        ResizeState.toggleDialog('off');
+                    }}
                     style={{gridColumnStart:'1', gridColumnEnd:'3', gridRow:'3', justifySelf:'center'}}
                     buttonshape='rectangle'
                 >

@@ -11,7 +11,7 @@ import { ToolProvider } from './contexts/tool-context';
 import { DimensionProvider } from './contexts/dimension-context';
 import { DialogProvider } from './contexts/dialog-context';
 import { AppBody } from './components/app-body/app-body';
-import { installApp } from './v1/install';
+import { installApp } from '././v1/install';
 
 const GlobalStyle = createGlobalStyle`
   body {

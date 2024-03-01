@@ -1,8 +1,8 @@
 import React from 'react';
-import { Skeleton } from './skeleton';
-import { installDisplay } from '../display/install';
-import { installCanvas } from '../canvas/install';
-import { installResizeDialog } from '../resize/reisze-dialog/install';
+import { Skeleton } from './components/skeleton/skeleton';
+import { installDisplay } from './components/display/install';
+import { installCanvas } from './components/canvas/install';
+import { installResizeDialog } from './components/resize/reisze-dialog/install';
 
 export function installApp() {
     const { Canvas } = installCanvas();

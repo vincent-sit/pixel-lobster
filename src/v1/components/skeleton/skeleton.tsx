@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { StyledBackdrop } from '../../ui-style/alert-dialog/backdrop';
 import { ResizeState } from '../resize/model';
+import { CommandPanel } from '../command-panel/panel/command-panel';
+import { useSnapshot } from 'valtio';
 
 const Layout = styled.div`
     display: grid;
@@ -26,13 +28,6 @@ const DisplayWrapper = styled.div`
     overflow: hidden;
 `;
 
-const CommandPanel = styled.div`
-    background-color: red;
-    position: absolute;
-    top: 0;
-    right: 0;
-`;
-
 type SkeletonProps = {
     Display : React.ComponentType,
     ResizeDialog : React.ComponentType
@@ -41,6 +36,8 @@ type SkeletonProps = {
 export function Skeleton({
     Display, ResizeDialog
 }: SkeletonProps) {
+    const snap = useSnapshot(ResizeState);
+
     return (
         <Layout>
             <SidePanel>
@@ -50,11 +47,10 @@ export function Skeleton({
                 <Display/>
             </DisplayWrapper>
 
-            <CommandPanel>
-                <p>Hello World</p>
-            </CommandPanel>
-            { ResizeState.store.isDialogActive && <StyledBackdrop/>}
-            { ResizeState.store.isDialogActive && <ResizeDialog/>}
+            <CommandPanel/>
+
+            { snap.store.isDialogActive && <StyledBackdrop/> }
+            { snap.store.isDialogActive && <ResizeDialog/> }
         </Layout>
     );
 }
