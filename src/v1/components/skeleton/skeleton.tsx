@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { StyledBackdrop } from '../../ui-style/alert-dialog/backdrop';
 import { ResizeState } from '../resize/model';
-import { CommandPanel } from '../command-panel/panel/command-panel';
 import { useSnapshot } from 'valtio';
 
 const Layout = styled.div`
@@ -30,11 +29,12 @@ const DisplayWrapper = styled.div`
 
 type SkeletonProps = {
     Display : React.ComponentType,
-    ResizeDialog : React.ComponentType
+    ResizeDialog : React.ComponentType,
+    CommandPanel : React.ComponentType
 };
 
 export function Skeleton({
-    Display, ResizeDialog
+    Display, ResizeDialog, CommandPanel
 }: SkeletonProps) {
     const snap = useSnapshot(ResizeState);
 

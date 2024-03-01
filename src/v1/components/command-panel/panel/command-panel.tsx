@@ -5,20 +5,24 @@ import resizeCanvasImage from '../../../../assets/resizeCanvas.png';
 import clearCanvasImage from '../../../../assets/clearCanvas.png';
 import exportCanvasImage from '../../../../assets/export.png';
 import { ResizeState } from '../../resize/model';
+import { CanvasPresenter } from '../../canvas/presenter';
 
+interface CommandPanelProps {
+    presenter : CanvasPresenter;
+}
 
-export function CommandPanel() {
+export function CommandPanel({presenter} : CommandPanelProps) {
     return (
         <CommandPanelWrapper>
             <CommandButton
                 altText='Export Canvas'
                 imageLink={exportCanvasImage}
-                onClick={() => ResizeState.toggleDialog('on')}
+                onClick={() => presenter.exportCanvas()}
             />
             <CommandButton
                 altText='Clear Canvas'
                 imageLink={clearCanvasImage}
-                onClick={() => ResizeState.toggleDialog('on')}
+                onClick={() => presenter.clearCanvas()}
             />
             <CommandButton
                 altText='Resize Canvas'

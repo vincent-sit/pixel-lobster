@@ -44,6 +44,7 @@ export function installCanvas() {
     };
 
     return {
-        Canvas
+        Canvas,
+        presenter
     };
 }
