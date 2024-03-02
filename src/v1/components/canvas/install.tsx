@@ -1,10 +1,10 @@
+/* eslint-disable valtio/state-snapshot-rule */
 import React , { useEffect }from 'react';
 import { useSnapshot } from 'valtio';
 import { Canvas as InternalCanvas } from './canvas';
 import { CanvasPresenter } from './presenter';
-import { DisplayState } from '../display/model';
-import Color from 'colorjs.io';
 import { ResizeState } from '../resize/model';
+import { ColorState } from '../color-picker/model';
 
 export function installCanvas() {
     const canvas = document.createElement('canvas');
@@ -24,20 +24,20 @@ export function installCanvas() {
     const Presenter = new CanvasPresenter(canvas, marker);
 
     const Canvas = () => {
-        const snapshot = useSnapshot(ResizeState);
+        const resize = useSnapshot(ResizeState);
 
         useEffect(() => {
-            // eslint-disable-next-line valtio/state-snapshot-rule
-            Presenter.canvasResize(snapshot.store.width, snapshot.store.height);
-        }, [snapshot.store]);
+            Presenter.canvasResize(resize.store.width, resize.store.height);
+        }, [resize.store]);
+
+        useEffect(() => {
+            marker.style.backgroundColor = ColorState.store.currentColor.toString();
+        }, [ColorState.store]);
 
         return <InternalCanvas 
             canvas={canvas}
             marker={marker}
-            width={snapshot.store.width}
-            height={snapshot.store.height}
-            onMouseMove={(e) => Presenter.onMouseMove(e, new Color('white'), DisplayState.store.zoomFactor)}
-            onMouseLeave={() => Presenter.onMouseLeave()}
+            presenter={Presenter}
         />;
     };
 
