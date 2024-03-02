@@ -1,6 +1,10 @@
 import React, { useId } from 'react';
 import { Background } from '../../ui-style/canvas/ui';
-import { LayerProps } from './canvas';
+
+interface LayerProps {
+    width : number,
+    height : number
+}
 
 export function BackgroundLayer({width, height} : LayerProps) {
     const patternId = useId();

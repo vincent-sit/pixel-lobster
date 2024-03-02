@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import {
-    createHashRouter,
-    RouterProvider,
-} from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { ColorProvider } from './contexts/color-context';
 import { ColorHistoryProvider } from './contexts/color-history-context';
@@ -12,6 +9,10 @@ import { DimensionProvider } from './contexts/dimension-context';
 import { DialogProvider } from './contexts/dialog-context';
 import { AppBody } from './components/app-body/app-body';
 import { installApp } from '././v1/install';
+
+declare module 'valtio' {
+    function useSnapshot<T extends object>(p: T): T;
+}
 
 const GlobalStyle = createGlobalStyle`
   body {

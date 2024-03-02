@@ -1,5 +1,7 @@
 import { proxy } from 'valtio';
 
+// This is a separate state to keep the state of the input BEFORE it gets committed to 
+
 export class InputModel {
     width : string = '16';
     height : string = '16';

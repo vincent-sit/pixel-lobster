@@ -25,11 +25,7 @@ export interface CanvasProps {
     presenter : CanvasPresenter
 }
 
-export function Canvas({
-    canvas,
-    marker,
-    presenter
-}: CanvasProps) {
+export function Canvas({ canvas, marker, presenter }: CanvasProps) {
     const innerCanvasRef = useRef<HTMLDivElement>(null);
     const display = useSnapshot(DisplayState).store;
     const resize = useSnapshot(ResizeState).store;
