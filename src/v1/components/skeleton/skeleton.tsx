@@ -16,6 +16,7 @@ const SidePanel = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 1rem;
 `;
 
 const DisplayWrapper = styled.div`
@@ -30,18 +31,19 @@ const DisplayWrapper = styled.div`
 type SkeletonProps = {
     Display : React.ComponentType,
     ResizeDialog : React.ComponentType,
-    CommandPanel : React.ComponentType
+    CommandPanel : React.ComponentType,
+    ColorPicker : React.ComponentType
 };
 
 export function Skeleton({
-    Display, ResizeDialog, CommandPanel
+    Display, ResizeDialog, CommandPanel, ColorPicker
 }: SkeletonProps) {
     const snap = useSnapshot(ResizeState);
 
     return (
         <Layout>
             <SidePanel>
-                <p>Hello World</p>
+                <ColorPicker/>
             </SidePanel>
             <DisplayWrapper>
                 <Display/>

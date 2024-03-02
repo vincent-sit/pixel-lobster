@@ -1,10 +1,9 @@
-/* eslint-disable valtio/state-snapshot-rule */
 import React , { useEffect }from 'react';
 import { useSnapshot } from 'valtio';
 import { Canvas as InternalCanvas } from './canvas';
 import { CanvasPresenter } from './presenter';
 import { ResizeState } from '../resize/model';
-import { ColorState } from '../color-picker/model';
+import { ColorModel, ColorState } from '../color-picker/model';
 
 export function installCanvas() {
     const canvas = document.createElement('canvas');
@@ -17,22 +16,24 @@ export function installCanvas() {
     marker.style.height = '1px';
     marker.style.position = 'absolute';
     marker.style.visibility = 'hidden';
-    marker.style.backgroundColor = 'white';
+    marker.style.backgroundColor = ColorState.store.currentColor.toString();
     marker.style.top = '0';
     marker.style.left = '0';
     
     const Presenter = new CanvasPresenter(canvas, marker);
-
+    
     const Canvas = () => {
         const resize = useSnapshot(ResizeState);
+        const color = useSnapshot<ColorModel>(ColorState.store);
 
         useEffect(() => {
+            // eslint-disable-next-line valtio/state-snapshot-rule
             Presenter.canvasResize(resize.store.width, resize.store.height);
         }, [resize.store]);
 
         useEffect(() => {
-            marker.style.backgroundColor = ColorState.store.currentColor.toString();
-        }, [ColorState.store]);
+            Presenter.updateColorMarker(color.currentColor);
+        }, [color.currentColor]);
 
         return <InternalCanvas 
             canvas={canvas}

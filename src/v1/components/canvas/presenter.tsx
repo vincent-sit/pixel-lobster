@@ -34,6 +34,10 @@ export class CanvasPresenter {
         canvasCtx.fillRect(Math.floor((pointerX - rect.x) / zoomFactor), Math.floor((pointerY - rect.y) / zoomFactor), 1, 1);
     }
 
+    updateColorMarker(color : Color) {
+        this.marker.style.backgroundColor = color.toString();
+    }
+
     onMouseMove(e : PointerEvent, color : Color, zoomFactor : number) {
         this.toggleMarkerVisibility(true);
         this.trackMarkerMovement(e.clientX, e.clientY, zoomFactor);
