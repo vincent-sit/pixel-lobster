@@ -78,6 +78,8 @@ export class ColorPickerPresenter {
             const rect = this.colorSelector.getBoundingClientRect();
             colorX = clamp(e.clientX - rect.x, 0, rect.width);
             colorY = clamp(e.clientY - rect.y, 0, rect.height);
+            ColorState.updateSaturation(colorX);
+            ColorState.updateValue(colorY);
             this.colorMarker.style.transform = 
                 `translate(${colorX}px, ${colorY}px) translate(-50%, -50%)`;
             this.colorMarker.style.border = 
@@ -85,9 +87,10 @@ export class ColorPickerPresenter {
         } else if (this.originatedFromHue) {
             const rect = this.hueSelector.getBoundingClientRect();
             hueY = clamp(e.clientY - rect.y, 0, rect.height);
+            ColorState.updateHue(hueY);
             this.hueMarker.style.transform = `translateY(${hueY}px) translate(-50%, -50%)`;
         }
-        ColorState.updateCurrentColor(ColorState.store.hueY, ColorState.store.colorY, ColorState.store.colorX);
+        ColorState.updateCurrentColor(ColorState.store.hueY, ColorState.store.colorX, ColorState.store.colorY);
     }
 
     handleDown(e : PointerEvent) {
@@ -111,12 +114,12 @@ export class ColorPickerPresenter {
             this.hueMarker.style.transform = `translateY(${ColorState.store.hueY}px) translate(-50%, -50%)`;
         }
 
-        ColorState.updateCurrentColor(ColorState.store.hueY, ColorState.store.colorY, ColorState.store.colorX);
-        
+        ColorState.updateCurrentColor(ColorState.store.hueY, ColorState.store.colorX, ColorState.store.colorY);
     }
 
     handleUp() {
         this.originatedFromColor = false;
         this.originatedFromHue = false;
+        ColorState.updateCurrentColor(ColorState.store.hueY, ColorState.store.colorX, ColorState.store.colorY);
     }
 }

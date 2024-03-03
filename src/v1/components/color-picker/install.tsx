@@ -2,6 +2,7 @@ import React from 'react';
 import { ColorPickerPresenter } from './presenter';
 import { ColorState } from './model';
 import { ColorPickerMainBody } from './color-picker';
+import { useSnapshot } from 'valtio';
 
 export function installColorPicker() {
     const colorCanvas = document.createElement('canvas');
@@ -20,8 +21,11 @@ export function installColorPicker() {
     hueMarker.style.cssText = markerStyle;
 
     const presenter = new ColorPickerPresenter(colorCanvas, hueCanvas, colorMarker, hueMarker);
-
+    
     const ColorPicker = () => {
+        const color = useSnapshot(ColorState);
+        presenter.createHueSlider(ColorState.store.CANVAS_SIZE);
+        presenter.updateColorCanvas(color.store.currentColor.hsv.h);
         return <ColorPickerMainBody
             colorCanvas={colorCanvas}
             hueCanvas={hueCanvas}

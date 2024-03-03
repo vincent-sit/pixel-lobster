@@ -31,11 +31,6 @@ export function ColorPickerMainBody({colorCanvas, hueCanvas, colorMarker, hueMar
     const hueCanvasRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        presenter.createHueSlider(ColorState.store.CANVAS_SIZE);
-        presenter.updateColorCanvas(ColorState.store.currentColor.hsv.h);
-    }, []);
-
-    useEffect(() => {
         colorCanvasRef.current?.append(colorCanvas);
         colorCanvasRef.current?.append(colorMarker);
         hueCanvasRef.current?.append(hueCanvas);

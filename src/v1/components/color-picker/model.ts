@@ -9,8 +9,6 @@ export class ColorModel {
     colorX : number = 0;
     colorY : number = 0;
     hueY : number = 0;
-    isColorDown : boolean = false;
-    isHueDown : boolean = false;
     readonly CANVAS_SIZE : number = 300;
     readonly HUE_WIDTH : number = 30;
 }
@@ -18,7 +16,11 @@ export class ColorModel {
 export const ColorState = proxy({
     store : new ColorModel(),
     updateCurrentColor : (h : number, s : number, v : number) => {
-        ColorState.store.currentColor = new Color('hsv', [h, s, v]);
+        ColorState.store.currentColor = new Color('hsv', [
+            h / ColorState.store.CANVAS_SIZE * 360,
+            s / ColorState.store.CANVAS_SIZE * 100,
+            (1 - v / ColorState.store.CANVAS_SIZE) * 100
+        ]);
     },
     updateValue : (newColorY : number) => {
         ColorState.store.colorY = newColorY;
@@ -34,11 +36,5 @@ export const ColorState = proxy({
         if (ColorState.store.colorHistory.length > COLOR_HISTORY_LIMIT) {
             ColorState.store.colorHistory.splice(0, 1);
         }
-    },
-    updateIsColorDown : () => {
-        ColorState.store.isColorDown = !ColorState.store.isColorDown;
-    },
-    updateIsHueDown : () => {
-        ColorState.store.isHueDown = !ColorState.store.isHueDown;
     }
 });
