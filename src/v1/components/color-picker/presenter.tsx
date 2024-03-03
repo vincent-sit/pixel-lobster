@@ -1,19 +1,27 @@
 import Color from 'colorjs.io';
+import { isWithinBounds } from '../../../utils/ui-check';
+import { clamp } from '../../../utils/math';
+import { ColorState } from './model';
 
 // color picker needs to be able to track mouse movement across the entire body 
 // but only change color canvas/hue canvas when there is a click and hold
 
 export class ColorPickerPresenter {
+    originatedFromColor: boolean;
+    originatedFromHue : boolean;
+
     constructor(
         private readonly colorSelector : HTMLCanvasElement,
         private readonly hueSelector : HTMLCanvasElement,
         private readonly colorMarker : HTMLSpanElement,
-        private readonly hueMarker : HTMLSpanElement,
+        private readonly hueMarker : HTMLSpanElement
     ) {
         this.colorSelector = colorSelector;
         this.hueSelector = hueSelector;
         this.colorMarker = colorMarker;
         this.hueMarker = hueMarker;
+        this.originatedFromColor = false;
+        this.originatedFromHue = false;
     }
 
     createHueSlider(height : number) {
@@ -60,30 +68,55 @@ export class ColorPickerPresenter {
         return newColor;
     }
 
-    moveColorMarker(e : PointerEvent, rect : DOMRect) {
-        if (e.pressure > 0) {
+    handleMove(e : PointerEvent) {
+        let {colorX, colorY, hueY} = ColorState.store;
+        const {CANVAS_SIZE} = ColorState.store;
+
+        if (e.pressure <= 0 && !this.originatedFromColor && !this.originatedFromHue) return;
+
+        if (this.originatedFromColor) {
+            const rect = this.colorSelector.getBoundingClientRect();
+            colorX = clamp(e.clientX - rect.x, 0, rect.width);
+            colorY = clamp(e.clientY - rect.y, 0, rect.height);
             this.colorMarker.style.transform = 
-                `translate(${e.clientX - rect.x}px, ${e.clientY - rect.y}px) translate(-50%, -50%)`;
+                `translate(${colorX}px, ${colorY}px) translate(-50%, -50%)`;
+            this.colorMarker.style.border = 
+                `1px solid ${colorY > CANVAS_SIZE /2 ? 'white' : 'black'}`;
+        } else if (this.originatedFromHue) {
+            const rect = this.hueSelector.getBoundingClientRect();
+            hueY = clamp(e.clientY - rect.y, 0, rect.height);
+            this.hueMarker.style.transform = `translateY(${hueY}px) translate(-50%, -50%)`;
         }
+        ColorState.updateCurrentColor(ColorState.store.hueY, ColorState.store.colorY, ColorState.store.colorX);
     }
 
-    // moveMarkers(newX : number, newY : number, ) {
-    //     if (state.isColorDown) {
-    //         if (!this.colorMarker) return;
-    //         this.colorMarker.style.transform = `translate(${state.colorX}px, ${state.colorY}px) translate(-50%, -50%)`;
-    //     } else if (state.isHueDown) {
-    //         if (!this.hueSelector) return;
-    //         this.hueSelector.style.transform = `translateY(${state.hueY}px) translate(-50%, -50%)`;
-    //     } else {
-    //         if (!this.hueSelector || !this.colorSelector || !this.colorMarker || !this.hueMarker) return;
-    //         // hue
-    //         const newHueY = state.currentColor.hsv.h / 360 * this.hueSelector.height;
-    //         this.hueMarker.style.transform = `translateY(${newHueY}px) translate(-50%, -50%)`;
-    //         // color
-    //         const newColorX = state.currentColor.hsv.s / 100 * this.colorSelector.width;
-    //         const newColorY = (1 - (state.currentColor.hsv.v / 100)) * this.colorSelector.height;
-    //         this.colorMarker.style.transform = `translate(${newColorX}px, ${newColorY}px) translate(-50%, -50%)`;
-    //         this.colorMarker.style.border = `1px solid ${newColorY > this.colorSelector.height / 2 ? 'white' : 'black'}`;
-    //     }
-    // }
+    handleDown(e : PointerEvent) {
+        const {CANVAS_SIZE} = ColorState.store;
+        const colorRect = this.colorSelector.getBoundingClientRect();
+        const hueRect = this.hueSelector.getBoundingClientRect();
+        
+        if (!isWithinBounds(e, colorRect) && !isWithinBounds(e, hueRect)) return;
+        
+        if (isWithinBounds(e, colorRect)) {
+            this.originatedFromColor = true;
+            ColorState.updateSaturation(e.clientX - colorRect.x);
+            ColorState.updateValue(e.clientY - colorRect.y);
+            this.colorMarker.style.transform = 
+                `translate(${ColorState.store.colorX}px, ${ColorState.store.colorY}px) translate(-50%, -50%)`;
+            this.colorMarker.style.border = 
+                `1px solid ${(ColorState.store.colorY) > CANVAS_SIZE /2 ? 'white' : 'black'}`;
+        } else if (isWithinBounds(e, hueRect)) {
+            this.originatedFromHue = true;
+            ColorState.updateHue(e.clientY - hueRect.y);
+            this.hueMarker.style.transform = `translateY(${ColorState.store.hueY}px) translate(-50%, -50%)`;
+        }
+
+        ColorState.updateCurrentColor(ColorState.store.hueY, ColorState.store.colorY, ColorState.store.colorX);
+        
+    }
+
+    handleUp() {
+        this.originatedFromColor = false;
+        this.originatedFromHue = false;
+    }
 }

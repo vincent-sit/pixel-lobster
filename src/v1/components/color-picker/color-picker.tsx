@@ -2,8 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { ColorPickerPresenter } from './presenter';
 import { ColorState } from './model';
-import { clamp } from '../../../utils/math';
-import Color from 'colorjs.io';
 
 const Container = styled.div`
     display: flex;
@@ -31,7 +29,6 @@ export function ColorPickerMainBody({colorCanvas, hueCanvas, colorMarker, hueMar
     const containerRef = useRef<HTMLDivElement>(null);
     const colorCanvasRef = useRef<HTMLDivElement>(null);
     const hueCanvasRef = useRef<HTMLDivElement>(null);
-    
 
     useEffect(() => {
         presenter.createHueSlider(ColorState.store.CANVAS_SIZE);
@@ -44,38 +41,33 @@ export function ColorPickerMainBody({colorCanvas, hueCanvas, colorMarker, hueMar
         hueCanvasRef.current?.append(hueCanvas);
         hueCanvasRef.current?.append(hueMarker);
 
-        function moveColorMarker(e : PointerEvent) {
-            const rect = colorCanvas.getBoundingClientRect();
-            ColorState.store.currentColor = new Color('red');
-            if (e.pressure > 0) {
-                const newX = clamp(e.clientX - rect.x, 0, rect.width);
-                const newY = clamp(e.clientY - rect.y, 0, rect.height);
-                colorMarker.style.transform = 
-                    `translate(${newX}px, ${newY}px) translate(-50%, -50%)`;
-            }
-        }
-        const rect = colorCanvas.getBoundingClientRect();
-        colorMarker.style.top = rect.top + 'px';
-        colorMarker.style.left = rect.left + 'px';
+        colorMarker.style.top = '0px';
+        colorMarker.style.left = '0px';
 
-        colorCanvas.addEventListener('pointerdown', moveColorMarker);
-        colorCanvas.addEventListener('pointermove', moveColorMarker);
+        hueMarker.style.top = '0px';
+        hueMarker.style.left = ColorState.store.HUE_WIDTH / 2 + 'px';
+
+        document.body.addEventListener('pointerdown', (e) => presenter.handleDown(e));
+        document.body.addEventListener('pointermove', (e) => presenter.handleMove(e));
+        document.body.addEventListener('pointerup', () => presenter.handleUp());
 
         return () => {
             colorCanvasRef.current?.removeChild(colorCanvas);
             colorCanvasRef.current?.removeChild(colorMarker);
             hueCanvasRef.current?.removeChild(hueCanvas);
             hueCanvasRef.current?.removeChild(hueMarker);
-            colorCanvas.removeEventListener('pointerdown', (e) => moveColorMarker(e));
-            colorCanvas.removeEventListener('pointermove', (e) => moveColorMarker(e));
+
+            document.body.addEventListener('pointerdown', (e) => presenter.handleDown(e));
+            document.body.addEventListener('pointermove', (e) => presenter.handleMove(e));
+            document.body.addEventListener('pointerup', () => presenter.handleUp());
         };
-        
+
     }, []);
 
     return (
         <Container ref={containerRef}>
-            <ColorCanvas ref={colorCanvasRef}/>
-            <HueCanvas ref={hueCanvasRef}/>
+            <ColorCanvas ref={colorCanvasRef} style={{width: ColorState.store.CANVAS_SIZE, height: ColorState.store.CANVAS_SIZE}}/>
+            <HueCanvas ref={hueCanvasRef} style={{width: ColorState.store.HUE_WIDTH, height: ColorState.store.CANVAS_SIZE}}/>
         </Container>
     );
 }

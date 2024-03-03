@@ -15,10 +15,9 @@ export function installColorPicker() {
     hueCanvas.height = ColorState.store.CANVAS_SIZE;
 
     const markerStyle = 
-        'position: absolute; display: block; width: 10px; height: 10px; border-radius: 9999999px; z-index: 1; transform: translate(-50%, -50%);';
+        'position: absolute; display: block; width: 10px; height: 10px; border-radius: 9999999px; z-index: 1; transform: translate(-50%, -50%); border : 1px solid black';
     colorMarker.style.cssText = markerStyle;
     hueMarker.style.cssText = markerStyle;
-    colorMarker.style.border = '1px solid black';
 
     const presenter = new ColorPickerPresenter(colorCanvas, hueCanvas, colorMarker, hueMarker);
 
