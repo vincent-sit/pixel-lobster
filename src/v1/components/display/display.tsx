@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
 
 const Wrapper = styled.div`
@@ -12,28 +12,14 @@ const Wrapper = styled.div`
 
 export interface DisplayProps {
     zoomFactor : number,
-    // eslint-disable-next-line no-unused-vars
-    onScroll : (e : WheelEvent) => void,
-    Canvas : React.ComponentType,
-    Display : HTMLDivElement
+    onWheel : (e : React.WheelEvent) => void,
+    Canvas : React.ComponentType
 }
 
-export function Display({onScroll, Canvas, Display} : DisplayProps) {
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        containerRef.current?.append(Display);
-        containerRef.current?.addEventListener('wheel', onScroll);
-
-        return () => {
-            containerRef.current?.removeChild(Display);
-            containerRef.current?.removeEventListener('wheel', onScroll);
-        };
-
-    }, [onScroll]);
+export function Display({onWheel: onWheel, Canvas} : DisplayProps) {
 
     return (
-        <Wrapper ref={containerRef}>
+        <Wrapper onWheel={onWheel}>
             <Canvas/>
         </Wrapper>
     );

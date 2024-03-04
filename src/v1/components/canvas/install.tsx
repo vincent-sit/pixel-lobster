@@ -1,49 +1,30 @@
-import React , { useEffect }from 'react';
-import { useSnapshot } from 'valtio';
+import React from 'react';
 import { Canvas as InternalCanvas } from './canvas';
-import { CanvasPresenter } from './presenter';
-import { ResizeState } from '../resize/model';
-import { ColorModel, ColorState } from '../color-picker/model';
+import { useSnapshot } from 'valtio';
+import { createCanvasState } from './state';
+import { ZoomState } from '../zoom/state';
 
-export function installCanvas() {
+export function installCanvas(zoomState : ZoomState) {
+    const canvasState = createCanvasState();
     const canvas = document.createElement('canvas');
-    canvas.width = ResizeState.store.width;
-    canvas.height = ResizeState.store.height;
+    canvas.width = canvasState.width;
+    canvas.height = canvasState.height;
     canvas.style.imageRendering = 'pixelated';
-    
-    const marker = document.createElement('span');
-    marker.style.width = '1px';
-    marker.style.height = '1px';
-    marker.style.position = 'absolute';
-    marker.style.visibility = 'hidden';
-    marker.style.backgroundColor = ColorState.store.currentColor.toString();
-    marker.style.top = '0';
-    marker.style.left = '0';
-    
-    const Presenter = new CanvasPresenter(canvas, marker);
-    
+
     const Canvas = () => {
-        const resize = useSnapshot(ResizeState);
-        const color = useSnapshot<ColorModel>(ColorState.store);
-
-        useEffect(() => {
-            // eslint-disable-next-line valtio/state-snapshot-rule
-            Presenter.canvasResize(resize.store.width, resize.store.height);
-        }, [resize.store]);
-
-        useEffect(() => {
-            Presenter.updateColorMarker(color.currentColor);
-        }, [color.currentColor]);
+        const canvasSnapshot = useSnapshot(canvasState);
+        const zoomSnapshot = useSnapshot(zoomState);
 
         return <InternalCanvas 
             canvas={canvas}
-            marker={marker}
-            presenter={Presenter}
+            zoomFactor={zoomSnapshot.zoomFactor}
+            width={canvasSnapshot.width}
+            height={canvasSnapshot.height}
         />;
     };
 
     return {
         Canvas,
-        Presenter
+        canvasElement : canvas
     };
 }

@@ -1,11 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { BackgroundLayer } from './background-layer';
-import { useSnapshot } from 'valtio';
-import { DisplayState } from '../display/model';
-import { CanvasPresenter } from './presenter';
-import { ColorState } from '../color-picker/model';
-import { ResizeState } from '../resize/model';
 
 const Container = styled.div`
     transform-origin: center;
@@ -15,46 +10,63 @@ const Container = styled.div`
     z-index: 1;
 `;
 
-const InnerCanvas = styled.div`
-    position: relative;
+const Marker = styled.span`
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    background-color: white;
+    z-index: 1;
+
+    &:hover {
+        cursor: crosshair;
+    }
 `;
 
 export interface CanvasProps {
     canvas: HTMLCanvasElement,
-    marker : HTMLSpanElement,
-    presenter : CanvasPresenter
+    zoomFactor : number,
+    width: number,
+    height : number,
 }
 
-export function Canvas({ canvas, marker, presenter }: CanvasProps) {
-    const innerCanvasRef = useRef<HTMLDivElement>(null);
-    const display = useSnapshot(DisplayState).store;
-    const resize = useSnapshot(ResizeState).store;
-
-    const mouseMove = (e : PointerEvent) => {
-        presenter.onMouseMove(e, ColorState.store.currentColor, DisplayState.store.zoomFactor);
-    };
+export function Canvas({ canvas, zoomFactor, width, height }: CanvasProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const markerRef = useRef<HTMLSpanElement>(null);
 
     useEffect(() => {
-        innerCanvasRef.current?.addEventListener('pointermove', mouseMove);
-        innerCanvasRef.current?.addEventListener('pointerleave', () => presenter.onMouseLeave());
-        innerCanvasRef.current?.addEventListener('pointerdown', mouseMove);
-        innerCanvasRef.current?.append(canvas);
-        innerCanvasRef.current?.append(marker);
+        containerRef.current?.append(canvas);
 
         return () => {
-            innerCanvasRef.current?.removeEventListener('pointermove', mouseMove);
-            innerCanvasRef.current?.removeEventListener('pointerleave', () => presenter.onMouseLeave());
-            innerCanvasRef.current?.removeEventListener('pointerdown', mouseMove);
-            innerCanvasRef.current?.removeChild(canvas);
-            innerCanvasRef.current?.removeChild(marker);
+            containerRef.current?.removeChild(canvas);
         };
-    }, [canvas, marker]);
+    }, [canvas]);
+
+    function handlePointerMove(e : React.PointerEvent<HTMLDivElement>) {
+        if (!markerRef.current || !containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        markerRef.current.style.visibility = 'visible';
+        markerRef.current.style.top = `${Math.floor((e.clientY - rect.y) / zoomFactor)}px`;
+        markerRef.current.style.left = `${Math.floor((e.clientX - rect.x) / zoomFactor)}px`;
+    }
+
+    function handlePointerLeave() {
+        if (!markerRef.current) return;
+        markerRef.current.style.visibility = 'hidden';
+    }
 
     return (
-        <Container style={{transform: `scale(${display.zoomFactor})`, width: resize.width, height: resize.height}}>
-            <InnerCanvas ref={innerCanvasRef} style={{width: resize.width, height: resize.height}}>
-                <BackgroundLayer width={resize.width} height={resize.height}/>
-            </InnerCanvas>
+        <Container 
+            ref={containerRef}
+            onPointerMove={handlePointerMove}
+            onPointerLeave={handlePointerLeave}
+            style={{transform: `scale(${zoomFactor})`, width: width, height: height}}
+        >
+            <BackgroundLayer width={width} height={height}/>
+            <Marker ref={markerRef}/>
         </Container>
     );
 }

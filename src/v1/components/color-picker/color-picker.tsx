@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { ColorPickerPresenter } from './presenter';
 import { ColorState } from './model';
+import { useSnapshot } from 'valtio';
 
 const Container = styled.div`
     display: flex;
@@ -29,6 +30,10 @@ export function ColorPickerMainBody({colorCanvas, hueCanvas, colorMarker, hueMar
     const containerRef = useRef<HTMLDivElement>(null);
     const colorCanvasRef = useRef<HTMLDivElement>(null);
     const hueCanvasRef = useRef<HTMLDivElement>(null);
+
+    const color = useSnapshot(ColorState);
+    presenter.createHueSlider(ColorState.store.CANVAS_SIZE);
+    presenter.updateColorCanvas(color.store.currentColor.hsv.h);
 
     useEffect(() => {
         colorCanvasRef.current?.append(colorCanvas);

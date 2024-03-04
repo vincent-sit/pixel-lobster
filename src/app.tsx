@@ -10,10 +10,6 @@ import { DialogProvider } from './contexts/dialog-context';
 import { AppBody } from './components/app-body/app-body';
 import { installApp } from '././v1/install';
 
-declare module 'valtio' {
-    function useSnapshot<T extends object>(p: T): T;
-}
-
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -39,7 +35,6 @@ const GlobalStyle = createGlobalStyle`
   #root {
     height: 100%;
   }
-  
 `;
 
 const { App: AppV1 } = installApp();

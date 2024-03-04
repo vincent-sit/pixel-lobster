@@ -1,35 +1,30 @@
 import React from 'react';
 import { useSnapshot } from 'valtio';
-import { DisplayState } from './model';
-import { DisplayPresenter } from './presenter';
+import { ZoomState } from '../zoom/state';
 import { Display as InternalDisplay } from './display';
 
-export function installDisplay(Canvas : React.ComponentType) {
-    const display = document.createElement('div');
-    display.style.width = '100%';
-    display.style.height = '100%';
-    display.style.position = 'absolute';
-    const Presenter = new DisplayPresenter(display);
-
+export function installDisplay(
+    zoomState : ZoomState, 
+    updateZoomFactor : (newZoomFactor : number) => void, 
+    Canvas : React.ComponentType
+) {
     const Display = () => {
-        const snapshot = useSnapshot(DisplayState);
+        const snapshot = useSnapshot(zoomState);
         
-        function onScroll(e : WheelEvent) {
-            const newZoomFactor = Presenter.updateZoomFactor(e, snapshot.store.scrollSpeed, snapshot.store.zoomFactor);
-            if (!newZoomFactor) return;
-            snapshot.updateZoomFactor(newZoomFactor);
+        function onWheel(e : React.WheelEvent) {
+            const scrollDistance = e.deltaY < 0 ? zoomState.scrollSpeed : -zoomState.scrollSpeed;
+            const newZoomFactor = zoomState.zoomFactor + scrollDistance > 0.1 ? zoomState.zoomFactor + scrollDistance : 0.1;
+            updateZoomFactor(newZoomFactor);
         }
 
         return <InternalDisplay
-            zoomFactor={snapshot.store.zoomFactor}
-            onScroll={onScroll}
+            zoomFactor={snapshot.zoomFactor}
+            onWheel={onWheel}
             Canvas={Canvas}
-            Display={display}
         />;
     };
 
     return {
-        Display,
-        Presenter
+        Display
     };
 }

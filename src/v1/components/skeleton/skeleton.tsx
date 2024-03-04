@@ -28,15 +28,26 @@ const DisplayWrapper = styled.div`
     overflow: hidden;
 `;
 
+const CommandPanel = styled.div`
+    background-color: red;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+`;
+
 type SkeletonProps = {
     Display : React.ComponentType,
     ResizeDialog : React.ComponentType,
-    CommandPanel : React.ComponentType,
+    ExportCanvasButton : React.ComponentType,
+    ClearCanvasButton : React.ComponentType
     ColorPicker : React.ComponentType
 };
 
 export function Skeleton({
-    Display, ResizeDialog, CommandPanel, ColorPicker
+    Display, ResizeDialog, ExportCanvasButton, ClearCanvasButton, ColorPicker
 }: SkeletonProps) {
     const snap = useSnapshot(ResizeState);
 
@@ -49,7 +60,10 @@ export function Skeleton({
                 <Display/>
             </DisplayWrapper>
 
-            <CommandPanel/>
+            <CommandPanel>
+                <ExportCanvasButton/>
+                <ClearCanvasButton/>
+            </CommandPanel>
 
             { snap.store.isDialogActive && <StyledBackdrop/> }
             { snap.store.isDialogActive && <ResizeDialog/> }

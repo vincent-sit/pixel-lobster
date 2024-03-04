@@ -1,12 +1,19 @@
 import React, { useId } from 'react';
-import { Background } from '../../ui-style/canvas/ui';
+import { styled } from 'styled-components';
 
-interface LayerProps {
+const Background = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+`;
+
+interface BackgroundLayerProps {
     width : number,
     height : number
 }
 
-export function BackgroundLayer({width, height} : LayerProps) {
+export function BackgroundLayer({width, height} : BackgroundLayerProps) {
     const patternId = useId();
 
     return (
