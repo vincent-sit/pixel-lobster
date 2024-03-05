@@ -9,17 +9,6 @@ export class CanvasPresenter {
         // this.marker = marker;
     }
 
-    // private toggleMarkerVisibility(isVisible : boolean) {
-    //     this.marker.style.visibility = isVisible ? 'visible' : 'hidden';
-    // }
-
-    // private trackMarkerMovement(pointerX : number, pointerY : number, zoomFactor : number) {
-    //     const rect = this.canvas.getBoundingClientRect();
-    //     this.toggleMarkerVisibility(true);
-    //     this.marker.style.top = `${Math.floor((pointerY - rect.y) / zoomFactor)}px`;
-    //     this.marker.style.left = `${Math.floor((pointerX - rect.x) / zoomFactor)}px`;
-    // }
-
     private trackMouseDrag(
         color : Color,
         pointerX : number,

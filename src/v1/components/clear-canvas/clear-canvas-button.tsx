@@ -8,7 +8,7 @@ interface ClearCanvasProps {
 export function ClearCanvasButton({onClick} : ClearCanvasProps ) {
     return (
         <Button onClick={onClick}>
-            <img src={clearCanvasImage} alt={'Clear Canvas'}/>
+            <img src={clearCanvasImage} alt='Clear Canvas'/>
         </Button>
     );
 }

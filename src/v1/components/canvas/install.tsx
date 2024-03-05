@@ -3,11 +3,13 @@ import { Canvas as InternalCanvas } from './canvas';
 import { useSnapshot } from 'valtio';
 import { createCanvasState } from './state';
 import { ZoomState } from '../zoom/state';
+import { ToolManagementState } from '../tool-management/state';
 
 export function installCanvas(
     zoomState : ZoomState,
     draw : (e : React.PointerEvent<HTMLDivElement>, color : string, zoomFactor : number, canvas : HTMLCanvasElement) => void,
-    erase : (e : React.PointerEvent<HTMLDivElement>, zoomFactor : number, canvas : HTMLCanvasElement) => void
+    erase : (e : React.PointerEvent<HTMLDivElement>, zoomFactor : number, canvas : HTMLCanvasElement) => void,
+    toolState : ToolManagementState
 ) {
     const canvasState = createCanvasState();
     const canvas = document.createElement('canvas');
@@ -18,6 +20,7 @@ export function installCanvas(
     const Canvas = () => {
         const canvasSnapshot = useSnapshot(canvasState);
         const zoomSnapshot = useSnapshot(zoomState);
+        const toolSnapshot = useSnapshot(toolState);
 
         return <InternalCanvas 
             canvas={canvas}
@@ -26,6 +29,7 @@ export function installCanvas(
             height={canvasSnapshot.height}
             draw={draw}
             erase={erase}
+            tool={toolSnapshot.tool}
         />;
     };
 

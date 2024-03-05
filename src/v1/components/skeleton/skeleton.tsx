@@ -19,6 +19,13 @@ const SidePanel = styled.div`
     padding: 1rem;
 `;
 
+const ToolBar = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+`;
+
 const DisplayWrapper = styled.div`
     background-color: blue;
     display: flex;
@@ -43,18 +50,31 @@ type SkeletonProps = {
     ResizeDialog : React.ComponentType,
     ExportCanvasButton : React.ComponentType,
     ClearCanvasButton : React.ComponentType
-    ColorPicker : React.ComponentType
+    ColorPicker : React.ComponentType,
+    EraserButton : React.ComponentType,
+    PaintbrushButton : React.ComponentType,
+    ColorPickerButton : React.ComponentType
 };
 
 export function Skeleton({
-    Display, ResizeDialog, ExportCanvasButton, ClearCanvasButton, ColorPicker
+    Display, 
+    ResizeDialog, 
+    ExportCanvasButton, 
+    ClearCanvasButton, 
+    EraserButton,
+    PaintbrushButton,
+    ColorPickerButton
 }: SkeletonProps) {
     const snap = useSnapshot(ResizeState);
 
     return (
         <Layout>
             <SidePanel>
-                <ColorPicker/>
+                <ToolBar>
+                    <PaintbrushButton/>
+                    <EraserButton/>
+                    <ColorPickerButton/>
+                </ToolBar>
             </SidePanel>
             <DisplayWrapper>
                 <Display/>

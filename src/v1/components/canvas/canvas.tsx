@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { BackgroundLayer } from './background-layer';
+import { toolType } from '../tool-management/state';
 
 const Container = styled.div`
     transform-origin: center;
@@ -39,10 +40,11 @@ export interface CanvasProps {
     erase : (
         e : React.PointerEvent<HTMLDivElement>, 
         zoomFactor : number, 
-        canvas : HTMLCanvasElement) => void
+        canvas : HTMLCanvasElement) => void,
+    tool : toolType
 }
 
-export function Canvas({ canvas, zoomFactor, width, height, draw, erase }: CanvasProps) {
+export function Canvas({ canvas, zoomFactor, width, height, draw, erase, tool }: CanvasProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
 
@@ -55,19 +57,37 @@ export function Canvas({ canvas, zoomFactor, width, height, draw, erase }: Canva
     }, [canvas]);
 
     function handlePointerDown(e : React.PointerEvent<HTMLDivElement>) {
-        draw(e, 'white', zoomFactor, canvas);
-        erase(e, zoomFactor, canvas);
+        switch(tool) {
+            case 'paintbrush':
+                draw(e, 'white', zoomFactor, canvas);
+                break;
+            case 'eraser':
+                erase(e, zoomFactor, canvas);
+                break;
+            default:
+                break;
+        }
     }
 
     function handlePointerMove(e : React.PointerEvent<HTMLDivElement>) {
         if (!markerRef.current || !containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
-        markerRef.current.style.visibility = 'visible';
+
+        if (tool === 'paintbrush') markerRef.current.style.visibility = 'visible';
+        
         markerRef.current.style.top = `${Math.floor((e.clientY - rect.y) / zoomFactor)}px`;
         markerRef.current.style.left = `${Math.floor((e.clientX - rect.x) / zoomFactor)}px`;
         if (e.pressure > 0) {
-            draw(e, 'white', zoomFactor, canvas);
-            erase(e, zoomFactor, canvas);
+            switch(tool) {
+                case 'paintbrush':
+                    draw(e, 'white', zoomFactor, canvas);
+                    break;
+                case 'eraser':
+                    erase(e, zoomFactor, canvas);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
