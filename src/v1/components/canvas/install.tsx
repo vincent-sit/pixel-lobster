@@ -4,7 +4,10 @@ import { useSnapshot } from 'valtio';
 import { createCanvasState } from './state';
 import { ZoomState } from '../zoom/state';
 
-export function installCanvas(zoomState : ZoomState) {
+export function installCanvas(
+    zoomState : ZoomState,
+    draw : (e : React.PointerEvent<HTMLDivElement>, color : string, zoomFactor : number, canvas : HTMLCanvasElement) => void
+) {
     const canvasState = createCanvasState();
     const canvas = document.createElement('canvas');
     canvas.width = canvasState.width;
@@ -20,6 +23,7 @@ export function installCanvas(zoomState : ZoomState) {
             zoomFactor={zoomSnapshot.zoomFactor}
             width={canvasSnapshot.width}
             height={canvasSnapshot.height}
+            draw={draw}
         />;
     };
 
