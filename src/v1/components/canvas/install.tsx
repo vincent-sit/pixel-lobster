@@ -6,7 +6,8 @@ import { ZoomState } from '../zoom/state';
 
 export function installCanvas(
     zoomState : ZoomState,
-    draw : (e : React.PointerEvent<HTMLDivElement>, color : string, zoomFactor : number, canvas : HTMLCanvasElement) => void
+    draw : (e : React.PointerEvent<HTMLDivElement>, color : string, zoomFactor : number, canvas : HTMLCanvasElement) => void,
+    erase : (e : React.PointerEvent<HTMLDivElement>, zoomFactor : number, canvas : HTMLCanvasElement) => void
 ) {
     const canvasState = createCanvasState();
     const canvas = document.createElement('canvas');
@@ -24,6 +25,7 @@ export function installCanvas(
             width={canvasSnapshot.width}
             height={canvasSnapshot.height}
             draw={draw}
+            erase={erase}
         />;
     };
 

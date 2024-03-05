@@ -35,10 +35,14 @@ export interface CanvasProps {
         e : React.PointerEvent<HTMLDivElement>, 
         color : string, 
         zoomFactor : number, 
+        canvas : HTMLCanvasElement) => void,
+    erase : (
+        e : React.PointerEvent<HTMLDivElement>, 
+        zoomFactor : number, 
         canvas : HTMLCanvasElement) => void
 }
 
-export function Canvas({ canvas, zoomFactor, width, height, draw }: CanvasProps) {
+export function Canvas({ canvas, zoomFactor, width, height, draw, erase }: CanvasProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
 
@@ -52,6 +56,7 @@ export function Canvas({ canvas, zoomFactor, width, height, draw }: CanvasProps)
 
     function handlePointerDown(e : React.PointerEvent<HTMLDivElement>) {
         draw(e, 'white', zoomFactor, canvas);
+        erase(e, zoomFactor, canvas);
     }
 
     function handlePointerMove(e : React.PointerEvent<HTMLDivElement>) {
@@ -60,7 +65,10 @@ export function Canvas({ canvas, zoomFactor, width, height, draw }: CanvasProps)
         markerRef.current.style.visibility = 'visible';
         markerRef.current.style.top = `${Math.floor((e.clientY - rect.y) / zoomFactor)}px`;
         markerRef.current.style.left = `${Math.floor((e.clientX - rect.x) / zoomFactor)}px`;
-        if (e.pressure > 0) draw(e, 'white', zoomFactor, canvas);
+        if (e.pressure > 0) {
+            draw(e, 'white', zoomFactor, canvas);
+            erase(e, zoomFactor, canvas);
+        }
     }
 
     function handlePointerLeave() {

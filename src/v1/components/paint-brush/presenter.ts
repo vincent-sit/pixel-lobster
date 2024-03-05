@@ -1,7 +1,4 @@
 export class PaintBrushPresenter {
-    constructor() {
-    }
-
     draw(e : React.PointerEvent<HTMLDivElement>, color : string, zoomFactor : number, canvas : HTMLCanvasElement) {
         const context = canvas.getContext('2d');
         const rect = canvas.getBoundingClientRect();

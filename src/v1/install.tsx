@@ -6,11 +6,13 @@ import { installZoom } from './components/zoom/install';
 import { installExportCanvas } from './components/export-canvas/install';
 import { installClearCanvas } from './components/clear-canvas/install';
 import { installPaintBrush } from './components/paint-brush/install';
+import { installEraser } from './components/eraser/install';
 
 export function installApp() {
     const { state : zoomState, updateZoomFactor } = installZoom();
     const { draw } = installPaintBrush();
-    const { Canvas, canvasElement } = installCanvas(zoomState, draw);
+    const { erase } = installEraser();
+    const { Canvas, canvasElement } = installCanvas(zoomState, draw, erase);
     const { Display } = installDisplay(zoomState, updateZoomFactor, Canvas);
     const { ExportCanvasButton } = installExportCanvas(canvasElement);
     const { ClearCanvasButton } = installClearCanvas(canvasElement);
