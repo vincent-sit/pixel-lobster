@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { BackgroundLayer } from './background-layer';
-import { toolType } from '../tool-management/state';
+import { toolType } from '../tool/state';
 
 const Container = styled.div`
     transform-origin: center;
@@ -27,24 +27,17 @@ const Marker = styled.span`
     }
 `;
 
-export interface CanvasProps {
+export interface CanvasProxyProps {
     canvas: HTMLCanvasElement,
     zoomFactor : number,
     width: number,
     height : number,
-    draw : (
-        e : React.PointerEvent<HTMLDivElement>, 
-        color : string, 
-        zoomFactor : number, 
-        canvas : HTMLCanvasElement) => void,
-    erase : (
-        e : React.PointerEvent<HTMLDivElement>, 
-        zoomFactor : number, 
-        canvas : HTMLCanvasElement) => void,
+    draw : (x : number, y : number, color : string) => void,
+    erase : (x : number, y : number) => void,
     tool : toolType
 }
 
-export function Canvas({ canvas, zoomFactor, width, height, draw, erase, tool }: CanvasProps) {
+export function CanvasProxy({ canvas, zoomFactor, width, height, draw, erase, tool }: CanvasProxyProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
 
@@ -57,12 +50,15 @@ export function Canvas({ canvas, zoomFactor, width, height, draw, erase, tool }:
     }, [canvas]);
 
     function handlePointerDown(e : React.PointerEvent<HTMLDivElement>) {
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.x) / zoomFactor);
+        const y = Math.floor((e.clientY - rect.y) / zoomFactor);
         switch(tool) {
             case 'paintbrush':
-                draw(e, 'white', zoomFactor, canvas);
+                draw(x, y, 'white');
                 break;
             case 'eraser':
-                erase(e, zoomFactor, canvas);
+                erase(x, y);
                 break;
             default:
                 break;
@@ -70,20 +66,21 @@ export function Canvas({ canvas, zoomFactor, width, height, draw, erase, tool }:
     }
 
     function handlePointerMove(e : React.PointerEvent<HTMLDivElement>) {
-        if (!markerRef.current || !containerRef.current) return;
-        const rect = containerRef.current.getBoundingClientRect();
-
+        if (!markerRef.current) return;
         if (tool === 'paintbrush') markerRef.current.style.visibility = 'visible';
-        
-        markerRef.current.style.top = `${Math.floor((e.clientY - rect.y) / zoomFactor)}px`;
-        markerRef.current.style.left = `${Math.floor((e.clientX - rect.x) / zoomFactor)}px`;
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.x) / zoomFactor);
+        const y = Math.floor((e.clientY - rect.y) / zoomFactor);
+
+        markerRef.current.style.top = y + 'px';
+        markerRef.current.style.left = x + 'px';
         if (e.pressure > 0) {
             switch(tool) {
                 case 'paintbrush':
-                    draw(e, 'white', zoomFactor, canvas);
+                    draw(x, y, 'white');
                     break;
                 case 'eraser':
-                    erase(e, zoomFactor, canvas);
+                    erase(x, y);
                     break;
                 default:
                     break;

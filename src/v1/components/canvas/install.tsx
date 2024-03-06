@@ -1,40 +1,15 @@
-import React from 'react';
-import { Canvas as InternalCanvas } from './canvas';
-import { useSnapshot } from 'valtio';
 import { createCanvasState } from './state';
-import { ZoomState } from '../zoom/state';
-import { ToolManagementState } from '../tool-management/state';
 
-export function installCanvas(
-    zoomState : ZoomState,
-    draw : (e : React.PointerEvent<HTMLDivElement>, color : string, zoomFactor : number, canvas : HTMLCanvasElement) => void,
-    erase : (e : React.PointerEvent<HTMLDivElement>, zoomFactor : number, canvas : HTMLCanvasElement) => void,
-    toolState : ToolManagementState
-) {
+export function installCanvas() {
     const canvasState = createCanvasState();
+    
     const canvas = document.createElement('canvas');
     canvas.width = canvasState.width;
     canvas.height = canvasState.height;
     canvas.style.imageRendering = 'pixelated';
 
-    const Canvas = () => {
-        const canvasSnapshot = useSnapshot(canvasState);
-        const zoomSnapshot = useSnapshot(zoomState);
-        const toolSnapshot = useSnapshot(toolState);
-
-        return <InternalCanvas 
-            canvas={canvas}
-            zoomFactor={zoomSnapshot.zoomFactor}
-            width={canvasSnapshot.width}
-            height={canvasSnapshot.height}
-            draw={draw}
-            erase={erase}
-            tool={toolSnapshot.tool}
-        />;
-    };
-
     return {
-        Canvas,
-        canvasElement : canvas
+        canvas,
+        canvasState
     };
 }

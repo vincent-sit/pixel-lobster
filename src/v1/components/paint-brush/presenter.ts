@@ -1,15 +1,18 @@
-import { ToolManagementState } from '../tool-management/state';
+import { ToolState } from '../tool/state';
 
 export class PaintBrushPresenter {
-    draw(e : React.PointerEvent<HTMLDivElement>, color : string, zoomFactor : number, canvas : HTMLCanvasElement) {
-        const context = canvas.getContext('2d');
-        const rect = canvas.getBoundingClientRect();
+    constructor(private readonly canvas : HTMLCanvasElement) {
+        this.canvas = canvas;
+    }
+    
+    draw(x : number, y : number, color : string) {
+        const context = this.canvas.getContext('2d');
         if (!context) return;
         context.fillStyle = color;
-        context.fillRect(Math.floor((e.clientX - rect.x) / zoomFactor), Math.floor((e.clientY - rect.y) / zoomFactor), 1, 1);
+        context.fillRect(x, y, 1, 1);
     }
 
-    changeTool(state : ToolManagementState) {
+    changeTool(state : ToolState) {
         state.tool = 'paintbrush';
     }
 }

@@ -1,14 +1,17 @@
-import { ToolManagementState } from '../tool-management/state';
+import { ToolState } from '../tool/state';
 
 export class EraserPresenter {
-    erase(e : React.PointerEvent<HTMLDivElement>, zoomFactor : number, canvas : HTMLCanvasElement) {
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-        const rect = canvas.getBoundingClientRect();
-        ctx.clearRect(Math.floor((e.clientX - rect.x) / zoomFactor), Math.floor((e.clientY - rect.y) / zoomFactor), 1, 1);
+    constructor(private readonly canvas : HTMLCanvasElement) {
+        this.canvas = canvas;
     }
 
-    changeTool(state : ToolManagementState) {
+    erase(x : number, y : number) {
+        const ctx = this.canvas.getContext('2d');
+        if (!ctx) return;
+        ctx.clearRect(x, y, 1, 1);
+    }
+
+    changeTool(state : ToolState) {
         state.tool = 'eraser';
     }
 }
