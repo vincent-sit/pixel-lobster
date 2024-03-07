@@ -16,6 +16,6 @@ export class ColorPresenter {
             newColorHistory.splice(0, 1);
         }
         newColorHistory.push(newColor);
-        state.colorHistory = newColorHistory;
+        state.colorHistory = ref(newColorHistory);
     }
 }

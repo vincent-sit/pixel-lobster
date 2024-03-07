@@ -110,7 +110,7 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
         onChange(newColor);
     }, [isColorDown, colorX, colorY, isHueDown, hueY]);
 
-    // Move markers
+    // Move markers when clicked on hue canvas or color canvas
     useEffect(() => {
         if ((!isColorDown && !isHueDown) || !colorMarkerRef.current || !hueMarkerRef.current) {
             return;
@@ -126,6 +126,24 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
             hueMarkerRef.current.style.top = colorY + 'px';
         }
     }, [isColorDown, colorX, colorY, isHueDown, hueY]);
+
+    // Move markers when color is changed but not through interacting with internal canvas
+    useEffect(() => {
+        if (isColorDown || isHueDown || !colorMarkerRef.current || !hueMarkerRef.current || 
+            !colorCanvasRef.current || !hueCanvasRef.current) {
+            return;
+        }
+
+        // hue
+        const newHueY = color.hsv.h / 360 * hueCanvasRef.current.height;
+        hueMarkerRef.current.style.top = newHueY + 'px';
+        // color
+        const newColorX = color.hsv.s / 100 * colorCanvasRef.current.width;
+        const newColorY = (1 - (color.hsv.v / 100)) * colorCanvasRef.current.height;
+        colorMarkerRef.current.style.top = newColorY + 'px';
+        colorMarkerRef.current.style.left = newColorX + 'px';
+        colorMarkerRef.current.style.border = `1px solid ${newColorY > CANVAS_SIZE_PX / 2 ? 'white' : 'black'}`;
+    }, [color]);
 
     return (
         <Wrapper>

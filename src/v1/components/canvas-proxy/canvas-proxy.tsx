@@ -35,10 +35,12 @@ export interface CanvasProxyProps {
     height : number,
     draw : (x : number, y : number, color : string) => void,
     erase : (x : number, y : number) => void,
+    pick : (x : number, y : number, canvas : HTMLCanvasElement) => void,
+    addToColorHistory : (newColor : Color) => void,
     tool : toolType
 }
 
-export function CanvasProxy({ canvas, zoomFactor, color, width, height, draw, erase, tool }: CanvasProxyProps) {
+export function CanvasProxy({ canvas, zoomFactor, color, width, height, draw, erase, pick, addToColorHistory, tool }: CanvasProxyProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
 
@@ -57,9 +59,13 @@ export function CanvasProxy({ canvas, zoomFactor, color, width, height, draw, er
         switch(tool) {
             case 'paintbrush':
                 draw(x, y, color.to('srgb').toString());
+                addToColorHistory(color);
                 break;
             case 'eraser':
                 erase(x, y);
+                break;
+            case 'colorpicker':
+                pick(x, y, canvas);
                 break;
             default:
                 break;
@@ -83,6 +89,9 @@ export function CanvasProxy({ canvas, zoomFactor, color, width, height, draw, er
                     break;
                 case 'eraser':
                     erase(x, y);
+                    break;
+                case 'colorpicker':
+                    pick(x, y, canvas);
                     break;
                 default:
                     break;

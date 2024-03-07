@@ -4,8 +4,8 @@ import { proxy, ref } from 'valtio';
 type Ref<T extends object> = ReturnType<typeof ref<T>>;
 
 export class ColorState {
-    color : Ref<Color> = ref(new Color('red'));
-    colorHistory : Color[] = [];
+    color : Ref<Color> = ref(new Color('white'));
+    colorHistory : Ref<Color[]> = ref([]);
 }
 
 export function createColorState() {

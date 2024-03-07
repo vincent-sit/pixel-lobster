@@ -53,7 +53,8 @@ type SkeletonProps = {
     ColorPicker : React.ComponentType,
     EraserButton : React.ComponentType,
     PaintbrushButton : React.ComponentType,
-    ColorPickerButton : React.ComponentType
+    ColorPickerButton : React.ComponentType,
+    ColorHistory : React.ComponentType
 };
 
 export function Skeleton({
@@ -64,7 +65,8 @@ export function Skeleton({
     ColorPicker,
     EraserButton,
     PaintbrushButton,
-    ColorPickerButton
+    ColorPickerButton,
+    ColorHistory
 }: SkeletonProps) {
     const snap = useSnapshot(ResizeState);
 
@@ -77,6 +79,7 @@ export function Skeleton({
                     <ColorPickerButton/>
                 </ToolBar>
                 <ColorPicker/>
+                <ColorHistory/>
             </SidePanel>
             <DisplayWrapper>
                 <Display/>

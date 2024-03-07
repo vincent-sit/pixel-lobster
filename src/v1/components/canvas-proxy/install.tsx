@@ -5,11 +5,14 @@ import { ZoomState } from '../zoom/state';
 import { ToolState } from '../tool/state';
 import { CanvasState } from '../canvas/state';
 import { ColorState } from '../color/state';
+import Color from 'colorjs.io';
 
 export function installCanvasProxy(
     zoomState : ZoomState,
     draw : (x : number, y : number, color : string) => void,
     erase : (x : number, y : number) => void,
+    pick : (x : number, y : number, canvas : HTMLCanvasElement) => void,
+    addToColorHistory : (newColor : Color) => void,
     toolState : ToolState,
     canvasState : CanvasState,
     colorState : ColorState,
@@ -29,6 +32,8 @@ export function installCanvasProxy(
             height={canvasSnapshot.height}
             draw={draw}
             erase={erase}
+            pick={pick}
+            addToColorHistory={addToColorHistory}
             tool={toolSnapshot.tool}
         />;
     };
