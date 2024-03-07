@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { BackgroundLayer } from './background-layer';
 import { toolType } from '../tool/state';
+import Color from 'colorjs.io';
 
 const Container = styled.div`
     transform-origin: center;
@@ -19,7 +20,6 @@ const Marker = styled.span`
     pointer-events: none;
     top: 0;
     left: 0;
-    background-color: white;
     z-index: 1;
 
     &:hover {
@@ -30,6 +30,7 @@ const Marker = styled.span`
 export interface CanvasProxyProps {
     canvas: HTMLCanvasElement,
     zoomFactor : number,
+    color : Color,
     width: number,
     height : number,
     draw : (x : number, y : number, color : string) => void,
@@ -37,7 +38,7 @@ export interface CanvasProxyProps {
     tool : toolType
 }
 
-export function CanvasProxy({ canvas, zoomFactor, width, height, draw, erase, tool }: CanvasProxyProps) {
+export function CanvasProxy({ canvas, zoomFactor, color, width, height, draw, erase, tool }: CanvasProxyProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
 
@@ -55,7 +56,7 @@ export function CanvasProxy({ canvas, zoomFactor, width, height, draw, erase, to
         const y = Math.floor((e.clientY - rect.y) / zoomFactor);
         switch(tool) {
             case 'paintbrush':
-                draw(x, y, 'white');
+                draw(x, y, color.to('srgb').toString());
                 break;
             case 'eraser':
                 erase(x, y);
@@ -74,10 +75,11 @@ export function CanvasProxy({ canvas, zoomFactor, width, height, draw, erase, to
 
         markerRef.current.style.top = y + 'px';
         markerRef.current.style.left = x + 'px';
+        markerRef.current.style.backgroundColor = color.to('srgb').toString();
         if (e.pressure > 0) {
             switch(tool) {
                 case 'paintbrush':
-                    draw(x, y, 'white');
+                    draw(x, y, color.to('srgb').toString());
                     break;
                 case 'eraser':
                     erase(x, y);

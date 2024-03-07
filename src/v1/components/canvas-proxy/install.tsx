@@ -4,6 +4,7 @@ import { useSnapshot } from 'valtio';
 import { ZoomState } from '../zoom/state';
 import { ToolState } from '../tool/state';
 import { CanvasState } from '../canvas/state';
+import { ColorState } from '../color/state';
 
 export function installCanvasProxy(
     zoomState : ZoomState,
@@ -11,16 +12,19 @@ export function installCanvasProxy(
     erase : (x : number, y : number) => void,
     toolState : ToolState,
     canvasState : CanvasState,
+    colorState : ColorState,
     canvas : HTMLCanvasElement
 ) {
     const CanvasProxy = () => {
         const canvasSnapshot = useSnapshot(canvasState);
         const zoomSnapshot = useSnapshot(zoomState);
         const toolSnapshot = useSnapshot(toolState);
+        const colorSnapshot = useSnapshot(colorState);
 
         return <InternalCanvas 
             canvas={canvas}
             zoomFactor={zoomSnapshot.zoomFactor}
+            color={colorSnapshot.color}
             width={canvasSnapshot.width}
             height={canvasSnapshot.height}
             draw={draw}

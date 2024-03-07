@@ -10,15 +10,19 @@ import { installEraser } from './components/eraser/install.tsx';
 import { installTool } from './components/tool/install.ts';
 import { installEyeDropper } from './components/eye-dropper/install.tsx';
 import { installCanvas } from './components/canvas/install.tsx';
+import { installColorPicker } from './components/color-picker/install.tsx';
+import { installColor } from './components/color/install.tsx';
 
 export function installApp() {
     const { state : zoomState, updateZoomFactor } = installZoom();
     const { state : toolState } = installTool();
+    const { state : colorState, updateColor, addToColorHistory } = installColor();
+    const { ColorPicker } = installColorPicker(colorState, updateColor);
     const { canvas, canvasState } = installCanvas();
     const { draw, PaintbrushButton } = installPaintBrush(toolState, canvas);
     const { erase, EraserButton } = installEraser(toolState, canvas);
     const { pick, ColorPickerButton } = installEyeDropper(toolState);
-    const { CanvasProxy } = installCanvasProxy(zoomState, draw, erase, toolState, canvasState, canvas);
+    const { CanvasProxy } = installCanvasProxy(zoomState, draw, erase, toolState, canvasState, colorState, canvas);
     const { Display } = installDisplay(zoomState, updateZoomFactor, CanvasProxy);
     const { ExportCanvasButton } = installExportCanvas(canvas);
     const { ClearCanvasButton } = installClearCanvas(canvas);
@@ -31,7 +35,7 @@ export function installApp() {
             ResizeDialog={() => null}
             ExportCanvasButton={ExportCanvasButton}
             ClearCanvasButton={ClearCanvasButton}
-            ColorPicker={() => null}
+            ColorPicker={ColorPicker}
             EraserButton={EraserButton}
             PaintbrushButton={PaintbrushButton}
             ColorPickerButton={ColorPickerButton}

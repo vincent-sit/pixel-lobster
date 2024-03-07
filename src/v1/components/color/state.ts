@@ -1,8 +1,10 @@
 import Color from 'colorjs.io';
-import { proxy } from 'valtio';
+import { proxy, ref } from 'valtio';
+
+type Ref<T extends object> = ReturnType<typeof ref<T>>;
 
 export class ColorState {
-    color : Color = new Color('white');
+    color : Ref<Color> = ref(new Color('red'));
     colorHistory : Color[] = [];
 }
 

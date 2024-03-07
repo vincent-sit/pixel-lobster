@@ -60,7 +60,8 @@ export function Skeleton({
     Display, 
     ResizeDialog, 
     ExportCanvasButton, 
-    ClearCanvasButton, 
+    ClearCanvasButton,
+    ColorPicker,
     EraserButton,
     PaintbrushButton,
     ColorPickerButton
@@ -75,6 +76,7 @@ export function Skeleton({
                     <EraserButton/>
                     <ColorPickerButton/>
                 </ToolBar>
+                <ColorPicker/>
             </SidePanel>
             <DisplayWrapper>
                 <Display/>
