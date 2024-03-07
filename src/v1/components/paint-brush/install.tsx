@@ -1,10 +1,10 @@
 import React from 'react';
 import { PaintbrushButton as InternalPaintbrushButton } from './paint-brush-button';
 import { PaintBrushPresenter } from './presenter';
-import { ToolState } from '../tool/state';
+import { toolType } from '../tool/state';
 
 export function installPaintBrush(
-    toolState : ToolState,
+    changeTool : (newTool : toolType) => void,
     canvas : HTMLCanvasElement
 ) {
     const presenter = new PaintBrushPresenter(canvas);
@@ -13,7 +13,7 @@ export function installPaintBrush(
             presenter.draw(x, y, color);
 
     const PaintbrushButton = () => {
-        return <InternalPaintbrushButton handleClick={() => presenter.changeTool(toolState)}/>;
+        return <InternalPaintbrushButton handleClick={() => changeTool('paintbrush')}/>;
     };
 
     return {

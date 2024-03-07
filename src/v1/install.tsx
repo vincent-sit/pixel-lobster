@@ -16,20 +16,18 @@ import { installColorHistory } from './components/color-history/install.tsx';
 
 export function installApp() {
     const { state : zoomState, updateZoomFactor } = installZoom();
-    const { state : toolState } = installTool();
+    const { state : toolState, changeTool } = installTool();
     const { state : colorState, updateColor, addToColorHistory } = installColor();
     const { ColorPicker } = installColorPicker(colorState, updateColor);
     const { ColorHistory } = installColorHistory(colorState, updateColor);
     const { canvas, canvasState } = installCanvas();
-    const { draw, PaintbrushButton } = installPaintBrush(toolState, canvas);
-    const { erase, EraserButton } = installEraser(toolState, canvas);
-    const { pick, ColorPickerButton } = installEyeDropper(toolState, updateColor);
+    const { draw, PaintbrushButton } = installPaintBrush(changeTool, canvas);
+    const { erase, EraserButton } = installEraser(changeTool, canvas);
+    const { pick, ColorPickerButton } = installEyeDropper(changeTool, updateColor);
     const { CanvasProxy } = installCanvasProxy(zoomState, draw, erase, pick, addToColorHistory, toolState, canvasState, colorState, canvas);
     const { Display } = installDisplay(zoomState, updateZoomFactor, CanvasProxy);
     const { ExportCanvasButton } = installExportCanvas(canvas);
     const { ClearCanvasButton } = installClearCanvas(canvas);
-
-    // const ResizeDialog = installResizeDialog();
 
     const App = () => (
         <Skeleton 

@@ -1,11 +1,11 @@
 import React from 'react';
 import { EyeDropperButton as InternalColorPickerButton } from './eye-dropper-button';
 import { EyeDropperPresenter } from './presenter';
-import { ToolState } from '../tool/state';
+import { toolType } from '../tool/state';
 import Color from 'colorjs.io';
 
 export function installEyeDropper(
-    toolState : ToolState,
+    changeTool : (newTool : toolType) => void,
     updateColor : (newColor : Color) => void
 ) {
     const presenter = new EyeDropperPresenter();
@@ -14,7 +14,7 @@ export function installEyeDropper(
             presenter.pick(x, y, canvas, updateColor);
 
     const EyeDropperButton = () => {
-        return <InternalColorPickerButton handleClick={() => presenter.changeTool(toolState)}/>;
+        return <InternalColorPickerButton handleClick={() => changeTool('colorpicker')}/>;
     };
 
     return {

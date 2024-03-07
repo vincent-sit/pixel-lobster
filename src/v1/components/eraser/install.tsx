@@ -1,10 +1,10 @@
 import React from 'react';
 import { EraserButton as InternalEraserButton} from './eraser-button';
 import { EraserPresenter } from './presenter';
-import { ToolState } from '../tool/state';
+import { toolType } from '../tool/state';
 
 export function installEraser(
-    toolState : ToolState,
+    changeTool : (newTool : toolType) => void,
     canvas : HTMLCanvasElement
 ) {
     const presenter = new EraserPresenter(canvas);
@@ -13,7 +13,7 @@ export function installEraser(
             presenter.erase(x, y);
 
     const EraserButton = () => {
-        return <InternalEraserButton handleClick={() => presenter.changeTool(toolState)}/>;
+        return <InternalEraserButton handleClick={() => changeTool('eraser')}/>;
     };
 
     return {

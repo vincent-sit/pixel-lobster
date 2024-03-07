@@ -1,5 +1,3 @@
-import { ToolState } from '../tool/state';
-
 export class PaintBrushPresenter {
     constructor(private readonly canvas : HTMLCanvasElement) {
         this.canvas = canvas;
@@ -10,9 +8,5 @@ export class PaintBrushPresenter {
         if (!context) return;
         context.fillStyle = color;
         context.fillRect(x, y, 1, 1);
-    }
-
-    changeTool(state : ToolState) {
-        state.tool = 'paintbrush';
     }
 }
