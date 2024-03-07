@@ -14,7 +14,7 @@ export function installEyeDropper(
             presenter.pick(x, y, canvas, updateColor);
 
     const EyeDropperButton = () => {
-        return <InternalColorPickerButton handleClick={() => changeTool('colorpicker')}/>;
+        return <InternalColorPickerButton handleClick={() => changeTool('eyedropper')}/>;
     };
 
     return {

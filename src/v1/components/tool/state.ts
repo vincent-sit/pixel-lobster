@@ -1,6 +1,6 @@
 import { proxy } from 'valtio';
 
-export type toolType = 'paintbrush' | 'eraser' | 'colorpicker';
+export type toolType = 'paintbrush' | 'eraser' | 'eyedropper';
 
 export class ToolState {
     tool : toolType = 'paintbrush';
