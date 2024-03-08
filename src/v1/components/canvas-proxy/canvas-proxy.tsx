@@ -64,7 +64,7 @@ export function CanvasProxy({ canvas, zoomFactor, color, width, height, draw, er
             case 'eraser':
                 erase(x, y);
                 break;
-            case 'colorpicker':
+            case 'eyedropper':
                 pick(x, y, canvas);
                 break;
             default:
@@ -90,7 +90,7 @@ export function CanvasProxy({ canvas, zoomFactor, color, width, height, draw, er
                 case 'eraser':
                     erase(x, y);
                     break;
-                case 'colorpicker':
+                case 'eyedropper':
                     pick(x, y, canvas);
                     break;
                 default:
