@@ -1,15 +1,19 @@
 import React from 'react';
-import { Button } from '../../ui-style/button/ui';
+import { PressedButton } from '../../ui-style/button/ui';
 import eraserImage from '../../../assets/eraser.png';
 
 interface EraserProps {
     handleClick : () => void;
+    isToolInUse : boolean;
 }
 
-export function EraserButton({handleClick} : EraserProps) {
+export function EraserButton({handleClick, isToolInUse} : EraserProps) {
     return (
-        <Button onClick={handleClick}>
+        <PressedButton 
+            onClick={handleClick}
+            isPressed={isToolInUse}
+        >
             <img src={eraserImage} alt='Eraser'/>
-        </Button> 
+        </PressedButton> 
     );
 }

@@ -23,9 +23,9 @@ export function installApp() {
     const { state : canvasState, canvas } = installCanvas();
     const { ColorPicker } = installColorPicker(colorState, updateColor);
     const { ColorHistory } = installColorHistory(colorState, updateColor);
-    const { draw, PaintbrushButton } = installPaintBrush(changeTool, canvas);
-    const { erase, EraserButton } = installEraser(changeTool, canvas);
-    const { pick, ColorPickerButton } = installEyeDropper(changeTool, updateColor);
+    const { draw, PaintbrushButton } = installPaintBrush(toolState, changeTool, canvas);
+    const { erase, EraserButton } = installEraser(toolState, changeTool, canvas);
+    const { pick, ColorPickerButton } = installEyeDropper(toolState, changeTool, updateColor);
     const { CanvasProxy } = installCanvasProxy(zoomState, draw, erase, pick, addToColorHistory, toolState, canvasState, colorState, canvas);
     const { Display } = installDisplay(zoomState, updateZoomFactor, CanvasProxy);
     const { ExportCanvasButton } = installExportCanvas(canvas);

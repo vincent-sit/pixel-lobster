@@ -1,15 +1,19 @@
 import React from 'react';
-import { Button } from '../../ui-style/button/ui';
+import { PressedButton } from '../../ui-style/button/ui';
 import paintbrushImage from '../../../assets/paintbrush.png';
 
 interface PaintbrushProps {
     handleClick : () => void;
+    isToolInUse : boolean;
 }
 
-export function PaintbrushButton({handleClick} : PaintbrushProps) {
+export function PaintbrushButton({handleClick, isToolInUse} : PaintbrushProps) {
     return (
-        <Button onClick={handleClick}>
+        <PressedButton
+            onClick={handleClick}
+            isPressed={isToolInUse}
+        >
             <img src={paintbrushImage} alt='Paint Brush'/>
-        </Button> 
+        </PressedButton>
     );
 }

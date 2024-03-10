@@ -14,8 +14,9 @@ const StyledDialog = styled.dialog`
     z-index: 1;
     text-align: center;
 
-    ::backdrop {
+    &::backdrop {
         background-color: black;
+        opacity: 0.7;
     }
 
     @media (min-width: 600px) {
@@ -75,8 +76,7 @@ export function ResizeDialog({dialogId, width, height, onSubmit, canvas} : Resiz
     };
 
     const closeDialog = () => {
-        if (!dialogRef.current) return;
-        dialogRef.current.close();
+        dialogRef.current?.close();
     };
 
     const onChange = (e : React.ChangeEvent<HTMLInputElement>, 
@@ -95,29 +95,19 @@ export function ResizeDialog({dialogId, width, height, onSubmit, canvas} : Resiz
                     <InputLabel htmlFor='w'>
                         <span>W</span>
                         <input 
-                            id='w'
-                            name='width'
-                            type="text"
-                            value={widthState.toString()}
-                            onChange={(e) => onChange(e, setWidthState)}
-                            style={{
-                                width: '25px',
-                                textAlign: 'center'
-                            }}
+                            id='w' name='width' type="text"
+                            value={ widthState.toString() }
+                            onChange={ (e) => onChange(e, setWidthState) }
+                            style={{ width: '25px', textAlign: 'center' }}
                         />
                     </InputLabel>
                     <span>x</span>
                     <InputLabel htmlFor='h'>H
                         <input
-                            id='h'
-                            name='height'
-                            type="text"
-                            value={heightState.toString()}
-                            onChange={(e) => onChange(e, setHeightState)}
-                            style={{
-                                width: '25px',
-                                textAlign: 'center'
-                            }}
+                            id='h' name='height' type="text"
+                            value={ heightState.toString() }
+                            onChange={ (e) => onChange(e, setHeightState) }
+                            style={{ width: '25px', textAlign: 'center' }}
                         />
                     </InputLabel>
                 </StyledForm>

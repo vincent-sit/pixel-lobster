@@ -22,6 +22,7 @@ export const Button = styled.button<{ buttonshape?: ButtonShape}>`
     font-style: normal;
     padding: 0.5rem;
     border-width: 0;
+    border-radius: 5px;
 
     &:hover {
         cursor: pointer;
@@ -32,4 +33,8 @@ export const Button = styled.button<{ buttonshape?: ButtonShape}>`
         transform: scale(0.98); 
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24); 
     }
+`;
+
+export const PressedButton = styled(Button)<{ isPressed?: boolean; }>`
+    filter: ${props => props.isPressed ? 'brightness(70%)' : 'brightness(100%)'};
 `;

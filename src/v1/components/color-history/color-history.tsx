@@ -7,29 +7,35 @@ interface ColorHistoryProps {
     onChange : (newColor : Color) => void
 }
 
-const ColorBlocks = styled.div`
+const ColorHistoryContainer = styled.div`
+    background-color: #f5f5f5;
+    border-radius: 10px;
     display: flex;
     flex-wrap: wrap;
-    height: 50px;
-    width: 250px;
-    gap: 0;
+    height: 55px;
+    width: 325px;
+    gap: 0.2rem;
+    padding: 0.4rem;
+    box-shadow: 0.5px 0.5px 0.5px 0.5px #878787;
 `;
-const ColorBlock = styled.div`
+const ColorHistoryBlock = styled.div`
     width: 25px;
     height: 25px;
-    border: 0.1rem solid black;
+    border-radius: 5px;
+    /* border: 0.1rem solid black; */
     box-sizing: border-box;
+    box-shadow: 0.5px 0.5px 0.5px 0.5px #878787;
 `;
 
 export function ColorHistory({colorHistory, onChange} : ColorHistoryProps) {
     return (
-        <ColorBlocks>
+        <ColorHistoryContainer>
             {[...colorHistory].reverse().map((color, index) =>
-                <ColorBlock key={`color-${index}`}
+                <ColorHistoryBlock key={`color-${index}`}
                     style={{backgroundColor: color.to('srgb').toString()}}
                     onClick={() => onChange(color)}
                 />)
             }
-        </ColorBlocks>
+        </ColorHistoryContainer>
     );
 }

@@ -6,16 +6,12 @@ import { usePointer } from '../../utils/use-pointer';
 const CANVAS_SIZE_PX = 300;
 const HUE_SELECTOR_WIDTH_PX = 30;
 
-const Wrapper = styled.div`
-    background-color: #D32A2A;
-`;
-
 const ColorPickerBody = styled.div`
     display: flex;
-    background-color: white;
-    height: 325px;
-    width: 360px;
-    border: solid 1px #ccc;
+    background-color: #f5f5f5;
+    height: 310px;
+    width: 340px;
+    border-radius: 8px;
     padding: 5px;
     box-sizing: border-box;
 `;
@@ -146,7 +142,7 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
     }, [color]);
 
     return (
-        <Wrapper>
+        <div>
             <ColorPickerBody>
                 <CanvasContainer style={{width: `${CANVAS_SIZE_PX}`, height: `${CANVAS_SIZE_PX}`}}>
                     <Canvas ref={colorCanvasRef} width={`${CANVAS_SIZE_PX}px`} height={`${CANVAS_SIZE_PX}px`}/>
@@ -168,6 +164,6 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
                     />
                 </CanvasContainer>
             </ColorPickerBody>
-        </Wrapper>
+        </div>
     );
 }

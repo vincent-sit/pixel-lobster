@@ -1,9 +1,11 @@
 import React from 'react';
 import { PaintbrushButton as InternalPaintbrushButton } from './paint-brush-button';
 import { PaintBrushPresenter } from './presenter';
-import { toolType } from '../tool/state';
+import { ToolState, toolType } from '../tool/state';
+import { useSnapshot } from 'valtio';
 
 export function installPaintBrush(
+    state : ToolState,
     changeTool : (newTool : toolType) => void,
     canvas : HTMLCanvasElement
 ) {
@@ -13,7 +15,12 @@ export function installPaintBrush(
             presenter.draw(x, y, color);
 
     const PaintbrushButton = () => {
-        return <InternalPaintbrushButton handleClick={() => changeTool('paintbrush')}/>;
+        const snapShot = useSnapshot(state);
+
+        return <InternalPaintbrushButton 
+            handleClick={() => changeTool('paintbrush')}
+            isToolInUse={snapShot.tool === 'paintbrush'}
+        />;
     };
 
     return {

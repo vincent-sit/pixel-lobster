@@ -9,18 +9,40 @@ const Layout = styled.div`
 `;
 
 const SidePanel = styled.div`
-    background-color: green;
+    background-color: #201e30;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 1rem;
+    padding: 2rem;
+`;
+
+const ColorPanel = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 `;
 
 const ToolBar = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     gap: 1rem;
+`;
+
+const OverlayRow = styled.div`
+    background-color: #201e30;
+    position: fixed;
+    width: 100%;
+    height: 20px;
+    z-index: 1;
+`;
+
+const OverlayColumn = styled.div`
+    background-color: #201e30;
+    position: fixed;
+    height: 100%;
+    width: 20px;
+    z-index: 1;
 `;
 
 const DisplayWrapper = styled.div`
@@ -33,13 +55,15 @@ const DisplayWrapper = styled.div`
 `;
 
 const CommandPanel = styled.div`
-    background-color: red;
+    background-color: #201e30;
     position: absolute;
     top: 0;
     right: 0;
     padding: 20px;
     display: flex;
     gap: 20px;
+    border-radius: 0 0 0 20px;
+    z-index: 1;
 `;
 
 type SkeletonProps = {
@@ -67,7 +91,6 @@ export function Skeleton({
     ColorPickerButton,
     ColorHistory
 }: SkeletonProps) {
-    // const snap = useSnapshot(ResizeState);
 
     return (
         <Layout>
@@ -77,8 +100,10 @@ export function Skeleton({
                     <EraserButton/>
                     <ColorPickerButton/>
                 </ToolBar>
-                <ColorPicker/>
-                <ColorHistory/>
+                <ColorPanel>
+                    <ColorPicker/>
+                    <ColorHistory/>
+                </ColorPanel>
             </SidePanel>
             <DisplayWrapper>
                 <Display/>
@@ -90,7 +115,9 @@ export function Skeleton({
                 <ResizeCanvasButton/>
             </CommandPanel>
 
-            {/* { snap.store.isDialogActive && <StyledBackdrop/> } */}
+            <OverlayRow style={{top: 0}}/>
+            <OverlayRow style={{bottom: 0}}/>
+            <OverlayColumn style={{right: 0}}/>
             <ResizeDialog/>
         </Layout>
     );

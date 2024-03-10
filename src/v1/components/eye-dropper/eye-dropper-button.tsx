@@ -1,16 +1,20 @@
 import React from 'react';
-import { Button } from '../../ui-style/button/ui';
+import { PressedButton } from '../../ui-style/button/ui';
 import colorPickerImage from '../../../assets/colorPicker.png';
 
 interface EyeDropperProps {
     handleClick : () => void;
+    isToolInUse : boolean;
 }
 
-export function EyeDropperButton({handleClick} : EyeDropperProps) {
+export function EyeDropperButton({handleClick, isToolInUse} : EyeDropperProps) {
     
     return (
-        <Button onClick={handleClick}>
+        <PressedButton 
+            onClick={handleClick}
+            isPressed={isToolInUse}
+        >
             <img src={colorPickerImage} alt='Eye Dropper'/>
-        </Button> 
+        </PressedButton>
     );
 }
