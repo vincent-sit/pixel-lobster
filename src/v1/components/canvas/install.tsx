@@ -1,15 +1,15 @@
 import { createCanvasState } from './state';
 
 export function installCanvas() {
-    const canvasState = createCanvasState();
+    const state = createCanvasState();
     
     const canvas = document.createElement('canvas');
-    canvas.width = canvasState.width;
-    canvas.height = canvasState.height;
+    canvas.width = state.width;
+    canvas.height = state.height;
     canvas.style.imageRendering = 'pixelated';
 
     return {
         canvas,
-        canvasState
+        state
     };
 }

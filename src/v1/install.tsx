@@ -13,14 +13,16 @@ import { installCanvas } from './components/canvas/install.tsx';
 import { installColorPicker } from './components/color-picker/install.tsx';
 import { installColor } from './components/color/install.tsx';
 import { installColorHistory } from './components/color-history/install.tsx';
+import { installResizeDialog } from './components/resize-dialog/install.tsx';
+import { installResizeCanvas } from './components/resize-button/install.tsx';
 
 export function installApp() {
     const { state : zoomState, updateZoomFactor } = installZoom();
     const { state : toolState, changeTool } = installTool();
     const { state : colorState, updateColor, addToColorHistory } = installColor();
+    const { state : canvasState, canvas } = installCanvas();
     const { ColorPicker } = installColorPicker(colorState, updateColor);
     const { ColorHistory } = installColorHistory(colorState, updateColor);
-    const { canvas, canvasState } = installCanvas();
     const { draw, PaintbrushButton } = installPaintBrush(changeTool, canvas);
     const { erase, EraserButton } = installEraser(changeTool, canvas);
     const { pick, ColorPickerButton } = installEyeDropper(changeTool, updateColor);
@@ -28,18 +30,21 @@ export function installApp() {
     const { Display } = installDisplay(zoomState, updateZoomFactor, CanvasProxy);
     const { ExportCanvasButton } = installExportCanvas(canvas);
     const { ClearCanvasButton } = installClearCanvas(canvas);
+    const { getDialog, ResizeDialog } = installResizeDialog(canvasState, canvas);
+    const { ResizeCanvasButton } = installResizeCanvas(getDialog);
 
     const App = () => (
         <Skeleton 
             Display={Display}
-            ResizeDialog={() => null}
             ExportCanvasButton={ExportCanvasButton}
             ClearCanvasButton={ClearCanvasButton}
+            ResizeCanvasButton={ResizeCanvasButton}
             ColorPicker={ColorPicker}
             EraserButton={EraserButton}
             PaintbrushButton={PaintbrushButton}
             ColorPickerButton={ColorPickerButton}
             ColorHistory={ColorHistory}
+            ResizeDialog={ResizeDialog}
         />
     );
 

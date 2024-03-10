@@ -29,6 +29,7 @@ export const ResizeContent = styled.div`
     grid-template-rows: repeat(3, 1fr);
 `;
 
+
 export const Title = styled.span`
     grid-column-start: 2;
     grid-column-end: 4;
@@ -37,7 +38,7 @@ export const Title = styled.span`
 
 export const SizeInputWrapper = styled.div`
     display: flex;
-    flex-direction: row;    
+    flex-direction: row;
     gap: 1rem;
     justify-content: center;
     align-items: center;

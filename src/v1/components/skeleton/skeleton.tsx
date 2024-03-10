@@ -1,8 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { StyledBackdrop } from '../../ui-style/alert-dialog/backdrop';
-import { ResizeState } from '../resize/model';
-import { useSnapshot } from 'valtio';
 
 const Layout = styled.div`
     display: grid;
@@ -47,14 +44,15 @@ const CommandPanel = styled.div`
 
 type SkeletonProps = {
     Display : React.ComponentType,
-    ResizeDialog : React.ComponentType,
     ExportCanvasButton : React.ComponentType,
-    ClearCanvasButton : React.ComponentType
+    ClearCanvasButton : React.ComponentType,
+    ResizeCanvasButton : React.ComponentType,
     ColorPicker : React.ComponentType,
     EraserButton : React.ComponentType,
     PaintbrushButton : React.ComponentType,
     ColorPickerButton : React.ComponentType,
-    ColorHistory : React.ComponentType
+    ColorHistory : React.ComponentType,
+    ResizeDialog : React.ComponentType
 };
 
 export function Skeleton({
@@ -62,13 +60,14 @@ export function Skeleton({
     ResizeDialog, 
     ExportCanvasButton, 
     ClearCanvasButton,
+    ResizeCanvasButton,
     ColorPicker,
     EraserButton,
     PaintbrushButton,
     ColorPickerButton,
     ColorHistory
 }: SkeletonProps) {
-    const snap = useSnapshot(ResizeState);
+    // const snap = useSnapshot(ResizeState);
 
     return (
         <Layout>
@@ -88,10 +87,11 @@ export function Skeleton({
             <CommandPanel>
                 <ExportCanvasButton/>
                 <ClearCanvasButton/>
+                <ResizeCanvasButton/>
             </CommandPanel>
 
-            { snap.store.isDialogActive && <StyledBackdrop/> }
-            { snap.store.isDialogActive && <ResizeDialog/> }
+            {/* { snap.store.isDialogActive && <StyledBackdrop/> } */}
+            <ResizeDialog/>
         </Layout>
     );
 }
