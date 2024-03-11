@@ -14,7 +14,7 @@ const AdjustWidth = (buttonShape?: ButtonShape) => {
 };
 
 export const Button = styled.button<{ buttonshape?: ButtonShape}>`
-    background: lightgrey;    
+    background-color: #201e30;
     min-height: 50px;
     min-width: ${({ buttonshape }) => AdjustWidth(buttonshape)};
     font-family: "VT323", monospace;
@@ -26,7 +26,7 @@ export const Button = styled.button<{ buttonshape?: ButtonShape}>`
 
     &:hover {
         cursor: pointer;
-        filter: brightness(110%);
+        filter: brightness(150%);
     }
 
     &:active {

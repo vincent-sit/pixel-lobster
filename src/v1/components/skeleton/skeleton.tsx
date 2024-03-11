@@ -68,23 +68,21 @@ const CommandPanel = styled.div`
 
 type SkeletonProps = {
     Display : React.ComponentType,
-    ExportCanvasButton : React.ComponentType,
-    ClearCanvasButton : React.ComponentType,
-    ResizeCanvasButton : React.ComponentType,
+    ExportButton : React.ComponentType,
+    ClearButton : React.ComponentType,
+    ResizeButton : React.ComponentType,
     ColorPicker : React.ComponentType,
     EraserButton : React.ComponentType,
     PaintbrushButton : React.ComponentType,
     ColorPickerButton : React.ComponentType,
-    ColorHistory : React.ComponentType,
-    ResizeDialog : React.ComponentType
+    ColorHistory : React.ComponentType
 };
 
 export function Skeleton({
-    Display, 
-    ResizeDialog, 
-    ExportCanvasButton, 
-    ClearCanvasButton,
-    ResizeCanvasButton,
+    Display,
+    ExportButton,
+    ClearButton,
+    ResizeButton,
     ColorPicker,
     EraserButton,
     PaintbrushButton,
@@ -110,15 +108,14 @@ export function Skeleton({
             </DisplayWrapper>
 
             <CommandPanel>
-                <ExportCanvasButton/>
-                <ClearCanvasButton/>
-                <ResizeCanvasButton/>
+                <ExportButton/>
+                <ClearButton/>
+                <ResizeButton/>
             </CommandPanel>
 
             <OverlayRow style={{top: 0}}/>
             <OverlayRow style={{bottom: 0}}/>
             <OverlayColumn style={{right: 0}}/>
-            <ResizeDialog/>
         </Layout>
     );
 }

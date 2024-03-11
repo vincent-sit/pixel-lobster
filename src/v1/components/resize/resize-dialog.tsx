@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { ButtonWrapper } from '../../../ui-style/button';
 
@@ -55,29 +55,27 @@ const InputLabel = styled.label`
 `;
 
 interface ResizeDialogProps {
-    dialogId : string,
-    width : number,
-    height : number,
-    onSubmit : (newHeight : number, newWidth : number) => void,
-    canvas : HTMLCanvasElement
+    initialWidth : number,
+    initialHeight : number,
+    isOpen : boolean,
+    onSubmit : (newWidth : number, newHeight : number) => void,
+    onCloseClick : () => void
 }
 
-export function ResizeDialog({dialogId, width, height, onSubmit, canvas} : ResizeDialogProps) {
+export function ResizeDialog({initialWidth, initialHeight, isOpen, onSubmit, onCloseClick} : ResizeDialogProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
-    const [ widthState, setWidthState ] = useState(width.valueOf());
-    const [ heightState, setHeightState ] = useState(height.valueOf());
+    const [ width, setWidth ] = useState(initialWidth);
+    const [ height, setHeight ] = useState(initialHeight);
 
-    const onConfirm = () => {
+    useEffect(() => {
         if (!dialogRef.current) return;
-        onSubmit(heightState, widthState);
-        canvas.width = widthState;
-        canvas.height = heightState;
-        dialogRef.current.close();
-    };
 
-    const closeDialog = () => {
-        dialogRef.current?.close();
-    };
+        if (isOpen) {
+            dialogRef.current.showModal();
+        } else {
+            dialogRef.current.close();
+        }
+    }, [isOpen]);
 
     const onChange = (e : React.ChangeEvent<HTMLInputElement>, 
         setState : React.Dispatch<React.SetStateAction<number>>) => 
@@ -88,7 +86,7 @@ export function ResizeDialog({dialogId, width, height, onSubmit, canvas} : Resiz
     };
 
     return (
-        <StyledDialog id={dialogId} ref={dialogRef}>
+        <StyledDialog ref={dialogRef}>
             <ResizeContent>
                 <Title>Resize Canvas</Title>
                 <StyledForm>
@@ -96,8 +94,8 @@ export function ResizeDialog({dialogId, width, height, onSubmit, canvas} : Resiz
                         <span>W</span>
                         <input 
                             id='w' name='width' type="text"
-                            value={ widthState.toString() }
-                            onChange={ (e) => onChange(e, setWidthState) }
+                            value={ width.toString() }
+                            onChange={ (e) => onChange(e, setWidth) }
                             style={{ width: '25px', textAlign: 'center' }}
                         />
                     </InputLabel>
@@ -105,14 +103,14 @@ export function ResizeDialog({dialogId, width, height, onSubmit, canvas} : Resiz
                     <InputLabel htmlFor='h'>H
                         <input
                             id='h' name='height' type="text"
-                            value={ heightState.toString() }
-                            onChange={ (e) => onChange(e, setHeightState) }
+                            value={ height.toString() }
+                            onChange={ (e) => onChange(e, setHeight) }
                             style={{ width: '25px', textAlign: 'center' }}
                         />
                     </InputLabel>
                 </StyledForm>
                 <ButtonWrapper 
-                    onClick={onConfirm}
+                    onClick={() => onSubmit(width, height)}
                     style={{gridColumnStart:'1', gridColumnEnd:'3', gridRow:'3', justifySelf:'center'}}
                     buttonshape='rectangle'
                     autoFocus
@@ -120,7 +118,7 @@ export function ResizeDialog({dialogId, width, height, onSubmit, canvas} : Resiz
                     Confirm
                 </ButtonWrapper>
                 <ButtonWrapper 
-                    onClick={closeDialog}
+                    onClick={onCloseClick}
                     style={{gridColumnStart:'4', gridColumnEnd:'6', gridRow:'3', justifySelf:'center'}}
                     buttonshape='rectangle'
                 >

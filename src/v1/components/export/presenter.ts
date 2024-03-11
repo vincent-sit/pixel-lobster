@@ -1,4 +1,4 @@
-export class ExportCanvasPresenter {
+export class ExportPresenter {
     
     export(canvas : HTMLCanvasElement) {
         const canvasUrl = canvas.toDataURL();

@@ -32,9 +32,9 @@ const Canvas = styled.canvas`
 
 const Marker = styled.span`
     position: absolute;
+    display: block;
     top: 0;
     left: 0;
-    display: block;
     width: 10px;
     height: 10px;
     border-radius: 9999999px;
@@ -48,8 +48,6 @@ interface ColorPickerProps {
 export function ColorPicker({ color, onChange } : ColorPickerProps) {
     const colorCanvasRef = useRef<HTMLCanvasElement>(null);
     const hueCanvasRef = useRef<HTMLCanvasElement>(null);
-    const hueMarkerRef = useRef<HTMLSpanElement>(null);
-    const colorMarkerRef = useRef<HTMLSpanElement>(null);
     const { isDown: isColorDown, x: colorX, y: colorY } = usePointer(colorCanvasRef);
     const { isDown: isHueDown, y: hueY } = usePointer(hueCanvasRef);
 
@@ -106,60 +104,25 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
         onChange(newColor);
     }, [isColorDown, colorX, colorY, isHueDown, hueY]);
 
-    // Move markers when clicked on hue canvas or color canvas
-    useEffect(() => {
-        if ((!isColorDown && !isHueDown) || !colorMarkerRef.current || !hueMarkerRef.current) {
-            return;
-        }
-
-        if (isColorDown) {
-            colorMarkerRef.current.style.top = colorY + 'px';
-            colorMarkerRef.current.style.left = colorX + 'px';
-            colorMarkerRef.current.style.border = `1px solid ${colorY > CANVAS_SIZE_PX/2 ? 'white' : 'black'}`;
-        }
-
-        if (isHueDown) {
-            hueMarkerRef.current.style.top = colorY + 'px';
-        }
-    }, [isColorDown, colorX, colorY, isHueDown, hueY]);
-
-    // Move markers when color is changed but not through interacting with internal canvas
-    useEffect(() => {
-        if (isColorDown || isHueDown || !colorMarkerRef.current || !hueMarkerRef.current || 
-            !colorCanvasRef.current || !hueCanvasRef.current) {
-            return;
-        }
-
-        // hue
-        const newHueY = color.hsv.h / 360 * hueCanvasRef.current.height;
-        hueMarkerRef.current.style.top = newHueY + 'px';
-        // color
-        const newColorX = color.hsv.s / 100 * colorCanvasRef.current.width;
-        const newColorY = (1 - (color.hsv.v / 100)) * colorCanvasRef.current.height;
-        colorMarkerRef.current.style.top = newColorY + 'px';
-        colorMarkerRef.current.style.left = newColorX + 'px';
-        colorMarkerRef.current.style.border = `1px solid ${newColorY > CANVAS_SIZE_PX / 2 ? 'white' : 'black'}`;
-    }, [color]);
-
     return (
         <div>
             <ColorPickerBody>
                 <CanvasContainer style={{width: `${CANVAS_SIZE_PX}`, height: `${CANVAS_SIZE_PX}`}}>
                     <Canvas ref={colorCanvasRef} width={`${CANVAS_SIZE_PX}px`} height={`${CANVAS_SIZE_PX}px`}/>
-                    <Marker  ref={colorMarkerRef}
-                        style={{ 
-                            transform: 'translate(-50%, -50%)',
-                            border: '1px solid black'
+                    <Marker
+                        style={{
+                            transform: `translate(-50%, -50%) translate(${color.hsv.s / 100 * CANVAS_SIZE_PX}px, ${(1 - (color.hsv.v / 100)) * CANVAS_SIZE_PX}px)`,
+                            border: `1px solid ${color.hsv.v < 50 ? 'white' : 'black'}`,
                         }}
                     />
                 </CanvasContainer>
                 <CanvasContainer>
                     <Canvas ref={hueCanvasRef} height={`${CANVAS_SIZE_PX}px`} width={`${HUE_SELECTOR_WIDTH_PX}px`}/>
-                    <Marker ref={hueMarkerRef}
-                        style={{ 
+                    <Marker
+                        style={{
                             left: HUE_SELECTOR_WIDTH_PX / 2,
-                            transform: 'translate(-50%, -50%)',
-                            border: '1px solid black'
+                            transform: `translate(-50%, -50%) translateY(${color.hsv.h / 360 * CANVAS_SIZE_PX}px)`,
+                            border: '1px solid black',
                         }}
                     />
                 </CanvasContainer>

@@ -30,8 +30,8 @@ const ColorHistoryBlock = styled.div`
 export function ColorHistory({colorHistory, onChange} : ColorHistoryProps) {
     return (
         <ColorHistoryContainer>
-            {[...colorHistory].reverse().map((color, index) =>
-                <ColorHistoryBlock key={`color-${index}`}
+            {[...colorHistory].reverse().map((color) =>
+                <ColorHistoryBlock key={color.to('srgb').toString()}
                     style={{backgroundColor: color.to('srgb').toString()}}
                     onClick={() => onChange(color)}
                 />)
