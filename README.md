@@ -1,15 +1,19 @@
 ## Pixel Art Editor
 
 MVP:
-- Canvas (fixed size)
-- Single pixel brush
-- Color picker
-- Zoom
+- [x] Canvas (fixed size)
+- [x] Single pixel brush
+- [x] Color picker
+- [x] Zoom
 
 Stretch goals:
-- Let user pick canvas size
-- Adjustable brush size
-- Export image
-- Erase
-- Undo/redo
-- Layers
+- [x] Let user pick canvas size
+- [x] Export image
+- [x] Erase
+- [ ] Adjustable brush size
+- [ ] Undo/redo
+- [ ] Layers
+
+- [ ] Re-usable UI components
+- [ ] Abstracting tool
+

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { CommandPanelButton } from './command-panel-button';
 import clearCanvasImage from '../../assets/clearCanvas.png';
-import exportImage from '../../assets/export.png';
+import exportImage from '../../assets/exportCanvas.png';
 import resizeImage from '../../assets/resizeCanvas.png';
 import { DialogContext } from '../../contexts/dialog-context';
 
