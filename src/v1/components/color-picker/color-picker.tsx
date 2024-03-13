@@ -90,7 +90,7 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
         colorCtx.fillRect(0, 0, colorCtx.canvas.width, colorCtx.canvas.height);
     }, [color]);
 
-    // Handle pointer in hue slider
+    // Handle pointer
     useEffect(() => {
         if ((!isColorDown && !isHueDown) || !colorCanvasRef.current || !hueCanvasRef.current) {
             return;

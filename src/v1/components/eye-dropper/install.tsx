@@ -26,6 +26,6 @@ export function installEyeDropper(
 
     return {
         pick,
-        ColorPickerButton: EyeDropperButton
+        EyeDropperButton
     };
 }

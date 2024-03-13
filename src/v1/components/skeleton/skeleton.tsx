@@ -74,7 +74,7 @@ type SkeletonProps = {
     ColorPicker : React.ComponentType,
     EraserButton : React.ComponentType,
     PaintbrushButton : React.ComponentType,
-    ColorPickerButton : React.ComponentType,
+    EyeDropperButton : React.ComponentType,
     ColorHistory : React.ComponentType
 };
 
@@ -86,7 +86,7 @@ export function Skeleton({
     ColorPicker,
     EraserButton,
     PaintbrushButton,
-    ColorPickerButton,
+    EyeDropperButton,
     ColorHistory
 }: SkeletonProps) {
 
@@ -96,7 +96,7 @@ export function Skeleton({
                 <ToolBar>
                     <PaintbrushButton/>
                     <EraserButton/>
-                    <ColorPickerButton/>
+                    <EyeDropperButton/>
                 </ToolBar>
                 <ColorPanel>
                     <ColorPicker/>

@@ -31,8 +31,6 @@ export interface CanvasProxyProps {
     canvas: HTMLCanvasElement,
     zoomFactor : number,
     color : Color,
-    width: number,
-    height : number,
     draw : (x : number, y : number, color : string) => void,
     erase : (x : number, y : number) => void,
     pick : (x : number, y : number, canvas : HTMLCanvasElement) => void,
@@ -40,7 +38,7 @@ export interface CanvasProxyProps {
     tool : toolType
 }
 
-export function CanvasProxy({ canvas, zoomFactor, color, width, height, draw, erase, pick, addToColorHistory, tool }: CanvasProxyProps) {
+export function CanvasProxy({ canvas, zoomFactor, color, draw, erase, pick, addToColorHistory, tool }: CanvasProxyProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
 
@@ -110,9 +108,9 @@ export function CanvasProxy({ canvas, zoomFactor, color, width, height, draw, er
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerLeave}
             onPointerDown={handlePointerDown}
-            style={{transform: `scale(${zoomFactor})`, width: width, height: height}}
+            style={{transform: `scale(${zoomFactor})`}}
         >
-            <BackgroundLayer width={width} height={height}/>
+            <BackgroundLayer/>
             <Marker ref={markerRef}/>
         </Container>
     );
