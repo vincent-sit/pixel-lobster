@@ -4,14 +4,6 @@ import { BackgroundLayer } from './background-layer';
 import { toolType } from '../tool/state';
 import Color from 'colorjs.io';
 
-const Container = styled.div`
-    transform-origin: center;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 1;
-`;
-
 const Marker = styled.span`
     width: 1px;
     height: 1px;
@@ -29,16 +21,16 @@ const Marker = styled.span`
 
 export interface CanvasProxyProps {
     canvas: HTMLCanvasElement,
-    zoomFactor : number,
     color : Color,
     draw : (x : number, y : number, color : string) => void,
     erase : (x : number, y : number) => void,
     pick : (x : number, y : number, canvas : HTMLCanvasElement) => void,
     addToColorHistory : (newColor : Color) => void,
+    getZoomFactor : () => number,
     tool : toolType
 }
 
-export function CanvasProxy({ canvas, zoomFactor, color, draw, erase, pick, addToColorHistory, tool }: CanvasProxyProps) {
+export function CanvasProxy({ canvas, color, draw, erase, pick, addToColorHistory, getZoomFactor, tool }: CanvasProxyProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
 
@@ -52,6 +44,7 @@ export function CanvasProxy({ canvas, zoomFactor, color, draw, erase, pick, addT
 
     function handlePointerDown(e : React.PointerEvent<HTMLDivElement>) {
         const rect = canvas.getBoundingClientRect();
+        const zoomFactor = getZoomFactor();
         const x = Math.floor((e.clientX - rect.x) / zoomFactor);
         const y = Math.floor((e.clientY - rect.y) / zoomFactor);
         switch(tool) {
@@ -74,6 +67,7 @@ export function CanvasProxy({ canvas, zoomFactor, color, draw, erase, pick, addT
         if (!markerRef.current) return;
         if (tool === 'paintbrush') markerRef.current.style.visibility = 'visible';
         const rect = canvas.getBoundingClientRect();
+        const zoomFactor = getZoomFactor();
         const x = Math.floor((e.clientX - rect.x) / zoomFactor);
         const y = Math.floor((e.clientY - rect.y) / zoomFactor);
 
@@ -103,15 +97,14 @@ export function CanvasProxy({ canvas, zoomFactor, color, draw, erase, pick, addT
     }
 
     return (
-        <Container 
+        <div
             ref={containerRef}
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerLeave}
             onPointerDown={handlePointerDown}
-            style={{transform: `scale(${zoomFactor})`}}
         >
             <BackgroundLayer/>
             <Marker ref={markerRef}/>
-        </Container>
+        </div>
     );
 }
