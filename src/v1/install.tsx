@@ -17,7 +17,7 @@ import { installResize } from './components/resize/install';
 export function installApp() {
     const { getZoomFactor, zoom, ZoomArea } = installZoom();
     const { state : toolState, changeTool } = installTool();
-    const { state : canvasState, canvas, resize } = installCanvas();
+    const { canvas, getCanvasSize, resize } = installCanvas();
     const { ColorPicker, getColor, setColor } = installColorPicker();
     const { ColorHistory, addToColorHistory } = installColorHistory(setColor);
     const { draw, PaintbrushButton } = installPaintBrush(toolState, changeTool, canvas);
@@ -27,7 +27,7 @@ export function installApp() {
     const { Display } = installDisplay(zoom, ZoomArea, CanvasProxy);
     const { ExportButton } = installExport(canvas);
     const { ClearCanvasButton } = installClearCanvas(canvas);
-    const { ResizeButton } = installResize(canvasState, resize);
+    const { ResizeButton } = installResize(getCanvasSize, resize);
 
     const App = () => (
         <Skeleton 

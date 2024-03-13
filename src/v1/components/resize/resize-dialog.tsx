@@ -55,22 +55,24 @@ const InputLabel = styled.label`
 `;
 
 interface ResizeDialogProps {
-    initialWidth : number,
-    initialHeight : number,
+    getCanvasSize: () => ({width : number, height : number}),
     isOpen : boolean,
     onSubmit : (newWidth : number, newHeight : number) => void,
     onCloseClick : () => void
 }
 
-export function ResizeDialog({initialWidth, initialHeight, isOpen, onSubmit, onCloseClick} : ResizeDialogProps) {
+export function ResizeDialog({getCanvasSize, isOpen, onSubmit, onCloseClick} : ResizeDialogProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
-    const [ width, setWidth ] = useState(initialWidth);
-    const [ height, setHeight ] = useState(initialHeight);
+    const [ width, setWidth ] = useState(0);
+    const [ height, setHeight ] = useState(0);
 
     useEffect(() => {
         if (!dialogRef.current) return;
 
         if (isOpen) {
+            const size = getCanvasSize();
+            setWidth(size.width);
+            setHeight(size.height);
             dialogRef.current.showModal();
         } else {
             dialogRef.current.close();
