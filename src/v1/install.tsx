@@ -16,7 +16,7 @@ import { installColorHistory } from './components/color-history/install';
 import { installResize } from './components/resize/install';
 
 export function installApp() {
-    const { state : zoomState, zoom } = installZoom();
+    const { getZoomFactor, zoom, ZoomArea } = installZoom();
     const { state : toolState, changeTool } = installTool();
     const { state : colorState, updateColor, addToColorHistory } = installColor();
     const { state : canvasState, canvas, resize } = installCanvas();
@@ -25,8 +25,8 @@ export function installApp() {
     const { draw, PaintbrushButton } = installPaintBrush(toolState, changeTool, canvas);
     const { erase, EraserButton } = installEraser(toolState, changeTool, canvas);
     const { pick, EyeDropperButton } = installEyeDropper(toolState, changeTool, updateColor);
-    const { CanvasProxy } = installCanvasProxy(zoomState, draw, erase, pick, addToColorHistory, toolState, colorState, canvas);
-    const { Display } = installDisplay(zoom, CanvasProxy);
+    const { CanvasProxy } = installCanvasProxy(draw, erase, pick, addToColorHistory, getZoomFactor, toolState, colorState, canvas);
+    const { Display } = installDisplay(zoom, ZoomArea, CanvasProxy);
     const { ExportButton } = installExport(canvas);
     const { ClearCanvasButton } = installClearCanvas(canvas);
     const { ResizeButton } = installResize(canvasState, resize);
