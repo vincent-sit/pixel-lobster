@@ -1,6 +1,6 @@
 import React from 'react';
 import { Display as InternalDisplay } from './display';
-import { clamp } from '../../utils/math';
+import { clamp } from '../../base/math';
 
 export function installDisplay(
     zoom : (scale : number) => void,

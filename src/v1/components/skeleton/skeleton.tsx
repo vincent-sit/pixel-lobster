@@ -23,12 +23,6 @@ const ColorPanel = styled.div`
     gap: 1rem;
 `;
 
-const ToolBar = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-`;
-
 const OverlayRow = styled.div`
     background-color: #201e30;
     position: fixed;
@@ -72,10 +66,8 @@ type SkeletonProps = {
     ClearButton : React.ComponentType,
     ResizeButton : React.ComponentType,
     ColorPicker : React.ComponentType,
-    EraserButton : React.ComponentType,
-    PaintbrushButton : React.ComponentType,
-    EyeDropperButton : React.ComponentType,
-    ColorHistory : React.ComponentType
+    ColorHistory : React.ComponentType,
+    ToolBar : React.ComponentType
 };
 
 export function Skeleton({
@@ -84,20 +76,14 @@ export function Skeleton({
     ClearButton,
     ResizeButton,
     ColorPicker,
-    EraserButton,
-    PaintbrushButton,
-    EyeDropperButton,
-    ColorHistory
+    ColorHistory,
+    ToolBar
 }: SkeletonProps) {
 
     return (
         <Layout>
             <SidePanel>
-                <ToolBar>
-                    <PaintbrushButton/>
-                    <EraserButton/>
-                    <EyeDropperButton/>
-                </ToolBar>
+                <ToolBar/>
                 <ColorPanel>
                     <ColorPicker/>
                     <ColorHistory/>

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { BackgroundLayer } from './background-layer';
-import { toolType } from '../tool/state';
 import Color from 'colorjs.io';
+import { Tool } from '../tool/types';
 
 const Marker = styled.span`
     width: 1px;
@@ -22,15 +22,11 @@ const Marker = styled.span`
 export interface CanvasProxyProps {
     canvas: HTMLCanvasElement,
     getColor : () => Color,
-    draw : (x : number, y : number, color : string) => void,
-    erase : (x : number, y : number) => void,
-    pick : (x : number, y : number, canvas : HTMLCanvasElement) => void,
-    addToColorHistory : (newColor : Color) => void,
     getZoomFactor : () => number,
-    tool : toolType
+    getTool : () => Tool,
 }
 
-export function CanvasProxy({ canvas, getColor, draw, erase, pick, addToColorHistory, getZoomFactor, tool }: CanvasProxyProps) {
+export function CanvasProxy({ canvas, getColor, getZoomFactor, getTool }: CanvasProxyProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
 
@@ -47,25 +43,12 @@ export function CanvasProxy({ canvas, getColor, draw, erase, pick, addToColorHis
         const zoomFactor = getZoomFactor();
         const x = Math.floor((e.clientX - rect.x) / zoomFactor);
         const y = Math.floor((e.clientY - rect.y) / zoomFactor);
-        switch(tool) {
-            case 'paintbrush':
-                draw(x, y, getColor().to('srgb').toString());
-                addToColorHistory(getColor());
-                break;
-            case 'eraser':
-                erase(x, y);
-                break;
-            case 'eyedropper':
-                pick(x, y, canvas);
-                break;
-            default:
-                break;
-        }
+        getTool().down?.(x, y);
     }
 
     function handlePointerMove(e : React.PointerEvent<HTMLDivElement>) {
         if (!markerRef.current) return;
-        if (tool === 'paintbrush') markerRef.current.style.visibility = 'visible';
+        if (getTool().type === 'paint-brush') markerRef.current.style.visibility = 'visible';
         const rect = canvas.getBoundingClientRect();
         const zoomFactor = getZoomFactor();
         const x = Math.floor((e.clientX - rect.x) / zoomFactor);
@@ -75,19 +58,7 @@ export function CanvasProxy({ canvas, getColor, draw, erase, pick, addToColorHis
         markerRef.current.style.left = x + 'px';
         markerRef.current.style.backgroundColor = getColor().to('srgb').toString();
         if (e.pressure > 0) {
-            switch(tool) {
-                case 'paintbrush':
-                    draw(x, y, getColor().to('srgb').toString());
-                    break;
-                case 'eraser':
-                    erase(x, y);
-                    break;
-                case 'eyedropper':
-                    pick(x, y, canvas);
-                    break;
-                default:
-                    break;
-            }
+            getTool().move?.(x, y);
         }
     }
 

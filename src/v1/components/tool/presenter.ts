@@ -1,11 +1,9 @@
-import { ToolState, toolType } from './state';
+import { ref } from 'valtio';
+import { ToolState } from './state';
+import { Tool } from './types';
 
 export class ToolPresenter {
-    changeTool(state : ToolState, newTool : toolType) {
-        state.tool = newTool;
+    changeTool(state : ToolState, newTool : Tool) {
+        state.tool = ref(newTool);
     }
-
-    checkIfToolInUse(state : ToolState, currentTool : toolType) {
-        return state.tool === currentTool;
-    } 
 }

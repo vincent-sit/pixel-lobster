@@ -1,11 +1,14 @@
-import { proxy } from 'valtio';
-
-export type toolType = 'paintbrush' | 'eraser' | 'eyedropper';
+import { proxy, ref, Ref } from 'valtio';
+import { Tool } from './types';
 
 export class ToolState {
-    tool : toolType = 'paintbrush';
+    tool: Ref<Tool>;
+
+    constructor(tool : Tool) {
+        this.tool = ref(tool);
+    }
 }
 
-export function createToolState() {
-    return proxy(new ToolState());
+export function createToolState(defaultTool : Tool) {
+    return proxy(new ToolState(defaultTool));
 }

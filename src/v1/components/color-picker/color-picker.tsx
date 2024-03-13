@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { styled } from 'styled-components';
 import Color from 'colorjs.io';
-import { usePointer } from '../../utils/use-pointer';
+import { usePointer } from '../../base/use-pointer';
 
 const CANVAS_SIZE_PX = 300;
 const HUE_SELECTOR_WIDTH_PX = 30;
