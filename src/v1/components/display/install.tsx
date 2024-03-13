@@ -7,14 +7,6 @@ export function installDisplay(
     ZoomArea : React.ComponentType<{ children: React.ReactNode }>,
     Canvas : React.ComponentType,
 ) {
-    const Content = () => {
-        return (
-            <ZoomArea>
-                <Canvas/>
-            </ZoomArea>
-        );
-    };
-
     const Display = () => {
         function onWheel(e : React.WheelEvent) {
             zoom(clamp(-e.deltaY, -1, 1));
@@ -22,7 +14,9 @@ export function installDisplay(
 
         return (
             <InternalDisplay onWheel={onWheel}>
-                <Content/>
+                <ZoomArea>
+                    <Canvas/>
+                </ZoomArea>
             </InternalDisplay>
         );
     };
