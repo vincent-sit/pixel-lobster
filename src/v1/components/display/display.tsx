@@ -6,22 +6,18 @@ const Wrapper = styled.div`
     height: 100%;
     width: 100%;
     overflow: hidden;
-    transform-origin: center;
     position: relative;
 `;
 
 export interface DisplayProps {
-    zoomFactor : number,
     onWheel : (e : React.WheelEvent) => void,
     Canvas : React.ComponentType
 }
 
-export function Display({onWheel: onWheel, Canvas} : DisplayProps) {
-
+export function Display({ onWheel: onWheel, Canvas } : DisplayProps) {
     return (
         <Wrapper onWheel={onWheel}>
             <Canvas/>
         </Wrapper>
     );
-
 }

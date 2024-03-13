@@ -5,10 +5,10 @@ export function installZoom() {
     const state = createZoomState();
     const presenter = new ZoomPresenter();
 
-    const updateZoomFactor = (newZoomFactor : number) => presenter.updateZoomFactor(state, newZoomFactor);
+    const zoom = (scale : number) => presenter.zoom(state, scale);
 
     return {
-        updateZoomFactor,
+        zoom,
         state
     };
 }

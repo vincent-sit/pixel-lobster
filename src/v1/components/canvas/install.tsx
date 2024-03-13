@@ -9,6 +9,7 @@ export function installCanvas() {
     canvas.width = state.width;
     canvas.height = state.height;
     canvas.style.imageRendering = 'pixelated';
+    canvas.style.display = 'block';
 
     const resize = (newWidth : number, newHeight : number) => presenter.resize(state, canvas, newWidth, newHeight);
 
