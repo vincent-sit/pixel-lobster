@@ -10,10 +10,11 @@ Stretch goals:
 - [x] Let user pick canvas size
 - [x] Export image
 - [x] Erase
+- [x] Abstracting tool
+- [ ] Re-usable UI components
+- [ ] Testing (unit, visual regression etc.)
+
+Stretchier goals:
 - [ ] Adjustable brush size
 - [ ] Undo/redo
 - [ ] Layers
-
-- [ ] Re-usable UI components
-- [ ] Abstracting tool
-
