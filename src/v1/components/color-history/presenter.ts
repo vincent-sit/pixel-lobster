@@ -1,15 +1,11 @@
-import Color from 'colorjs.io/types/src';
+import Color from 'colorjs.io';
 import { ref } from 'valtio';
-import { ColorState } from './state';
+import { ColorHistoryState } from './state';
 
 const COLOR_HISTORY_LIMIT = 20;
 
-export class ColorPresenter {
-    updateColor(state : ColorState, newColor : Color) {
-        state.color = ref(newColor);
-    }
-
-    addToColorHistory(state : ColorState, newColor : Color) {
+export class ColorHistoryPresenter {
+    addToColorHistory(state : ColorHistoryState, newColor : Color) {
         const newColorHistory = state.colorHistory.filter(color => color.toString() !== newColor.toString());
 
         if (newColorHistory.length >= COLOR_HISTORY_LIMIT) {

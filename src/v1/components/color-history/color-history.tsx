@@ -22,7 +22,6 @@ const ColorHistoryBlock = styled.div`
     width: 25px;
     height: 25px;
     border-radius: 5px;
-    /* border: 0.1rem solid black; */
     box-sizing: border-box;
     box-shadow: 0.5px 0.5px 0.5px 0.5px #878787;
 `;

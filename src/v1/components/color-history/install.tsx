@@ -1,22 +1,26 @@
 import React from 'react';
 import Color from 'colorjs.io';
 import { ColorHistory as InternalColorHistory } from './color-history';
-import { ColorState } from '../color/state';
 import { useSnapshot } from 'valtio';
+import { ColorHistoryPresenter } from './presenter';
+import { createColorHistoryState } from './state';
 
-export function installColorHistory(
-    colorState : ColorState,
-    updateColor : (newColor : Color) => void
-) {
+export function installColorHistory(setColor : (newColor : Color) => void) {
+    const state = createColorHistoryState();
+    const presenter = new ColorHistoryPresenter();
+
+    const addToColorHistory = (newColor : Color) => presenter.addToColorHistory(state, newColor);
+
     const ColorHistory = () => {
-        const snap = useSnapshot(colorState);
+        const snap = useSnapshot(state);
         return <InternalColorHistory
             colorHistory={snap.colorHistory}
-            onChange={updateColor}
+            onChange={setColor}
         />;
     };
 
     return {
-        ColorHistory
+        ColorHistory,
+        addToColorHistory
     };
 }

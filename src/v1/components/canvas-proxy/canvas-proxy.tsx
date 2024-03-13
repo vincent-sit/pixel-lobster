@@ -21,7 +21,7 @@ const Marker = styled.span`
 
 export interface CanvasProxyProps {
     canvas: HTMLCanvasElement,
-    color : Color,
+    getColor : () => Color,
     draw : (x : number, y : number, color : string) => void,
     erase : (x : number, y : number) => void,
     pick : (x : number, y : number, canvas : HTMLCanvasElement) => void,
@@ -30,7 +30,7 @@ export interface CanvasProxyProps {
     tool : toolType
 }
 
-export function CanvasProxy({ canvas, color, draw, erase, pick, addToColorHistory, getZoomFactor, tool }: CanvasProxyProps) {
+export function CanvasProxy({ canvas, getColor, draw, erase, pick, addToColorHistory, getZoomFactor, tool }: CanvasProxyProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
 
@@ -49,8 +49,8 @@ export function CanvasProxy({ canvas, color, draw, erase, pick, addToColorHistor
         const y = Math.floor((e.clientY - rect.y) / zoomFactor);
         switch(tool) {
             case 'paintbrush':
-                draw(x, y, color.to('srgb').toString());
-                addToColorHistory(color);
+                draw(x, y, getColor().to('srgb').toString());
+                addToColorHistory(getColor());
                 break;
             case 'eraser':
                 erase(x, y);
@@ -73,11 +73,11 @@ export function CanvasProxy({ canvas, color, draw, erase, pick, addToColorHistor
 
         markerRef.current.style.top = y + 'px';
         markerRef.current.style.left = x + 'px';
-        markerRef.current.style.backgroundColor = color.to('srgb').toString();
+        markerRef.current.style.backgroundColor = getColor().to('srgb').toString();
         if (e.pressure > 0) {
             switch(tool) {
                 case 'paintbrush':
-                    draw(x, y, color.to('srgb').toString());
+                    draw(x, y, getColor().to('srgb').toString());
                     break;
                 case 'eraser':
                     erase(x, y);
