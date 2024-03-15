@@ -129,7 +129,8 @@ export function ColorPicker({ color, onChange }: ColorPickerProps) {
         const newColor = new Color('hsv', [hue, saturation, value]);
 
         onChange(newColor);
-    }, [isColorDown, colorX, colorY, isHueDown, hueY, color, onChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isColorDown, colorX, colorY, isHueDown, hueY, onChange]);
 
     return (
         <div>
