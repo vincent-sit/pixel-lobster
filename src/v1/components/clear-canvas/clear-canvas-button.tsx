@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../../ui-style/button/ui';
+import { Button } from '../../ui/button/button';
 import clearCanvasImage from '../../../assets/clearCanvas.png';
 interface ClearCanvasProps {
     onClick: () => void;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { PressedButton } from '../../../ui-style/button/ui';
+import { PressedButton } from '../../../ui/button/button';
 
 interface ToolButtonProps {
     isActive: boolean;
