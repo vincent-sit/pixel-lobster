@@ -63,7 +63,7 @@ export function usePointer(ref?: RefObject<HTMLElement>) {
             document.body.removeEventListener('pointerup', handleUp);
             document.body.removeEventListener('pointermove', handleMove);
         };
-    }, []);
+    }, [ref]);
 
     return state;
 }

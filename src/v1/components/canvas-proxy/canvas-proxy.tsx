@@ -31,10 +31,15 @@ export function CanvasProxy({ canvas, getColor, getZoomFactor, getTool }: Canvas
     const markerRef = useRef<HTMLSpanElement>(null);
 
     useEffect(() => {
-        containerRef.current?.append(canvas);
+        if (!containerRef.current) {
+            return;
+        }
+
+        const container = containerRef.current;
+        container.append(canvas);
 
         return () => {
-            containerRef.current?.removeChild(canvas);
+            container.removeChild(canvas);
         };
     }, [canvas]);
 
