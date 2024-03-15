@@ -2,10 +2,10 @@ import React from 'react';
 import { PressedButton } from '../../../ui-style/button/ui';
 
 interface ToolButtonProps {
-    isActive : boolean;
+    isActive: boolean;
     imgSrc: string;
     alt: string;
-    onClick : () => void;
+    onClick: () => void;
 }
 
 export function ToolButton({
@@ -13,13 +13,10 @@ export function ToolButton({
     imgSrc,
     alt,
     onClick,
-} : ToolButtonProps) {
+}: ToolButtonProps) {
     return (
-        <PressedButton
-            onClick={onClick}
-            isPressed={isActive}
-        >
-            <img src={imgSrc} alt={alt}/>
+        <PressedButton onClick={onClick} isPressed={isActive}>
+            <img src={imgSrc} alt={alt} />
         </PressedButton>
     );
 }

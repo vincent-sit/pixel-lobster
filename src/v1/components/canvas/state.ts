@@ -1,8 +1,8 @@
 import { proxy } from 'valtio';
 
 export class CanvasState {
-    width : number = 16;
-    height : number = 16;
+    width: number = 16;
+    height: number = 16;
 }
 
 export function createCanvasState() {

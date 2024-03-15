@@ -11,12 +11,13 @@ export function installCanvas() {
     canvas.style.imageRendering = 'pixelated';
     canvas.style.display = 'block';
 
-    const getCanvasSize = () => ({ width: state.width, height: state.height});
-    const resize = (newWidth : number, newHeight : number) => presenter.resize(state, canvas, newWidth, newHeight);
+    const getCanvasSize = () => ({ width: state.width, height: state.height });
+    const resize = (newWidth: number, newHeight: number) =>
+        presenter.resize(state, canvas, newWidth, newHeight);
 
     return {
         canvas,
         getCanvasSize,
-        resize
+        resize,
     };
 }

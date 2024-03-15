@@ -7,10 +7,10 @@ export class PaintBrushTool implements BaseTool {
     constructor(
         private readonly canvas: HTMLCanvasElement,
         private readonly getColor: () => Color,
-        private readonly addToColorHistory : (color : Color) => void,
+        private readonly addToColorHistory: (color: Color) => void
     ) {}
 
-    down(x : number, y : number) {
+    down(x: number, y: number) {
         const context = this.canvas.getContext('2d');
         if (!context) return;
         context.fillStyle = this.getColor().to('srgb').toString();
@@ -18,7 +18,7 @@ export class PaintBrushTool implements BaseTool {
         this.addToColorHistory(this.getColor());
     }
 
-    move(x : number, y : number) {
+    move(x: number, y: number) {
         const context = this.canvas.getContext('2d');
         if (!context) return;
         context.fillStyle = this.getColor().to('srgb').toString();

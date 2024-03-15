@@ -20,27 +20,31 @@ const StyledToolBar = styled.div`
 `;
 
 type ToolConfig = {
-    tool: Tool,
-    imgSrc: string,
-    alt: string,
+    tool: Tool;
+    imgSrc: string;
+    alt: string;
 };
 
 interface InstallToolParams {
-    canvas : HTMLCanvasElement,
-    getColor : () => Color,
-    setColor : (newColor : Color) => void,
-    addToColorHistory : (color : Color) => void,
+    canvas: HTMLCanvasElement;
+    getColor: () => Color;
+    setColor: (newColor: Color) => void;
+    addToColorHistory: (color: Color) => void;
 }
 
 export function installTool({
     canvas,
     getColor,
     setColor,
-    addToColorHistory
-} : InstallToolParams) {
-    const { tool : paintBrushTool } = installPaintBrush(canvas, getColor, addToColorHistory);
-    const { tool : eraserTool } = installEraser(canvas);
-    const { tool : eyeDropperTool } = installEyeDropper(canvas, setColor);
+    addToColorHistory,
+}: InstallToolParams) {
+    const { tool: paintBrushTool } = installPaintBrush(
+        canvas,
+        getColor,
+        addToColorHistory
+    );
+    const { tool: eraserTool } = installEraser(canvas);
+    const { tool: eyeDropperTool } = installEyeDropper(canvas, setColor);
 
     const tools: ToolConfig[] = [
         {
@@ -51,15 +55,15 @@ export function installTool({
         {
             tool: eraserTool,
             imgSrc: eraserImage,
-            alt: 'Eraser'
+            alt: 'Eraser',
         },
         {
             tool: eyeDropperTool,
             imgSrc: eyeDropperImage,
-            alt: 'Eye Dropper'
-        }
+            alt: 'Eye Dropper',
+        },
     ];
-    
+
     const presenter = new ToolPresenter();
     const state = createToolState(paintBrushTool);
 
@@ -70,7 +74,7 @@ export function installTool({
 
         return (
             <StyledToolBar>
-                {tools.map((tool) =>(
+                {tools.map((tool) => (
                     <ToolButton
                         key={tool.alt}
                         isActive={snap.tool === tool.tool}
@@ -85,6 +89,6 @@ export function installTool({
 
     return {
         ToolBar,
-        getTool
+        getTool,
     };
 }

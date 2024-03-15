@@ -1,10 +1,11 @@
 import { RefObject, useEffect, useState } from 'react';
 import { clamp } from './math';
 
-const isWithinBounds = (x: number, y: number, rect : DOMRect) => {    
-    return (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
+const isWithinBounds = (x: number, y: number, rect: DOMRect) => {
+    return (
+        x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom
+    );
 };
-
 
 type PointerState = {
     isDown: boolean;
@@ -23,7 +24,7 @@ export function usePointer(ref?: RefObject<HTMLElement>) {
         if (ref && !ref.current) {
             return;
         }
-        
+
         // If no ref passed, default to document.body
         const target = ref?.current ? ref.current : document.body;
 
@@ -34,7 +35,7 @@ export function usePointer(ref?: RefObject<HTMLElement>) {
             setState({
                 isDown: e.pressure > 0,
                 x: e.clientX - rect.x,
-                y: e.clientY - rect.y
+                y: e.clientY - rect.y,
             });
         };
 
