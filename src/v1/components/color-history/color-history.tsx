@@ -3,8 +3,8 @@ import Color from 'colorjs.io';
 import { styled } from 'styled-components';
 
 interface ColorHistoryProps {
-    colorHistory : Color[],
-    onChange : (newColor : Color) => void
+    colorHistory: Color[];
+    onChange: (newColor: Color) => void;
 }
 
 const ColorHistoryContainer = styled.div`
@@ -26,15 +26,16 @@ const ColorHistoryBlock = styled.div`
     box-shadow: 0.5px 0.5px 0.5px 0.5px #878787;
 `;
 
-export function ColorHistory({colorHistory, onChange} : ColorHistoryProps) {
+export function ColorHistory({ colorHistory, onChange }: ColorHistoryProps) {
     return (
         <ColorHistoryContainer>
-            {[...colorHistory].reverse().map((color) =>
-                <ColorHistoryBlock key={color.to('srgb').toString()}
-                    style={{backgroundColor: color.to('srgb').toString()}}
+            {[...colorHistory].reverse().map((color) => (
+                <ColorHistoryBlock
+                    key={color.to('srgb').toString()}
+                    style={{ backgroundColor: color.to('srgb').toString() }}
                     onClick={() => onChange(color)}
-                />)
-            }
+                />
+            ))}
         </ColorHistoryContainer>
     );
 }

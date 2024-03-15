@@ -6,11 +6,11 @@ const Container = styled.div`
 `;
 
 type ZoomAreaProps = {
-    zoomFactor : number,
-    children : React.ReactNode,
-}
+    zoomFactor: number;
+    children: React.ReactNode;
+};
 
-export function ZoomArea({ zoomFactor, children } : ZoomAreaProps) {
+export function ZoomArea({ zoomFactor, children }: ZoomAreaProps) {
     return (
         <Container style={{ transform: `scale(${zoomFactor})` }}>
             {children}

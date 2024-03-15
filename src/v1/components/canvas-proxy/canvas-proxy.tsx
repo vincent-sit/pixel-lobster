@@ -20,13 +20,18 @@ const Marker = styled.span`
 `;
 
 export interface CanvasProxyProps {
-    canvas: HTMLCanvasElement,
-    getColor : () => Color,
-    getZoomFactor : () => number,
-    getTool : () => Tool,
+    canvas: HTMLCanvasElement;
+    getColor: () => Color;
+    getZoomFactor: () => number;
+    getTool: () => Tool;
 }
 
-export function CanvasProxy({ canvas, getColor, getZoomFactor, getTool }: CanvasProxyProps) {
+export function CanvasProxy({
+    canvas,
+    getColor,
+    getZoomFactor,
+    getTool,
+}: CanvasProxyProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
 
@@ -43,7 +48,7 @@ export function CanvasProxy({ canvas, getColor, getZoomFactor, getTool }: Canvas
         };
     }, [canvas]);
 
-    function handlePointerDown(e : React.PointerEvent<HTMLDivElement>) {
+    function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
         const rect = canvas.getBoundingClientRect();
         const zoomFactor = getZoomFactor();
         const x = Math.floor((e.clientX - rect.x) / zoomFactor);
@@ -51,9 +56,10 @@ export function CanvasProxy({ canvas, getColor, getZoomFactor, getTool }: Canvas
         getTool().down?.(x, y);
     }
 
-    function handlePointerMove(e : React.PointerEvent<HTMLDivElement>) {
+    function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
         if (!markerRef.current) return;
-        if (getTool().type === 'paint-brush') markerRef.current.style.visibility = 'visible';
+        if (getTool().type === 'paint-brush')
+            markerRef.current.style.visibility = 'visible';
         const rect = canvas.getBoundingClientRect();
         const zoomFactor = getZoomFactor();
         const x = Math.floor((e.clientX - rect.x) / zoomFactor);
@@ -61,7 +67,9 @@ export function CanvasProxy({ canvas, getColor, getZoomFactor, getTool }: Canvas
 
         markerRef.current.style.top = y + 'px';
         markerRef.current.style.left = x + 'px';
-        markerRef.current.style.backgroundColor = getColor().to('srgb').toString();
+        markerRef.current.style.backgroundColor = getColor()
+            .to('srgb')
+            .toString();
         if (e.pressure > 0) {
             getTool().move?.(x, y);
         }
@@ -79,8 +87,8 @@ export function CanvasProxy({ canvas, getColor, getZoomFactor, getTool }: Canvas
             onPointerLeave={handlePointerLeave}
             onPointerDown={handlePointerDown}
         >
-            <BackgroundLayer/>
-            <Marker ref={markerRef}/>
+            <BackgroundLayer />
+            <Marker ref={markerRef} />
         </div>
     );
 }

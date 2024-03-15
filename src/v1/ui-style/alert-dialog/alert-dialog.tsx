@@ -29,7 +29,6 @@ export const ResizeContent = styled.div`
     grid-template-rows: repeat(3, 1fr);
 `;
 
-
 export const Title = styled.span`
     grid-column-start: 2;
     grid-column-end: 4;

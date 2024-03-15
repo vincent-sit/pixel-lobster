@@ -10,11 +10,15 @@ export function installZoom() {
 
     const getZoomFactor = () => state.zoomFactor;
 
-    const zoom = (scale : number) => presenter.zoom(state, scale);
+    const zoom = (scale: number) => presenter.zoom(state, scale);
 
-    const ZoomArea = ({ children } : { children : React.ReactNode}) => {
+    const ZoomArea = ({ children }: { children: React.ReactNode }) => {
         const { zoomFactor } = useSnapshot(state);
-        return <InternalZoomArea zoomFactor={zoomFactor}>{children}</InternalZoomArea>;
+        return (
+            <InternalZoomArea zoomFactor={zoomFactor}>
+                {children}
+            </InternalZoomArea>
+        );
     };
 
     return {

@@ -16,15 +16,25 @@ export function installApp() {
     const { canvas, getCanvasSize, resize } = installCanvas();
     const { ColorPicker, getColor, setColor } = installColorPicker();
     const { ColorHistory, addToColorHistory } = installColorHistory(setColor);
-    const { ToolBar, getTool } = installTool({ canvas, getColor, setColor, addToColorHistory });
-    const { CanvasProxy } = installCanvasProxy(getZoomFactor, getColor, canvas, getTool);
+    const { ToolBar, getTool } = installTool({
+        canvas,
+        getColor,
+        setColor,
+        addToColorHistory,
+    });
+    const { CanvasProxy } = installCanvasProxy(
+        getZoomFactor,
+        getColor,
+        canvas,
+        getTool
+    );
     const { Display } = installDisplay(zoom, ZoomArea, CanvasProxy);
     const { ExportButton } = installExport(canvas);
     const { ClearCanvasButton } = installClearCanvas(canvas);
     const { ResizeButton } = installResize(getCanvasSize, resize);
 
     const App = () => (
-        <Skeleton 
+        <Skeleton
             Display={Display}
             ExportButton={ExportButton}
             ClearButton={ClearCanvasButton}

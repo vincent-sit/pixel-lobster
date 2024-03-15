@@ -5,22 +5,25 @@ import { useSnapshot } from 'valtio';
 import { ColorHistoryPresenter } from './presenter';
 import { createColorHistoryState } from './state';
 
-export function installColorHistory(setColor : (newColor : Color) => void) {
+export function installColorHistory(setColor: (newColor: Color) => void) {
     const state = createColorHistoryState();
     const presenter = new ColorHistoryPresenter();
 
-    const addToColorHistory = (newColor : Color) => presenter.addToColorHistory(state, newColor);
+    const addToColorHistory = (newColor: Color) =>
+        presenter.addToColorHistory(state, newColor);
 
     const ColorHistory = () => {
         const snap = useSnapshot(state);
-        return <InternalColorHistory
-            colorHistory={snap.colorHistory}
-            onChange={setColor}
-        />;
+        return (
+            <InternalColorHistory
+                colorHistory={snap.colorHistory}
+                onChange={setColor}
+            />
+        );
     };
 
     return {
         ColorHistory,
-        addToColorHistory
+        addToColorHistory,
     };
 }

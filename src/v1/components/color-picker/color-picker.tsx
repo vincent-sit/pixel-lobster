@@ -41,14 +41,18 @@ const Marker = styled.span`
 `;
 
 interface ColorPickerProps {
-    color : Color;
-    onChange : (newColor : Color) => void;
+    color: Color;
+    onChange: (newColor: Color) => void;
 }
 
-export function ColorPicker({ color, onChange } : ColorPickerProps) {
+export function ColorPicker({ color, onChange }: ColorPickerProps) {
     const colorCanvasRef = useRef<HTMLCanvasElement>(null);
     const hueCanvasRef = useRef<HTMLCanvasElement>(null);
-    const { isDown: isColorDown, x: colorX, y: colorY } = usePointer(colorCanvasRef);
+    const {
+        isDown: isColorDown,
+        x: colorX,
+        y: colorY,
+    } = usePointer(colorCanvasRef);
     const { isDown: isHueDown, y: hueY } = usePointer(hueCanvasRef);
 
     // Set up hue picker canvas
@@ -67,7 +71,7 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
         gradient.addColorStop(0.85, 'rgba(255, 0, 255, 1)');
         gradient.addColorStop(1, 'rgba(255, 0, 0, 1)');
         hueCtx.fillStyle = gradient;
-        hueCtx.fillRect(0, 0, hueCtx.canvas.width, hueCtx.canvas.height); 
+        hueCtx.fillRect(0, 0, hueCtx.canvas.width, hueCtx.canvas.height);
     }, []);
 
     // Set up color picker canvas
@@ -78,12 +82,25 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
         }
 
         // Draw color gradient
-        const gradientH = colorCtx.createLinearGradient(0, 0, colorCtx.canvas.width, 0);
+        const gradientH = colorCtx.createLinearGradient(
+            0,
+            0,
+            colorCtx.canvas.width,
+            0
+        );
         gradientH.addColorStop(0, '#fff');
-        gradientH.addColorStop(1, new Color('hsv', [color.hsv.h, 100, 100]).to('srgb').toString());
+        gradientH.addColorStop(
+            1,
+            new Color('hsv', [color.hsv.h, 100, 100]).to('srgb').toString()
+        );
         colorCtx.fillStyle = gradientH;
         colorCtx.fillRect(0, 0, colorCtx.canvas.width, colorCtx.canvas.height);
-        const gradientV = colorCtx.createLinearGradient(0, 0, 0, colorCtx.canvas.height);
+        const gradientV = colorCtx.createLinearGradient(
+            0,
+            0,
+            0,
+            colorCtx.canvas.height
+        );
         gradientV.addColorStop(0, 'rgba(0,0,0,0)');
         gradientV.addColorStop(1, '#000');
         colorCtx.fillStyle = gradientV;
@@ -92,13 +109,23 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
 
     // Handle pointer
     useEffect(() => {
-        if ((!isColorDown && !isHueDown) || !colorCanvasRef.current || !hueCanvasRef.current) {
+        if (
+            (!isColorDown && !isHueDown) ||
+            !colorCanvasRef.current ||
+            !hueCanvasRef.current
+        ) {
             return;
         }
 
-        const hue = isHueDown ? (hueY / hueCanvasRef.current.height) * 360 : color.hsv.h;
-        const saturation = isColorDown ? colorX / colorCanvasRef.current.width * 100 : color.hsv.s;
-        const value = isColorDown ? ( 1 - (colorY / colorCanvasRef.current.height)) * 100 : color.hsv.v;
+        const hue = isHueDown
+            ? (hueY / hueCanvasRef.current.height) * 360
+            : color.hsv.h;
+        const saturation = isColorDown
+            ? (colorX / colorCanvasRef.current.width) * 100
+            : color.hsv.s;
+        const value = isColorDown
+            ? (1 - colorY / colorCanvasRef.current.height) * 100
+            : color.hsv.v;
         const newColor = new Color('hsv', [hue, saturation, value]);
 
         onChange(newColor);
@@ -107,21 +134,34 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
     return (
         <div>
             <ColorPickerBody>
-                <CanvasContainer style={{width: `${CANVAS_SIZE_PX}`, height: `${CANVAS_SIZE_PX}`}}>
-                    <Canvas ref={colorCanvasRef} width={`${CANVAS_SIZE_PX}px`} height={`${CANVAS_SIZE_PX}px`}/>
+                <CanvasContainer
+                    style={{
+                        width: `${CANVAS_SIZE_PX}`,
+                        height: `${CANVAS_SIZE_PX}`,
+                    }}
+                >
+                    <Canvas
+                        ref={colorCanvasRef}
+                        width={`${CANVAS_SIZE_PX}px`}
+                        height={`${CANVAS_SIZE_PX}px`}
+                    />
                     <Marker
                         style={{
-                            transform: `translate(-50%, -50%) translate(${color.hsv.s / 100 * CANVAS_SIZE_PX}px, ${(1 - (color.hsv.v / 100)) * CANVAS_SIZE_PX}px)`,
+                            transform: `translate(-50%, -50%) translate(${(color.hsv.s / 100) * CANVAS_SIZE_PX}px, ${(1 - color.hsv.v / 100) * CANVAS_SIZE_PX}px)`,
                             border: `1px solid ${color.hsv.v < 50 ? 'white' : 'black'}`,
                         }}
                     />
                 </CanvasContainer>
                 <CanvasContainer>
-                    <Canvas ref={hueCanvasRef} height={`${CANVAS_SIZE_PX}px`} width={`${HUE_SELECTOR_WIDTH_PX}px`}/>
+                    <Canvas
+                        ref={hueCanvasRef}
+                        height={`${CANVAS_SIZE_PX}px`}
+                        width={`${HUE_SELECTOR_WIDTH_PX}px`}
+                    />
                     <Marker
                         style={{
                             left: HUE_SELECTOR_WIDTH_PX / 2,
-                            transform: `translate(-50%, -50%) translateY(${color.hsv.h / 360 * CANVAS_SIZE_PX}px)`,
+                            transform: `translate(-50%, -50%) translateY(${(color.hsv.h / 360) * CANVAS_SIZE_PX}px)`,
                             border: '1px solid black',
                         }}
                     />

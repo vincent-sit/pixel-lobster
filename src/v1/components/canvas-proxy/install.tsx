@@ -4,21 +4,23 @@ import Color from 'colorjs.io';
 import { Tool } from '../tool/types';
 
 export function installCanvasProxy(
-    getZoomFactor : () => number,
-    getColor : () => Color,
-    canvas : HTMLCanvasElement,
-    getTool : () => Tool
+    getZoomFactor: () => number,
+    getColor: () => Color,
+    canvas: HTMLCanvasElement,
+    getTool: () => Tool
 ) {
     const CanvasProxy = () => {
-        return <InternalCanvasProxy
-            canvas={canvas}
-            getColor={getColor}
-            getTool={getTool}
-            getZoomFactor={getZoomFactor}
-        />;
+        return (
+            <InternalCanvasProxy
+                canvas={canvas}
+                getColor={getColor}
+                getTool={getTool}
+                getZoomFactor={getZoomFactor}
+            />
+        );
     };
 
     return {
-        CanvasProxy
+        CanvasProxy,
     };
 }

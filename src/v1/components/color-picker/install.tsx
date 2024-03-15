@@ -9,17 +9,20 @@ export function installColorPicker() {
     const state = createColorPickerState();
     const presenter = new ColorPickerPresenter();
 
-    const setColor = (newColor : Color) => presenter.updateColor(state, newColor);
+    const setColor = (newColor: Color) =>
+        presenter.updateColor(state, newColor);
     const getColor = () => state.color;
 
     const ColorPicker = () => {
         const snapshot = useSnapshot(state);
-        return <InternalColorPicker color={snapshot.color} onChange={setColor}/>;
+        return (
+            <InternalColorPicker color={snapshot.color} onChange={setColor} />
+        );
     };
 
     return {
         ColorPicker,
         getColor,
-        setColor
+        setColor,
     };
 }

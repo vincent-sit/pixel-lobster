@@ -61,13 +61,13 @@ const CommandPanel = styled.div`
 `;
 
 type SkeletonProps = {
-    Display : React.ComponentType,
-    ExportButton : React.ComponentType,
-    ClearButton : React.ComponentType,
-    ResizeButton : React.ComponentType,
-    ColorPicker : React.ComponentType,
-    ColorHistory : React.ComponentType,
-    ToolBar : React.ComponentType
+    Display: React.ComponentType;
+    ExportButton: React.ComponentType;
+    ClearButton: React.ComponentType;
+    ResizeButton: React.ComponentType;
+    ColorPicker: React.ComponentType;
+    ColorHistory: React.ComponentType;
+    ToolBar: React.ComponentType;
 };
 
 export function Skeleton({
@@ -77,31 +77,30 @@ export function Skeleton({
     ResizeButton,
     ColorPicker,
     ColorHistory,
-    ToolBar
+    ToolBar,
 }: SkeletonProps) {
-
     return (
         <Layout>
             <SidePanel>
-                <ToolBar/>
+                <ToolBar />
                 <ColorPanel>
-                    <ColorPicker/>
-                    <ColorHistory/>
+                    <ColorPicker />
+                    <ColorHistory />
                 </ColorPanel>
             </SidePanel>
             <DisplayWrapper>
-                <Display/>
+                <Display />
             </DisplayWrapper>
 
             <CommandPanel>
-                <ExportButton/>
-                <ClearButton/>
-                <ResizeButton/>
+                <ExportButton />
+                <ClearButton />
+                <ResizeButton />
             </CommandPanel>
 
-            <OverlayRow style={{top: 0}}/>
-            <OverlayRow style={{bottom: 0}}/>
-            <OverlayColumn style={{right: 0}}/>
+            <OverlayRow style={{ top: 0 }} />
+            <OverlayRow style={{ bottom: 0 }} />
+            <OverlayColumn style={{ right: 0 }} />
         </Layout>
     );
 }

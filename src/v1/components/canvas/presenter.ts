@@ -2,10 +2,10 @@ import { CanvasState } from './state';
 
 export class CanvasPresenter {
     resize(
-        state : CanvasState,
-        canvas : HTMLCanvasElement,
-        newWidth : number,
-        newHeight : number
+        state: CanvasState,
+        canvas: HTMLCanvasElement,
+        newWidth: number,
+        newHeight: number
     ) {
         const currCtx = canvas.getContext('2d');
         if (!currCtx) return;
