@@ -1,31 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import { ButtonWrapper } from '../../../ui-style/button';
-
-const StyledDialog = styled.dialog`
-    position: fixed;
-    background-color: white;
-    width: 20%;
-    border: 1px solid #ccc;
-    box-shadow: 1px 1px 1px black;
-    padding: 16px;
-    box-sizing: border-box;
-    transition: all 0.3s ease-out;
-    z-index: 1;
-    text-align: center;
-
-    &::backdrop {
-        background-color: black;
-        opacity: 0.7;
-    }
-
-    @media (min-width: 600px) {
-        .Modal {
-            width: 500px;
-            left: calc(50% - 250px);
-        }
-    }
-`;
+import { DialogButton } from './dialog-button';
+import { Dialog } from '../../ui/dialog/dialog';
 
 const ResizeContent = styled.div`
     display: grid;
@@ -67,20 +43,14 @@ export function ResizeDialog({
     onSubmit,
     onCloseClick,
 }: ResizeDialogProps) {
-    const dialogRef = useRef<HTMLDialogElement>(null);
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
 
     useEffect(() => {
-        if (!dialogRef.current) return;
-
         if (isOpen) {
             const size = getCanvasSize();
             setWidth(size.width);
             setHeight(size.height);
-            dialogRef.current.showModal();
-        } else {
-            dialogRef.current.close();
         }
     }, [isOpen, getCanvasSize]);
 
@@ -94,7 +64,7 @@ export function ResizeDialog({
     };
 
     return (
-        <StyledDialog ref={dialogRef}>
+        <Dialog isOpen={isOpen} onRequestClose={onCloseClick}>
             <ResizeContent>
                 <Title>Resize Canvas</Title>
                 <StyledForm>
@@ -122,7 +92,7 @@ export function ResizeDialog({
                         />
                     </InputLabel>
                 </StyledForm>
-                <ButtonWrapper
+                <DialogButton
                     onClick={() => onSubmit(width, height)}
                     style={{
                         gridColumnStart: '1',
@@ -130,12 +100,12 @@ export function ResizeDialog({
                         gridRow: '3',
                         justifySelf: 'center',
                     }}
-                    buttonshape="rectangle"
+                    buttonShape="rectangle"
                     autoFocus
                 >
                     Confirm
-                </ButtonWrapper>
-                <ButtonWrapper
+                </DialogButton>
+                <DialogButton
                     onClick={onCloseClick}
                     style={{
                         gridColumnStart: '4',
@@ -143,11 +113,11 @@ export function ResizeDialog({
                         gridRow: '3',
                         justifySelf: 'center',
                     }}
-                    buttonshape="rectangle"
+                    buttonShape="rectangle"
                 >
                     Close
-                </ButtonWrapper>
+                </DialogButton>
             </ResizeContent>
-        </StyledDialog>
+        </Dialog>
     );
 }
