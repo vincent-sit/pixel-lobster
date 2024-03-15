@@ -102,7 +102,7 @@ export function ColorPicker({ color, onChange } : ColorPickerProps) {
         const newColor = new Color('hsv', [hue, saturation, value]);
 
         onChange(newColor);
-    }, [isColorDown, colorX, colorY, isHueDown, hueY]);
+    }, [isColorDown, colorX, colorY, isHueDown, hueY, color, onChange]);
 
     return (
         <div>

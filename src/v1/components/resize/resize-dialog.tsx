@@ -77,7 +77,7 @@ export function ResizeDialog({getCanvasSize, isOpen, onSubmit, onCloseClick} : R
         } else {
             dialogRef.current.close();
         }
-    }, [isOpen]);
+    }, [isOpen, getCanvasSize]);
 
     const onChange = (e : React.ChangeEvent<HTMLInputElement>, 
         setState : React.Dispatch<React.SetStateAction<number>>) => 

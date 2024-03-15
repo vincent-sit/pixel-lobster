@@ -1,6 +1,11 @@
 /* eslint-env node */
 module.exports = {
-    extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:valtio/recommended'],
+    extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:valtio/recommended',
+        'plugin:react-hooks/recommended',
+    ],
     parser: '@typescript-eslint/parser',
     plugins: ['@typescript-eslint'],
     root: true,
