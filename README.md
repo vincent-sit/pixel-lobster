@@ -11,7 +11,7 @@ Stretch goals:
 - [x] Export image
 - [x] Erase
 - [x] Abstracting tool
-- [ ] Re-usable UI components
+- [x] Re-usable UI components
 - [ ] Testing (unit, visual regression etc.)
 
 Stretchier goals:
