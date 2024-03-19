@@ -11,7 +11,11 @@ export function BackgroundLayer() {
     const patternId = useId();
 
     return (
-        <Background width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <Background
+            width="100%"
+            height="100%"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <defs>
                 <pattern
                     id={patternId}
@@ -38,11 +42,7 @@ export function BackgroundLayer() {
                 </pattern>
             </defs>
 
-            <rect
-                fill="rgba(199, 199, 199, 1)"
-                width="100%"
-                height="100%"
-            />
+            <rect fill="rgba(199, 199, 199, 1)" width="100%" height="100%" />
             <rect fill={`url(#${patternId})`} width="100%" height="100%" />
         </Background>
     );

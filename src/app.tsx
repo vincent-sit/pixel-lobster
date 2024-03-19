@@ -31,15 +31,17 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const { App} = installApp();
+const { App } = installApp();
 
 const router = createHashRouter([
     {
         path: '/',
-        element: <>
-            <GlobalStyle/>
-            <App/>
-        </>,
+        element: (
+            <>
+                <GlobalStyle />
+                <App />
+            </>
+        ),
     },
 ]);
 

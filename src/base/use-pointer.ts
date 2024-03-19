@@ -1,5 +1,4 @@
 import { RefObject, useEffect, useState } from 'react';
-import { clamp } from './math';
 
 const isWithinBounds = (x: number, y: number, rect: DOMRect) => {
     return (
@@ -50,8 +49,8 @@ export function usePointer(ref?: RefObject<HTMLElement>) {
             const rect = target.getBoundingClientRect();
             setState((prev) => ({
                 isDown: prev.isDown,
-                x: clamp(e.clientX - rect.x, 0, rect.width),
-                y: clamp(e.clientY - rect.y, 0, rect.height),
+                x: e.clientX - rect.x,
+                y: e.clientY - rect.y,
             }));
         };
 

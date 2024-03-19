@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { BackgroundLayer } from './background-layer';
 import Color from 'colorjs.io';
 import { Tool } from '../tool/types';
+import { usePointer } from '../../base/use-pointer';
 
 const Marker = styled.span`
     width: 1px;
@@ -34,6 +35,8 @@ export function CanvasProxy({
 }: CanvasProxyProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
+    const prevIsDown = useRef(false);
+    const { isDown, x: pointerX, y: pointerY } = usePointer(containerRef);
 
     useEffect(() => {
         if (!containerRef.current) {
@@ -48,45 +51,50 @@ export function CanvasProxy({
         };
     }, [canvas]);
 
-    function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
-        const rect = canvas.getBoundingClientRect();
-        const zoomFactor = getZoomFactor();
-        const x = Math.floor((e.clientX - rect.x) / zoomFactor);
-        const y = Math.floor((e.clientY - rect.y) / zoomFactor);
-        getTool().down?.(x, y);
-    }
-
-    function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    // Handle marker
+    useEffect(() => {
         if (!markerRef.current) return;
-        if (getTool().type === 'paint-brush')
-            markerRef.current.style.visibility = 'visible';
+
         const rect = canvas.getBoundingClientRect();
+        if (
+            getTool().type === 'paint-brush' &&
+            pointerX >= 0 &&
+            pointerX < rect.width &&
+            pointerY >= 0 &&
+            pointerY < rect.height
+        ) {
+            markerRef.current.style.visibility = 'visible';
+        } else {
+            markerRef.current.style.visibility = 'hidden';
+            return;
+        }
         const zoomFactor = getZoomFactor();
-        const x = Math.floor((e.clientX - rect.x) / zoomFactor);
-        const y = Math.floor((e.clientY - rect.y) / zoomFactor);
+        const x = Math.floor(pointerX / zoomFactor);
+        const y = Math.floor(pointerY / zoomFactor);
 
         markerRef.current.style.top = y + 'px';
         markerRef.current.style.left = x + 'px';
         markerRef.current.style.backgroundColor = getColor()
             .to('srgb')
             .toString();
-        if (e.pressure > 0) {
-            getTool().move?.(x, y);
-        }
-    }
+    }, [pointerX, pointerY, canvas, getTool, getZoomFactor, getColor]);
 
-    function handlePointerLeave() {
-        if (!markerRef.current) return;
-        markerRef.current.style.visibility = 'hidden';
-    }
+    // Handle pointer interactions
+    useEffect(() => {
+        const zoomFactor = getZoomFactor();
+        const x = Math.floor(pointerX / zoomFactor);
+        const y = Math.floor(pointerY / zoomFactor);
+        const tool = getTool();
+        if (isDown !== prevIsDown.current) {
+            if (isDown) tool.down(x, y);
+            prevIsDown.current = isDown;
+        } else if (isDown) {
+            tool.move(x, y);
+        }
+    }, [isDown, pointerX, pointerY, canvas, getZoomFactor, getTool]);
 
     return (
-        <div
-            ref={containerRef}
-            onPointerMove={handlePointerMove}
-            onPointerLeave={handlePointerLeave}
-            onPointerDown={handlePointerDown}
-        >
+        <div ref={containerRef}>
             <BackgroundLayer />
             <Marker ref={markerRef} />
         </div>
