@@ -1,31 +1,21 @@
 import React from 'react';
-import styled from 'styled-components';
-import { DrawingArea } from '../drawing-area/drawing-area';
-import { CommandPanel } from '../command-panel/command-panel';
+import { styled } from 'styled-components';
 
 const Wrapper = styled.div`
-    background-color: #D9D9D9;  
-    height: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    position: relative;
+    justify-content: center;
+    background-color: #d9d9d9;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 `;
 
-const CommandPanelWrapper = styled.div`
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1;
-`;
+export interface DisplayProps {
+    onWheel: (e: React.WheelEvent) => void;
+    children: React.ReactNode;
+}
 
-export function Display() {    
-    return (
-        <Wrapper>
-            <CommandPanelWrapper>
-                <CommandPanel/>
-            </CommandPanelWrapper>
-            <DrawingArea/>
-        </Wrapper>
-    );
+export function Display({ onWheel: onWheel, children }: DisplayProps) {
+    return <Wrapper onWheel={onWheel}>{children}</Wrapper>;
 }

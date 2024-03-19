@@ -1,12 +1,8 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
-import { ColorProvider } from './contexts/color-context';
-import { ColorHistoryProvider } from './contexts/color-history-context';
-import { ToolProvider } from './contexts/tool-context';
-import { DimensionProvider } from './contexts/dimension-context';
-import { DialogProvider } from './contexts/dialog-context';
-import { AppBody } from './components/app-body/app-body';
+import { installApp } from './install';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -33,27 +29,21 @@ const GlobalStyle = createGlobalStyle`
   #root {
     height: 100%;
   }
-  
 `;
 
-function App() {
-    return (
-        <>
-            <GlobalStyle/>
-            <DialogProvider>
-                <ColorHistoryProvider>
-                    <ColorProvider>
-                        <ToolProvider>
-                            <DimensionProvider>
-                                <AppBody/>
-                            </DimensionProvider>
-                        </ToolProvider>
-                    </ColorProvider>
-                </ColorHistoryProvider>
-            </DialogProvider>
-        </>
-    );
-} 
+const { App } = installApp();
+
+const router = createHashRouter([
+    {
+        path: '/',
+        element: (
+            <>
+                <GlobalStyle />
+                <App />
+            </>
+        ),
+    },
+]);
 
 const root = createRoot(document.getElementById('root')!);
-root.render(<App/>);
+root.render(<RouterProvider router={router} />);
