@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../../ui/button/button';
-import exportCanvasImage from '../../../assets/exportCanvas.png';
+import exportCanvasImage from '../../assets/exportCanvas.png';
 
 interface ExportProps {
     onClick: () => void;

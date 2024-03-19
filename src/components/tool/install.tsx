@@ -7,9 +7,9 @@ import { Tool } from './types';
 import { ToolButton } from './tool-button/tool-button';
 import { installPaintBrush } from './paint-brush/install';
 import { installEraser } from './eraser/install';
-import paintbrushImage from '../../../assets/paintbrush.png';
-import eraserImage from '../../../assets/eraser.png';
-import eyeDropperImage from '../../../assets/colorPicker.png';
+import paintbrushImage from '../../assets/paintbrush.png';
+import eraserImage from '../../assets/eraser.png';
+import eyeDropperImage from '../../assets/colorPicker.png';
 import { installEyeDropper } from './eye-dropper/install';
 import styled from 'styled-components';
 
