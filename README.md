@@ -1,4 +1,5 @@
 ## Pixel Art Editor
+Check out the live site at https://pixel-lobster.netlify.app/ (using the v1 branch)
 
 MVP:
 - [x] Canvas (fixed size)
