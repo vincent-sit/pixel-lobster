@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 type ButtonShape = 'square' | 'rectangle';
 
-const StyledButton = styled.button<{ buttonshape?: ButtonShape}>`
-    background: lightgrey;    
+const StyledButton = styled.button<{ buttonshape?: ButtonShape }>`
+    background: lightgrey;
     min-height: 50px;
     min-width: ${({ buttonshape }) => AdjustWidth(buttonshape)};
-    font-family: "VT323", monospace;
+    font-family: 'VT323', monospace;
     font-weight: 400;
     font-style: normal;
     padding: 0.5rem;
@@ -19,8 +19,8 @@ const StyledButton = styled.button<{ buttonshape?: ButtonShape}>`
     }
 
     &:active {
-        transform: scale(0.98); 
-        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24); 
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     }
 `;
 
@@ -35,16 +35,16 @@ const AdjustWidth = (buttonShape?: ButtonShape) => {
     }
 };
 
-interface DialogButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface DialogButtonProps
+    extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     buttonShape: ButtonShape;
     children: React.ReactNode;
 }
 
-export const DialogButton = React.forwardRef<HTMLButtonElement, DialogButtonProps>(({
-    buttonShape,
-    children,
-    ...rest
-}: DialogButtonProps, ref) => {
+export const DialogButton = React.forwardRef<
+    HTMLButtonElement,
+    DialogButtonProps
+>(({ buttonShape, children, ...rest }: DialogButtonProps, ref) => {
     return (
         <StyledButton ref={ref} buttonshape={buttonShape} {...rest}>
             {children}

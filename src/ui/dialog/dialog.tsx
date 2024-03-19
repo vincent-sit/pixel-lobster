@@ -26,8 +26,8 @@ const StyledDialog = styled.dialog`
     }
 `;
 
-
-interface ResizeDialogProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
+interface ResizeDialogProps
+    extends React.DialogHTMLAttributes<HTMLDialogElement> {
     isOpen: boolean;
     onRequestClose: () => void;
     children: React.ReactNode;

@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { styled } from 'styled-components';
 import Color from 'colorjs.io';
 import { usePointer } from '../../base/use-pointer';
+import { clamp } from '../../base/math';
 
 const CANVAS_SIZE_PX = 300;
 const HUE_SELECTOR_WIDTH_PX = 30;
@@ -109,27 +110,21 @@ export function ColorPicker({ color, onChange }: ColorPickerProps) {
 
     // Handle pointer
     useEffect(() => {
-        if (
-            (!isColorDown && !isHueDown) ||
-            !colorCanvasRef.current ||
-            !hueCanvasRef.current
-        ) {
+        if (!isColorDown && !isHueDown) {
             return;
         }
 
-        const hue = isHueDown
-            ? (hueY / hueCanvasRef.current.height) * 360
-            : color.hsv.h;
+        const hue = isHueDown ? (hueY / CANVAS_SIZE_PX) * 360 : color.hsv.h;
         const saturation = isColorDown
-            ? (colorX / colorCanvasRef.current.width) * 100
+            ? (clamp(colorX, 0, CANVAS_SIZE_PX) / CANVAS_SIZE_PX) * 100
             : color.hsv.s;
         const value = isColorDown
-            ? (1 - colorY / colorCanvasRef.current.height) * 100
+            ? (1 - clamp(colorY, 0, CANVAS_SIZE_PX) / CANVAS_SIZE_PX) * 100
             : color.hsv.v;
         const newColor = new Color('hsv', [hue, saturation, value]);
 
         onChange(newColor);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isColorDown, colorX, colorY, isHueDown, hueY, onChange]);
 
     return (
