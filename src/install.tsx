@@ -10,17 +10,20 @@ import { installCanvas } from './components/canvas/install';
 import { installColorPicker } from './components/color-picker/install';
 import { installColorHistory } from './components/color-history/install';
 import { installResize } from './components/resize/install';
+import { installOperationHistory } from './components/operation-history/install';
 
 export function installApp() {
     const { getZoomFactor, zoom, ZoomArea } = installZoom();
     const { canvas, getCanvasSize, resize } = installCanvas();
     const { ColorPicker, getColor, setColor } = installColorPicker();
     const { ColorHistory, addToColorHistory } = installColorHistory(setColor);
+    const { UndoButton, RedoButton, addToHistory } = installOperationHistory(canvas);
     const { ToolBar, getTool } = installTool({
         canvas,
         getColor,
         setColor,
         addToColorHistory,
+        addToHistory
     });
     const { CanvasProxy } = installCanvasProxy(
         getZoomFactor,
@@ -39,6 +42,8 @@ export function installApp() {
             ExportButton={ExportButton}
             ClearButton={ClearCanvasButton}
             ResizeButton={ResizeButton}
+            UndoButton={UndoButton}
+            RedoButton={RedoButton}
             ColorPicker={ColorPicker}
             ToolBar={ToolBar}
             ColorHistory={ColorHistory}

@@ -7,7 +7,7 @@ export function installCanvasProxy(
     getZoomFactor: () => number,
     getColor: () => Color,
     canvas: HTMLCanvasElement,
-    getTool: () => Tool
+    getTool: () => Tool,
 ) {
     const CanvasProxy = () => {
         return (

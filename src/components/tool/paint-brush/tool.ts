@@ -1,6 +1,8 @@
 import Color from 'colorjs.io';
 import { BaseTool } from '../types';
 import { line } from '../../../base/line';
+import { Operation } from '../../operation-history/type';
+import { PaintOperation } from '../../operation-history/paint/operation';
 
 export class PaintBrushTool implements BaseTool {
     readonly type = 'paint-brush';
@@ -9,7 +11,8 @@ export class PaintBrushTool implements BaseTool {
     constructor(
         private readonly canvas: HTMLCanvasElement,
         private readonly getColor: () => Color,
-        private readonly addToColorHistory: (color: Color) => void
+        private readonly addToColorHistory: (color: Color) => void,
+        private readonly addToHistory : (operation : Operation) => void
     ) {}
 
     down(x: number, y: number) {
@@ -36,5 +39,12 @@ export class PaintBrushTool implements BaseTool {
             }
         );
         this.prevPoint = [x, y];
+        this.canvas.toDataURL();
+    }
+
+    up(x: number, y: number) {
+        const canvasSnapshot = this.canvas.toDataURL();
+        const paintOperation = new PaintOperation(canvasSnapshot);
+        this.addToHistory(paintOperation);
     }
 }

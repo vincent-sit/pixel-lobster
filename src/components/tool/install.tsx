@@ -12,6 +12,7 @@ import eraserImage from '../../assets/eraser.png';
 import eyeDropperImage from '../../assets/colorPicker.png';
 import { installEyeDropper } from './eye-dropper/install';
 import styled from 'styled-components';
+import { Operation } from '../operation-history/type';
 
 const StyledToolBar = styled.div`
     display: flex;
@@ -30,6 +31,7 @@ interface InstallToolParams {
     getColor: () => Color;
     setColor: (newColor: Color) => void;
     addToColorHistory: (color: Color) => void;
+    addToHistory : (operation : Operation) => void;
 }
 
 export function installTool({
@@ -37,13 +39,15 @@ export function installTool({
     getColor,
     setColor,
     addToColorHistory,
+    addToHistory
 }: InstallToolParams) {
     const { tool: paintBrushTool } = installPaintBrush(
         canvas,
         getColor,
-        addToColorHistory
+        addToColorHistory,
+        addToHistory
     );
-    const { tool: eraserTool } = installEraser(canvas);
+    const { tool: eraserTool } = installEraser(canvas, addToHistory);
     const { tool: eyeDropperTool } = installEyeDropper(canvas, setColor);
 
     const tools: ToolConfig[] = [

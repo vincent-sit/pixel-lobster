@@ -1,10 +1,15 @@
 import { line } from '../../../base/line';
+import { EraseOperation } from '../../operation-history/erase/operation';
+import { Operation } from '../../operation-history/type';
 
 export class EraserTool {
     readonly type = 'eraser';
     private prevPoint?: [number, number];
 
-    constructor(private readonly canvas: HTMLCanvasElement) {
+    constructor(
+        private readonly canvas: HTMLCanvasElement,
+        private readonly addToHistory : (operation : Operation) => void
+    ) {
         this.canvas = canvas;
     }
 
@@ -29,5 +34,11 @@ export class EraserTool {
             }
         );
         this.prevPoint = [x, y];
+    }
+    
+    up(x: number, y: number) {
+        const canvasSnapshot = this.canvas.toDataURL();
+        const paintOperation = new EraseOperation(canvasSnapshot);
+        this.addToHistory(paintOperation);
     }
 }
