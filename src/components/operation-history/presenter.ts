@@ -32,7 +32,7 @@ export class OperationHistoryPresenter {
         }
 
         // if pointer is not at the end of the history, remove all history after the pointer
-        const newHistory = state.history.splice(0, state.pointer + 1);
+        const newHistory = state.history.splice(0, state.pointer);
         state.history = newHistory;
 
         state.history.push(operation);
