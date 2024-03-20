@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../../../ui/button/button';
-import resizeCanvasImage from '../../../assets/resizeCanvas.png';
+import resizeCanvasImage from '../../../assets/undo.png';
 
 interface UndoButtonProps {
     onClick: () => void;

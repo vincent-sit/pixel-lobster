@@ -1,3 +1,4 @@
+import { ClearOperation } from './clear/operation';
 import { OperationHistoryState } from './state';
 import { Operation } from './type';
 
@@ -7,20 +8,25 @@ export class OperationHistoryPresenter {
     constructor(private readonly canvas : HTMLCanvasElement) {}
 
     undo (state : OperationHistoryState) {
-        if (state.pointer === -1) return;
-        state.history[state.pointer].operate(this.canvas);
         state.pointer--;
-        console.log(state.pointer);
+        if (state.pointer === -1) {
+            state.pointer = 0;
+            return;
+        }
+        state.history[state.pointer].operate(this.canvas);
     }
 
     redo (state : OperationHistoryState) {
-        if (state.pointer === state.history.length - 1) return;
-        state.history[state.pointer].operate(this.canvas);
         state.pointer++;
-        console.log(state.pointer);
+        if (state.pointer === state.history.length) {
+            state.pointer = state.history.length - 1;
+            return;
+        }
+        state.history[state.pointer].operate(this.canvas);
     }
 
     addToHistory(state : OperationHistoryState, operation : Operation) {
+        state.pointer++;
         if (state.history.length >= OPERATION_HISTORY_LIMIT) {
             state.history.splice(0, 1);
         }
@@ -30,11 +36,9 @@ export class OperationHistoryPresenter {
         state.history = newHistory;
 
         state.history.push(operation);
-        state.pointer++;
-        console.log(state.pointer);
     }
 
     clearHistory(state : OperationHistoryState) {
-        state.history = [];
+        state.history = [new ClearOperation('')];
     }
 }
