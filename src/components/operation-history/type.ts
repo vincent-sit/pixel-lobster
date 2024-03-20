@@ -6,4 +6,4 @@ export type Operation = {
     operate : (canvas : HTMLCanvasElement) => void;
 }
 
-export type OperationType = 'erase' | 'paint' | 'resize';
+export type OperationType = 'erase' | 'paint' | 'resize' | 'clear';
