@@ -12,8 +12,11 @@ export class EraseOperation implements Operation {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        var prevState = new Image();
-        prevState.src = this.canvasImage;
-        ctx.drawImage(prevState, 0, 0);
+        var image = new Image();
+        image.src = this.canvasImage;
+        image.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(image, 0, 0);
+        };
     }
 }
