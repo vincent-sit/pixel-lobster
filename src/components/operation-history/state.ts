@@ -3,7 +3,7 @@ import { Operation } from "./type";
 import { ClearOperation } from "./clear/operation";
 
 export class OperationHistoryState {
-    pointer : number = -1;
+    pointer : number = 0;
     history : Operation[] = [new ClearOperation('')];
 }
 
