@@ -1,10 +1,10 @@
 import { proxy } from "valtio";
-import { Operation } from "./type";
-import { ClearOperation } from "./clear/operation";
+import { Action } from "./type";
+import { ClearAction } from "../clear-canvas/action";
 
 export class OperationHistoryState {
     pointer : number = 0;
-    history : Operation[] = [new ClearOperation('')];
+    history : Action[] = [new ClearAction('')];
 }
 
 export function createOperationHistoryState() {

@@ -4,9 +4,6 @@ import { BackgroundLayer } from './background-layer';
 import Color from 'colorjs.io';
 import { Tool } from '../tool/types';
 import { usePointer } from '../../base/use-pointer';
-import { Operation } from '../operation-history/type';
-import { EraseOperation } from '../operation-history/erase/operation';
-import { PaintOperation } from '../operation-history/paint/operation';
 
 const Marker = styled.span`
     width: 1px;

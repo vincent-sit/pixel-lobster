@@ -9,3 +9,8 @@ export type BaseTool = {
 };
 
 export type Tool = PaintBrushTool | EraserTool | EyeDropperTool;
+
+export interface Point {
+    x : number,
+    y : number
+}

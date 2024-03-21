@@ -1,4 +1,7 @@
 // Bresenham's line algorithm
+
+import { Point } from "../components/tool/types";
+
 // Adapted from https://saturncloud.io/blog/bresenham-line-algorithm-a-powerful-tool-for-efficient-line-drawing/
 export function line(
     x1: number,
@@ -7,6 +10,8 @@ export function line(
     y2: number,
     cb: (x: number, y: number) => void
 ) {
+    const points : Point[] = [];
+
     let dx = Math.abs(x2 - x1);
     let dy = Math.abs(y2 - y1);
     const slope = dy > dx;
@@ -38,10 +43,12 @@ export function line(
     for (let drawX = x1; drawX < x2 + 1; drawX++) {
         const coord = slope ? [drawY, drawX] : [drawX, drawY];
         cb(coord[0], coord[1]);
+        points.push({x : coord[0], y : coord[1]});
         error -= dy;
         if (error < 0) {
             drawY += ystep;
             error += dx;
         }
     }
+    return points;
 }

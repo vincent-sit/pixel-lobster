@@ -1,7 +1,6 @@
-import { Operation } from "../type";
+import { Action } from "../operation-history/type";
 
-export class ResizeOperation implements Operation {
-    readonly type = 'resize';
+export class ResizeAction implements Action {
     canvasImage: string;
     canvasHeight: number;
     canvasWidth: number;
@@ -12,7 +11,7 @@ export class ResizeOperation implements Operation {
         this.canvasHeight = canvasHeight;
     }
 
-    operate(canvas : HTMLCanvasElement) {
+    undo(canvas : HTMLCanvasElement) {
         canvas.width = this.canvasWidth;
         canvas.height = this.canvasHeight;
         const ctx = canvas.getContext('2d');
@@ -22,4 +21,6 @@ export class ResizeOperation implements Operation {
         prevState.src = this.canvasImage;
         ctx.drawImage(prevState, 0, 0);
     }
+
+    redo(canvas: HTMLCanvasElement) {}
 }

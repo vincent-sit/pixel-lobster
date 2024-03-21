@@ -1,6 +1,6 @@
-import { ClearOperation } from './clear/operation';
+import { ClearAction } from '../clear-canvas/action';
 import { OperationHistoryState } from './state';
-import { Operation } from './type';
+import { Action } from './type';
 
 const OPERATION_HISTORY_LIMIT = 10;
 
@@ -13,7 +13,7 @@ export class OperationHistoryPresenter {
             state.pointer = 0;
             return;
         }
-        state.history[state.pointer].operate(this.canvas);
+        state.history[state.pointer].undo(this.canvas);
     }
 
     redo (state : OperationHistoryState) {
@@ -22,10 +22,10 @@ export class OperationHistoryPresenter {
             state.pointer = state.history.length - 1;
             return;
         }
-        state.history[state.pointer].operate(this.canvas);
+        state.history[state.pointer].redo(this.canvas);
     }
 
-    addToHistory(state : OperationHistoryState, operation : Operation) {
+    addToHistory(state : OperationHistoryState, operation : Action) {
         state.pointer++;
         if (state.history.length >= OPERATION_HISTORY_LIMIT) {
             state.history.splice(0, 1);
@@ -39,6 +39,6 @@ export class OperationHistoryPresenter {
     }
 
     clearHistory(state : OperationHistoryState) {
-        state.history = [new ClearOperation('')];
+        state.history = [new ClearAction('')];
     }
 }
