@@ -1,12 +1,12 @@
 import React from 'react';
 import { OperationHistoryPresenter } from './presenter';
-import { createOperationHistoryState } from './state';
+import { createActionHistoryState } from './state';
 import { Action } from './type';
 import { UndoButton as InternalUndoButton } from './button/undo-button';
 import { RedoButton as InternalRedoButton } from './button/redo-button';
 
 export function installOperationHistory(canvas : HTMLCanvasElement) {
-    const state = createOperationHistoryState();
+    const state = createActionHistoryState();
     const presenter = new OperationHistoryPresenter(canvas);
 
     const undo  = () => presenter.undo(state);
