@@ -17,5 +17,5 @@ Stretch goals:
 
 Stretchier goals:
 - [ ] Adjustable brush size
-- [ ] Undo/redo
+- [x] Undo/redo (canvas resize has not been tested)
 - [ ] Layers

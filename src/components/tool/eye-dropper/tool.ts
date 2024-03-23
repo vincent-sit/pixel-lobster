@@ -26,4 +26,6 @@ export class EyeDropperTool implements BaseTool {
         if (dataAtPixel[3] === 0) return;
         this.setColor(new Color(rgbaString));
     }
+
+    up(x : number, y : number) {}
 }

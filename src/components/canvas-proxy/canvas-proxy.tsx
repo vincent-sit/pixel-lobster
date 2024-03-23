@@ -31,7 +31,7 @@ export function CanvasProxy({
     canvas,
     getColor,
     getZoomFactor,
-    getTool,
+    getTool
 }: CanvasProxyProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const markerRef = useRef<HTMLSpanElement>(null);
@@ -87,6 +87,7 @@ export function CanvasProxy({
         const tool = getTool();
         if (isDown !== prevIsDown.current) {
             if (isDown) tool.down(x, y);
+            else tool.up(x, y);
             prevIsDown.current = isDown;
         } else if (isDown) {
             tool.move(x, y);

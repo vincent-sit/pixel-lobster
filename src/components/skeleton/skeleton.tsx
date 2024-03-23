@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { UndoButton } from '../operation-history/button/undo-button';
+import { RedoButton } from '../operation-history/button/redo-button';
 
 const Layout = styled.div`
     display: grid;
@@ -65,6 +67,8 @@ type SkeletonProps = {
     ExportButton: React.ComponentType;
     ClearButton: React.ComponentType;
     ResizeButton: React.ComponentType;
+    UndoButton: React.ComponentType;
+    RedoButton: React.ComponentType;
     ColorPicker: React.ComponentType;
     ColorHistory: React.ComponentType;
     ToolBar: React.ComponentType;
@@ -75,6 +79,8 @@ export function Skeleton({
     ExportButton,
     ClearButton,
     ResizeButton,
+    UndoButton,
+    RedoButton,
     ColorPicker,
     ColorHistory,
     ToolBar,
@@ -96,6 +102,8 @@ export function Skeleton({
                 <ExportButton />
                 <ClearButton />
                 <ResizeButton />
+                <UndoButton/>
+                <RedoButton/>
             </CommandPanel>
 
             <OverlayRow style={{ top: 0 }} />
