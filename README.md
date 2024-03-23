@@ -15,6 +15,7 @@ Stretch goals:
 - [x] Re-usable UI components
 - [ ] Testing (unit, visual regression etc.)
 - [ ] User feedback: add function text when hovered over button
+- [ ] User feedback: add zoom ratio indicator on the page
 
 Stretchier goals:
 - [ ] Adjustable brush size
