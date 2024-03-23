@@ -14,6 +14,7 @@ Stretch goals:
 - [x] Abstracting tool
 - [x] Re-usable UI components
 - [ ] Testing (unit, visual regression etc.)
+- [ ] User feedback: add function text when hovered over button
 
 Stretchier goals:
 - [ ] Adjustable brush size
